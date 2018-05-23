@@ -1,0 +1,28 @@
+{
+  "parser": "babel-eslint",
+  "extends": "standard",
+  "parserOptions": {
+    "ecmaVersion": 9,
+    "sourceType": "module"
+  },
+  "env": {
+    "browser": true
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    "import/no-unresolved": [2],
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "editor.formatOnSave": true
+      }
+    ]
+  },
+  "globals": {
+    "phaser": true
+  },
+  "settings": {
+    "import/core-modules": ["phaser"]
+  }
+}
