@@ -1,5 +1,5 @@
 {
-  "name": "Browser_Game",
+  "name": "browser_game",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -16,6 +16,8 @@
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.7.0",
     "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-prettier": "^2.6.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "webpack": "^4.8.3",
