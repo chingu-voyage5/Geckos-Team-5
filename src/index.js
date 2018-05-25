@@ -27,6 +27,11 @@ let player;
 let Bricks;
 let cursors;
 
+// ===== CUSTOM KEYS ===== //
+const Z_KEY     = game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+const SPACE_KEY = game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+
 function preload() {
     this.load.image('sky', 'src/assets/images/sky.png');
     this.load.image('platform', 'src/assets/images/platform.png');
@@ -37,21 +42,28 @@ function preload() {
     );
 }
 
+
 function create() {
 
     cursors = this.input.keyboard.createCursorKeys();
-    console.log(Phaser.Input.Keyboard.KeyCodes);
 
     this.add.image(400, 300, 'sky');
 
     player = this.physics.add.sprite(400, config.height - 30, 'player');
     player.setCollideWorldBounds(true);
     player.body.setGravityY(300);
+
     this.anims.create({
-        key: 'left',
-        frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
+        key: 'run',
+        frames: this.anims.generateFrameNumbers('player', { start: 1, end: 4 }),
         frameRate: 10,
         repeat: -1
+    });
+
+    this.anims.create({
+        key: 'sword',
+        frames: this.anims.generateFrameNumbers('player', { start: 14, end: 17 }),
+        frameRate: 10,
     });
 
     this.anims.create({
@@ -60,25 +72,31 @@ function create() {
         frameRate: 20
     });
 
-    this.anims.create({
-        key: 'right',
-        frames: this.anims.generateFrameNumbers('player', { start: 5, end: 8 }),
-        frameRate: 10,
-        repeat: -1
-    });
 
 }
 
 function update() {
-    if (cursors.left.isDown) {
-        player.setVelocityX(-160);
 
-        player.anims.play('left', true);
+    // ===== Move left ===== //
+    if (cursors.left.isDown) {
+        player.setVelocityX(-160);   
+        player.flipX = false;
+             
+        // ===== Check to see if we should swing sword ===== //
+        if( Z_KEY.isDown ) {
+            player.anims.play('sword', true);
+        } else {
+            player.anims.play('run', true);
+        }
     }
+
+    // ===== Move right ===== //
+    // Need to flip frames on x axis. Sprites dont have moving to the right frames 
     else if (cursors.right.isDown) {
         player.setVelocityX(160);
 
-        player.anims.play('right', true);
+        player.anims.play('run', true);
+        player.flipX = true;
     }
     else {
         player.setVelocityX(0);
