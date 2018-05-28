@@ -9,24 +9,24 @@ export class Level_1 extends Scene {
   }
 
   create() {
+    this.image = this.add.sprite(400, 300, 'sky');
+
     console.log('Level 1 loaded');
 
-    // ===== Global Definitions For This FILE ===== //
-    let player;
-    let Bricks;
-    let cursors;
-    // ===== CUSTOM KEYS ===== //
-    const Z_KEY = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
-    const SPACE_KEY = this.input.keyboard.addKey(
+    // // ===== Global Definitions For This FILE ===== //
+    this.player;
+    this.Bricks;
+    this.cursors;
+    // // ===== CUSTOM KEYS ===== //
+    this.Z_KEY = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+    this.SPACE_KEY = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
     );
-    cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.createCursorKeys();
 
-    this.add.image(400, 300, 'sky');
-
-    player = this.physics.add.sprite(400, HEIGHT - 30, 'player');
-    player.setCollideWorldBounds(true);
-    player.body.setGravityY(300);
+    this.player = this.physics.add.sprite(400, HEIGHT - 30, 'player');
+    this.player.setCollideWorldBounds(true);
+    this.player.body.setGravityY(300);
 
     this.anims.create({
       key: 'run',
@@ -56,55 +56,46 @@ export class Level_1 extends Scene {
 
   update() {
     let isSliding = false;
-
-    // ===== Move left ===== //
-    if (cursors.left.isDown) {
-      player.setVelocityX(-160);
-      player.flipX = false;
-
+    //   // ===== Move left ===== //
+    if (this.cursors.left.isDown) {
+      this.player.setVelocityX(-160);
+      this.player.flipX = false;
       // ===== Check to see if we should swing sword ===== //
-      if (Z_KEY.isDown) {
-        player.anims.play('sword', true);
-
+      if (this.Z_KEY.isDown) {
+        this.player.anims.play('sword', true);
         // ===== Slide, add speed ===== //
-      } else if (SPACE_KEY.isDown && !isSliding) {
+      } else if (this.SPACE_KEY.isDown && !isSliding) {
         isSliding = true;
-        player.anims.play('slide');
-        player.setVelocityX(-250);
+        this.player.anims.play('slide');
+        this.player.setVelocityX(-250);
       } else {
-        player.anims.play('run', true);
+        this.player.anims.play('run', true);
       }
     }
-
     // ===== Move right ===== //
     // Need to flip frames on x axis. Sprites dont have moving to the right frames
-    else if (cursors.right.isDown) {
-      player.setVelocityX(160);
-      player.flipX = true;
-
-      if (Z_KEY.isDown) {
-        player.anims.play('sword', true);
-
+    else if (this.cursors.right.isDown) {
+      this.player.setVelocityX(160);
+      this.player.flipX = true;
+      if (this.Z_KEY.isDown) {
+        this.player.anims.play('sword', true);
         // ===== Slide, add speed ===== //
-      } else if (SPACE_KEY.isDown && !isSliding) {
+      } else if (this.SPACE_KEY.isDown && !isSliding) {
         isSliding = true;
-        player.anims.play('slide');
-        player.setVelocityX(250);
+        this.player.anims.play('slide');
+        this.player.setVelocityX(250);
       } else {
-        player.anims.play('run', true);
+        this.player.anims.play('run', true);
       }
     }
-
     // ===== Jump ===== //
-    else if (cursors.up.isDown && player.body.onFloor()) {
-      player.setVelocityY(-330);
+    else if (this.cursors.up.isDown && this.player.body.onFloor()) {
+      this.player.setVelocityY(-330);
     }
-
     // Do nothing, 0 frame sprite ===== //
     else {
-      player.setVelocityX(0);
-
-      player.anims.play('turn');
+      this.player.setVelocityX(0);
+      this.player.anims.play('turn');
     }
   }
 }

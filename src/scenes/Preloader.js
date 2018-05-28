@@ -15,7 +15,9 @@ export class Preloader extends phaser.Scene {
       frameWidth: 32,
       frameHeight: 48
     });
+  }
 
+  create() {
     this.scene.start('Level_1');
   }
 }
