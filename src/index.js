@@ -1,6 +1,6 @@
 import phaser from 'phaser';
 import { WIDTH, HEIGHT } from './util/constants';
-import { Preloader } from './scenes/preloader';
+import { Preloader } from './scenes/Preloader';
 import { Level_1 } from './scenes/Level_1';
 
 const config = {
