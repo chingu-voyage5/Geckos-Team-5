@@ -6,18 +6,17 @@ export class Level_1 extends Scene {
     super({
       key: 'Level_1'
     });
+
+    // ===== Global Definitions For This FILE ===== //
+    this.player;
+    this.Bricks;
+    this.cursors;
   }
 
   create() {
     this.image = this.add.sprite(400, 300, 'sky');
 
-    console.log('Level 1 loaded');
-
-    // // ===== Global Definitions For This FILE ===== //
-    this.player;
-    this.Bricks;
-    this.cursors;
-    // // ===== CUSTOM KEYS ===== //
+    // ===== CUSTOM KEYS ===== //
     this.Z_KEY = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
     this.SPACE_KEY = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
