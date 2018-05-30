@@ -83,6 +83,8 @@ export class Level_1 extends Scene {
       } else if ( this.SPACE_KEY.isUp ) {
 				this.isSliding = false;
         this.player.anims.play('run', true);
+			} else {
+        this.player.anims.play('run', true);				
 			}
 		}
 		
@@ -107,8 +109,9 @@ export class Level_1 extends Scene {
       } else if(this.SPACE_KEY.isUp) {
 				this.isSliding = false;
         this.player.anims.play('run', true);
-				
-			} 
+			} else {
+        this.player.anims.play('run', true);				
+			}
     }
     // ===== Jump ===== //
     else if (this.cursors.up.isDown && this.player.body.onFloor()) {
