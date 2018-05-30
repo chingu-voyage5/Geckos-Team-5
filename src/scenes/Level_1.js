@@ -76,7 +76,7 @@ export class Level_1 extends Scene {
 				if( !this.isSliding ) {
 					this.player.anims.play('slide');
 					this.player.setVelocityX(-250);
-					this.time.delayedCall(300, () => this.isSliding = true)
+					this.time.delayedCall(200, () => this.isSliding = true)
 				} 
 
 			// ===== Once the player releases the space bar, reset slide ===== //
@@ -101,7 +101,7 @@ export class Level_1 extends Scene {
 				if( !this.isSliding ) {
 					this.player.anims.play('slide');
 					this.player.setVelocityX(250);
-					this.time.delayedCall(300, () => this.isSliding = true)
+					this.time.delayedCall(200, () => this.isSliding = true)
 				}
 				
       } else if(this.SPACE_KEY.isUp) {
