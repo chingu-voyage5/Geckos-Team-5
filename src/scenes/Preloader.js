@@ -19,5 +19,6 @@ export class Preloader extends phaser.Scene {
 
   create() {
     this.scene.start('Level_1');
+    this.scene.start('displayInformation');
   }
 }
