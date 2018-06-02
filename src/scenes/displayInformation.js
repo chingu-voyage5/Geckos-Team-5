@@ -20,6 +20,19 @@ export class displayInformation extends Scene {
 
             //the general variable for the style of all ui texts
             this.fontStyle = { font: "12px Arial", fill: "#fff"};
+
+            //holds the text for the timer
+            this.timerText;
+
+            //holds the timer event
+            this.timerEvent;
+
+            this.timerValue = [0, 0, 0, 0];
+            this.timerValueFormatted = "00:00";
+
+            //records the times the timer hits 60 minutes
+            this.hourRecord = 0;
+
       }
 
       create() { 
@@ -27,7 +40,7 @@ export class displayInformation extends Scene {
             this.Scenes = this.scene.manager.scenes; 
 
             //initial display of the level
-            this.levelText = this.add.text(0, 0, "Stage 1-1", this.fontStyle);
+            this.levelText = this.add.text(4, 0, "Stage 1-1", this.fontStyle);
 
             //an empty array for the for loop, later it will be holding a shortcut to make events for all scenes
             var SceneGets = [];
@@ -46,12 +59,37 @@ export class displayInformation extends Scene {
                         this.updateLevel(this);
 
                   }, this);
+
+                  //adds events for all level scenes and enables them to get timer data. whenever ui scene recieves the triger on getTimer, it emits its own event with the timer data
+                  SceneGets[i].events.on('getTimer', function () {
+
+                        //emits back the formatted timer value and if more than one hour was recorded with the trigger of receiveTimer
+                        this.events.emit('receiveTimer', this.timerValueFormatted, hourRecord);
+
+                  }, this);
+
+                  //adds events for all level scenes and enables them to stop the timer
+                  SceneGets[i].events.on('stopTimer', function () {
+
+                        //starts the function to stop the timer loop
+                        this.stopGameClock();
+
+                  }, this);
+
+                  //adds events for all level scenes and enables them to start the timer
+                  SceneGets[i].events.on('startTimer', function () {
+
+                        //start time loop
+                        this.startGameClock();
+
+                  }, this);
             }
+
+            //adds the initial timer text
+            this.timerText = this.add.text(446, 0, this.timerValueFormatted, this.fontStyle);
       }
 
-
-
-      update() {   
+      update() {
       }
 
       updateLevel(uiScene) {
@@ -74,6 +112,50 @@ export class displayInformation extends Scene {
                   uiScene.levelText.setText("Stage " + level[0] + "-" + level[1]);
             }
 
+      }
+
+      gameClock() {
+            //pushes the second number of seconds one up  00:00 --> 00:01
+            this.timerValue[3]++;
+
+            //if 00:010 --> 00:10
+            if (this.timerValue[3] > 9) {
+                  this.timerValue[3] = 0;
+                  this.timerValue[2]++;
+            }
+            //if 00:60 --> 01:00
+            if (this.timerValue[2] > 5) {
+                  this.timerValue[2] = 0;
+                  this.timerValue[1]++;
+            }
+            //if 010:00 --> 10:00
+            if (this.timerValue[1] > 9) {
+                  this.timerValue[1] = 0;
+                  this.timerValue[0]++;
+            }
+            //if 60:00 --> 00:00
+            if (this.timerValue[0] > 5) {
+                  this.timerValue = [0, 0, 0, 0];
+                  this.hourRecord++;
+            }
+
+            //a shortening variable to make the next line more readable
+            var z = this.timerValue.toString();
+            //make the array to a text in format 00:00
+            this.timerValueFormatted = z.substr(0, 1) + z.substr(2, 1) + ":" + z.substr(4, 1) + z.substr(6, 1);
+
+            //changes the timerText in the ui scene
+            this.timerText.setText(this.timerValueFormatted);
+      } 
+
+      stopGameClock() {
+            //stops the time event named timerEvent
+            this.timerEvent.remove(false);
+      }
+
+      startGameClock() {
+            //starts the timer loop which triggeres the gameClock every second, its looped
+            this.timerEvent = this.time.addEvent({ delay: 1000, callback: this.gameClock, callbackScope: this, loop: true });
       }
       
 }
