@@ -34,9 +34,7 @@ export class displayInformation extends Scene {
       }
 
       create() { 
-
-            //the following 2 lines are for testing
-            this.registry.set('TIMER', this.timerValue);
+            
             this.startGameClock();
 
             //initial display of the level

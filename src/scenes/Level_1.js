@@ -13,10 +13,6 @@ export class Level_1 extends Scene {
     this.cursors;
     this.isSliding   = false;
     this.isAttacking = false;
-    //test variable
-    this.testTimer = true;
-    this.testvariable1 = true;
-    this.testvariable2 = true;
   }
 
   create() {
@@ -63,25 +59,6 @@ export class Level_1 extends Scene {
 
   
   update() {
-    //TESTING
-    if (this.testTimer) {
-      console.log(this.registry.list.TIMER);
-      this.testTimer = false;
-      this.levelText = this.add.text(50, 50, "For Testing Purposes, the timer will stop at 10 sec", {font: "12px Arial"});
-      this.levelText = this.add.text(50, 64, "Test, access to timer from level: " + this.registry.list.TIMER, { font: "12px Arial" });
-      this.levelText = this.add.text(50, 76, "If you saw '0, 0, :, 0, 0, 0', it was successfull" , { font: "12px Arial" });
-      this.levelText = this.add.text(50, 90, "To reactivate timer --> press Space", { font: "12px Arial" });
-    }
-    if (this.registry.list.TIMER[3] == 1 && this.testvariable1 == true) {
-      this.events.emit('stopTimer');
-      this.testvariable1 = false;
-    }
-    if (this.SPACE_KEY.isDown && this.testvariable2 == true) {
-      console.log("test");
-      this.testvariable2 = false;
-      this.events.emit('startTimer');
-    }
-    //TEST END
 
     // ===== If space or z key is held, add new logic to move direction ===== //
     if( this.SPACE_KEY.isDown || this.Z_KEY.isDown ) {
