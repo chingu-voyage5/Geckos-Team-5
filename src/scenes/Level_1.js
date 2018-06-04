@@ -60,7 +60,7 @@ export class Level_1 extends Scene {
   
   update() {
 
-    // ===== If space key is held, add new logic to move direction ===== //
+    // ===== If space or z key is held, add new logic to move direction ===== //
     if( this.SPACE_KEY.isDown || this.Z_KEY.isDown ) {
       if( this.cursors.left.isDown ) {
           this.playerAnimate(this.player, { animation: 'run', setVelocityX: -160, flipX: false } );
@@ -98,9 +98,9 @@ export class Level_1 extends Scene {
 
         // ===== Once the player releases the space bar, reset slide ===== //
       } else if (this.SPACE_KEY.isUp || this.Z_KEY.isUp) {
-        this.isSliding   = false;
-        this.isAttacking = false;
-        this.player.anims.play('run', true);
+
+        this.cancelSlideAndAttack();
+
       } else {
         this.player.anims.play('run', true);
       }
@@ -130,9 +130,7 @@ export class Level_1 extends Scene {
         }
 
       } else if (this.SPACE_KEY.isUp || this.Z_KEY.isUp) {
-        this.isSliding   = false;
-        this.isAttacking = false;
-        this.player.anims.play('run', true);
+        this.cancelSlideAndAttack();
       } else {
         this.player.anims.play('run', true);
       }
@@ -171,5 +169,15 @@ export class Level_1 extends Scene {
     if( this.cursors.up.isDown && this.player.body.onFloor() ) {
       this.player.setVelocityY(-330);
     }
+  }
+
+
+  /**
+   * Cancel attack or sliding animation. Reset to running
+   */
+  cancelSlideAndAttack() {
+    this.isSliding   = false;
+    this.isAttacking = false;
+    this.player.anims.play('run', true);
   }
 }
