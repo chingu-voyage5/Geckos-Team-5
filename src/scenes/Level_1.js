@@ -11,12 +11,12 @@ export class Level_1 extends Scene {
     this.player;
     this.Bricks;
     this.cursors;
-    this.isSliding = false;
+    this.isSliding   = false;
+    this.isAttacking = false;
     //test variable
     this.testTimer = true;
     this.testvariable1 = true;
     this.testvariable2 = true;
-
   }
 
   create() {
@@ -83,12 +83,12 @@ export class Level_1 extends Scene {
     }
     //TEST END
 
-    // ===== If space key is held, add new logic to move direction ===== //
-    if( this.SPACE_KEY.isDown ) {
+    // ===== If space or z key is held, add new logic to move direction ===== //
+    if( this.SPACE_KEY.isDown || this.Z_KEY.isDown ) {
       if( this.cursors.left.isDown ) {
-          this.playerRunAnimate(this.player, { setVelocityX: -160, flipX: false } );
+          this.playerAnimate(this.player, { animation: 'run', setVelocityX: -160, flipX: false } );
       } else if( this.cursors.right.isDown ) {
-          this.playerRunAnimate(this.player, { setVelocityX: 160, flipX: true } );
+          this.playerAnimate(this.player, { animation:'run', setVelocityX: 160, flipX: true } );
       }
     }
 
@@ -97,28 +97,33 @@ export class Level_1 extends Scene {
 
       this.player.setVelocityX(-160);
       this.player.flipX = false;
+      this.playerCanJump();
 
       // ===== Check to see if we should swing sword ===== //
       if (this.Z_KEY.isDown) {
 
-        this.player.anims.play('sword', true);
-
+         // ===== Check if player is currently attacking. ===== //
+        // ===== Do sword attack, stop animation after 3/10ths of a second ===== //
+        if (!this.isAttacking) {
+          this.playerAnimate(this.player, { animation: 'sword', setVelocityX: -160 } );
+          this.time.delayedCall(200, () => this.isAttacking = true)
+        }
         // ===== Slide, add speed ===== //
-      } else if (this.SPACE_KEY.isDown) {
+     } else if (this.SPACE_KEY.isDown) {
 
 
         // ===== Check if player is currently sliding. ===== //
         // ===== Do slide, stop animation after 3/10ths of a second ===== //
         if (!this.isSliding) {
-          this.player.anims.play('slide');
-          this.player.setVelocityX(-250);
+          this.playerAnimate(this.player, { animation: 'slide', setVelocityX: -250 } );
           this.time.delayedCall(200, () => this.isSliding = true)
         }
 
         // ===== Once the player releases the space bar, reset slide ===== //
-      } else if (this.SPACE_KEY.isUp) {
-        this.isSliding = false;
-        this.player.anims.play('run', true);
+      } else if (this.SPACE_KEY.isUp || this.Z_KEY.isUp) {
+
+        this.cancelSlideAndAttack();
+
       } else {
         this.player.anims.play('run', true);
       }
@@ -128,23 +133,27 @@ export class Level_1 extends Scene {
     // ===== Need to flip frames on x axis. Sprites dont have moving to the right frames ===== //
     // ===== All same logic as above, but backwards ===== //
     else if (this.cursors.right.isDown) {
-
+      
       this.player.setVelocityX(160);
       this.player.flipX = true;
+      this.playerCanJump();
+
       if (this.Z_KEY.isDown) {
 
-        this.player.anims.play('sword', true);
-      } else if (this.SPACE_KEY.isDown) {
+        if (!this.isAttacking) {
+          this.playerAnimate(this.player, { animation: 'sword', setVelocityX: 160, flipX: true } );
+          this.time.delayedCall(200, () => this.isAttacking = true)
+        }
+
+     } else if (this.SPACE_KEY.isDown) {
 
         if (!this.isSliding) {
-          this.player.anims.play('slide');
-          this.player.setVelocityX(250);
+          this.playerAnimate(this.player, { animation: 'slide', setVelocityX: 250, flipX: true } );
           this.time.delayedCall(200, () => this.isSliding = true)
         }
 
-      } else if (this.SPACE_KEY.isUp) {
-        this.isSliding = false;
-        this.player.anims.play('run', true);
+      } else if (this.SPACE_KEY.isUp || this.Z_KEY.isUp) {
+        this.cancelSlideAndAttack();
       } else {
         this.player.anims.play('run', true);
       }
@@ -162,13 +171,36 @@ export class Level_1 extends Scene {
 
   /**
    * 
-   * 
-   * @param {player object} player 
-   * @param {player animation options object} [{ setVelocityX = 0 , flipX = false }={}] 
+   * Reusable Player animation function.
+   * @param {player object} player  Player Object
+   * @param {animation}     string  What animation to play
+   * @param {setVelocity}   number  Player speed on X axis. Negatives move player left 
+   * @param {flipX}         boolean Flip player animations from left to right 
    */
-  playerRunAnimate(player, { setVelocityX = 0 , flipX = false } = {} ) {
+  playerAnimate(player, { animation = 'run', setVelocityX = 0 , flipX = false } = {} ) {
     player.setVelocityX(setVelocityX);
     player.flipX = flipX;
-    player.anims.play('run', true);
+    player.anims.play(animation, true);
+  }
+
+  
+  /**
+   *Check to see if player is allowed to jump
+   *
+   */
+  playerCanJump() {
+    if( this.cursors.up.isDown && this.player.body.onFloor() ) {
+      this.player.setVelocityY(-330);
+    }
+  }
+
+
+  /**
+   * Cancel attack or sliding animation. Reset to running
+   */
+  cancelSlideAndAttack() {
+    this.isSliding   = false;
+    this.isAttacking = false;
+    this.player.anims.play('run', true);
   }
 }
