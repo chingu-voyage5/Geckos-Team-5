@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { WIDTH, HEIGHT, fontStyle } from '../util/constants';
+import { WIDTH, HEIGHT, UIFONT } from '../util/constants';
 
 export class UIScene extends Scene {
   constructor() {
@@ -33,10 +33,10 @@ export class UIScene extends Scene {
     this.startGameClock();
 
     //initial display of the level
-    this.levelText = this.add.text(4, 0, 'Stage 1-1', fontStyle);
+    this.levelText = this.add.text(4, 0, 'Stage 1-1', UIFONT);
 
     //adds the initial timer text
-    this.timerText = this.add.text(446, 0, '00:00', fontStyle);
+    this.timerText = this.add.text(446, 0, '00:00', UIFONT);
 
     // this gets the array with all the scenes names in it like in the config
     this.Scenes = this.scene.manager.scenes;
