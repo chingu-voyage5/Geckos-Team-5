@@ -1,24 +1,22 @@
-import 'phaser';
+import phaser from 'phaser';
+import { WIDTH, HEIGHT } from './util/constants';
+import { Preloader } from './scenes/Preloader';
+import { Level_1 } from './scenes/Level_1';
+import { displayInformation } from './scenes/displayInformation';
 
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
-  scene: {
-    preload: preload,
-    create: create,
-    update: update
-  }
+  width: WIDTH,
+  height: HEIGHT,
+  pixelArt: true,
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 300 },
+      debug: false
+    }
+  },
+  scene: [Preloader, Level_1, displayInformation]
 };
 
 const game = new Phaser.Game(config);
-
-function preload() {
-  this.load.image('sky', 'src/assets/images/sky.png');
-}
-
-function create() {
-  this.add.image(400, 300, 'sky');
-}
-
-function update() {}
