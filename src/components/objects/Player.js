@@ -51,7 +51,7 @@ export default class Player extends phaser.GameObjects.Sprite {
           if (this.slideTimer > 0) {
             this.isAttacking = true;
           }
-          this.time.delayedCall(200, () => (this.isAttacking = true));
+          this.scene.time.delayedCall(200, () => (this.isAttacking = true));
         }
         // ===== Slide, add speed ===== //
       } else if (input.jump) {
@@ -62,7 +62,7 @@ export default class Player extends phaser.GameObjects.Sprite {
           //     animation: 'slide',
           //     setVelocityX: -250
           //   });
-          this.time.delayedCall(200, () => (this.isSliding = true));
+          this.scene.time.delayedCall(200, () => (this.isSliding = true));
         }
 
         // ===== Once the player releases the space bar, reset slide ===== //
@@ -91,7 +91,7 @@ export default class Player extends phaser.GameObjects.Sprite {
           //     setVelocityX: 160,
           //     flipX: true
           //   });
-          this.time.delayedCall(200, () => (this.isAttacking = true));
+          this.scene.time.delayedCall(200, () => (this.isAttacking = true));
         }
       } else if (input.jump) {
         if (!this.isSliding) {
@@ -100,7 +100,7 @@ export default class Player extends phaser.GameObjects.Sprite {
           //     setVelocityX: 250,
           //     flipX: true
           //   });
-          this.time.delayedCall(200, () => (this.isSliding = true));
+          this.scene.time.delayedCall(200, () => (this.isSliding = true));
         }
       } else if (!input.attack || !input.jump) {
         this.cancelSlideAndAttack();
