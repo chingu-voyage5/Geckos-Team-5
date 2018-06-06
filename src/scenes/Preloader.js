@@ -1,5 +1,6 @@
 import phaser from 'phaser';
 import { WIDTH, HEIGHT } from '../util/constants';
+import makeAnimations from '../util/Animations';
 
 export class Preloader extends phaser.Scene {
   constructor() {
@@ -15,6 +16,7 @@ export class Preloader extends phaser.Scene {
       frameWidth: 32,
       frameHeight: 48
     });
+    makeAnimations(this);
   }
 
   create() {
