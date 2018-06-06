@@ -45,26 +45,26 @@ export class UIScene extends Scene {
     this.Scenes = this.scene.manager.scenes;
 
     //an empty array for the for loop, later it will be holding a shortcut to make events for all scenes
-    var SceneGets = [];
+    let sceneGets = [];
 
     //for loop to generate events to enable level update after a stage is won
-    for (var i = 1; i < this.Scenes.length - 1; i++) {
+    for (let i = 1; i < this.Scenes.length - 1; i++) {
       //loading a scene correspoding to the name of the scene
-      SceneGets[i] = this.scene.get(this.Scenes[i]);
+      sceneGets[i] = this.scene.get(this.Scenes[i]);
 
       //event with the trigger code 'updateLevel' to update Levels, need the following line to function inside a level scene:
       //this.events.emit('updateLevel');
-      SceneGets[i].events.on(
+      sceneGets[i].events.on(
         'updateLevel',
         function() {
-          //function which takes in the UIScene object (ui scene) to the function, which was made out of the creat scope to improve readability
+          //function which takes in the UIScene object to the function, which was made out of the create scope to improve readability
           this.updateLevel(this);
         },
         this
       );
 
       //adds events for all level scenes and enables them to stop the timer
-      SceneGets[i].events.on(
+      sceneGets[i].events.on(
         'stopTimer',
         function() {
           //starts the function to stop the timer loop
@@ -74,7 +74,7 @@ export class UIScene extends Scene {
       );
 
       //adds events for all level scenes and enables them to start the timer
-      SceneGets[i].events.on(
+      sceneGets[i].events.on(
         'startTimer',
         function() {
           //start time loop
@@ -85,11 +85,9 @@ export class UIScene extends Scene {
     }
   }
 
-  update() {}
-
   updateLevel(uiScene) {
     //shortening the name to improve readability
-    var level = uiScene.levelNumber;
+    let level = uiScene.levelNumber;
 
     //basic increase in the level
     level[1] += 1;
