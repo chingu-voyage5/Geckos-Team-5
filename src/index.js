@@ -9,6 +9,7 @@ const config = {
   width: WIDTH,
   height: HEIGHT,
   pixelArt: true,
+  parent: 'phaser',
   physics: {
     default: 'arcade',
     arcade: {
