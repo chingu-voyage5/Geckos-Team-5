@@ -10,6 +10,7 @@ export class Level_1 extends Scene {
 
     // ===== Global Definitions For This FILE ===== //
     this.Bricks;
+    this.testing = true;
   }
 
   create() {
@@ -39,5 +40,12 @@ export class Level_1 extends Scene {
   update(time, delta) {
     // Run the update method of Player
     this.player.update(this.keys, time, delta);
+    if (this.testing == true) {
+      this.registry.set('SCORE', 100);
+      this.registry.set('TIMER', [1, 0, ':', 0, 0, 0]);
+      this.testing = false;
+      this.add.text(0, 100, 'delete testing code in level_1 before merge:');
+      this.add.text(0, 130, 'line 13 + 43-49');
+    }
   }
 }
