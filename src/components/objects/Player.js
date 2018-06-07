@@ -1,21 +1,15 @@
-import phaser from 'phaser';
-
-export default class Player extends phaser.GameObjects.Sprite {
+export default class Player extends Phaser.GameObjects.Sprite {
   constructor(config) {
     super(config.scene, config.x, config.y, config.key);
     config.scene.physics.world.enable(this);
     config.scene.add.existing(this);
     this.body.setCollideWorldBounds(true);
-
-    // this.player;
     this.type = 'player';
     this.isSliding = false;
     this.isAttacking = false;
+
     // ===== Player Setup ===== //
-    // this.setCollideWorldBounds(true);
     this.body.setGravityY(300);
-    this.slideTimer = 0;
-    this.jumping = false;
   }
 
   update(keys, time, delta) {
@@ -27,14 +21,17 @@ export default class Player extends phaser.GameObjects.Sprite {
       attack: keys.attack.isDown,
       fire: keys.fire.isDown
     };
-
-    this.slideTimer -= delta;
+    const Z_KEY = this.scene.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.Z
+    );
+    const SPACE_KEY = this.scene.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.SPACE
+    );
 
     // ===== Move left ===== //
     if (input.left) {
       this.body.setVelocityX(-160);
       this.flipX = false;
-      //   this.playerCanJump();
       if (input.jump && this.body.onFloor()) {
         this.body.setVelocityY(-330);
       }
@@ -44,10 +41,10 @@ export default class Player extends phaser.GameObjects.Sprite {
         // ===== Check if player is currently attacking. ===== //
         // ===== Do sword attack, stop animation after 3/10ths of a second ===== //
         if (!this.isAttacking) {
-          //   this.playerAnimate(this.body, {
-          //     animation: 'sword',
-          //     setVelocityX: -160
-          //   });
+          this.playerAnimate(this.body, {
+            animation: 'sword',
+            setVelocityX: -160
+          });
           if (this.slideTimer > 0) {
             this.isAttacking = true;
           }
@@ -58,18 +55,18 @@ export default class Player extends phaser.GameObjects.Sprite {
         // ===== Check if player is currently sliding. ===== //
         // ===== Do slide, stop animation after 3/10ths of a second ===== //
         if (!this.isSliding) {
-          //   this.playerAnimate(this.body, {
-          //     animation: 'slide',
-          //     setVelocityX: -250
-          //   });
+          this.playerAnimate(this.body, {
+            animation: 'slide',
+            setVelocityX: -250
+          });
           this.scene.time.delayedCall(200, () => (this.isSliding = true));
         }
 
         // ===== Once the player releases the space bar, reset slide ===== //
-      } else if (!input.attack || !input.jump) {
+      } else if (SPACE_KEY.isUp || Z_KEY.isUp) {
         this.cancelSlideAndAttack();
       } else {
-        // this.anims.play('run', true);
+        this.anims.play('run', true);
       }
     }
 
@@ -79,33 +76,32 @@ export default class Player extends phaser.GameObjects.Sprite {
     else if (input.right) {
       this.body.setVelocityX(160);
       this.flipX = true;
-      //   this.playerCanJump();
       if (input.jump && this.body.onFloor()) {
         this.body.setVelocityY(-330);
       }
 
       if (input.attack) {
         if (!this.isAttacking) {
-          //   this.playerAnimate(this.body, {
-          //     animation: 'sword',
-          //     setVelocityX: 160,
-          //     flipX: true
-          //   });
+          this.playerAnimate(this.body, {
+            animation: 'sword',
+            setVelocityX: 160,
+            flipX: true
+          });
           this.scene.time.delayedCall(200, () => (this.isAttacking = true));
         }
       } else if (input.jump) {
         if (!this.isSliding) {
-          //   this.playerAnimate(this.body, {
-          //     animation: 'slide',
-          //     setVelocityX: 250,
-          //     flipX: true
-          //   });
+          this.playerAnimate(this.body, {
+            animation: 'slide',
+            setVelocityX: 250,
+            flipX: true
+          });
           this.scene.time.delayedCall(200, () => (this.isSliding = true));
         }
-      } else if (!input.attack || !input.jump) {
+      } else if (SPACE_KEY.isUp || Z_KEY.isUp) {
         this.cancelSlideAndAttack();
       } else {
-        // this.anims.play('run', true);
+        this.anims.play('run', true);
       }
     }
     // ===== Jump ===== //
@@ -115,7 +111,7 @@ export default class Player extends phaser.GameObjects.Sprite {
     // Do nothing, 0 frame sprite ===== //
     else {
       this.body.setVelocityX(0);
-      //   this.anims.play('turn');
+      this.anims.play('turn');
     }
   }
   /**
@@ -126,23 +122,13 @@ export default class Player extends phaser.GameObjects.Sprite {
    * @param {setVelocity}   number  Player speed on X axis. Negatives move player left
    * @param {flipX}         boolean Flip player animations from left to right
    */
-  //   playerAnimate(
-  //     player,
-  //     { animation = 'run', setVelocityX = 0, flipX = false } = {}
-  //   ) {
-  //     this.body.setVelocityX(setVelocityX);
-  //     player.flipX = flipX;
-  //     this.anims.play(animation, true);
-  //   }
-
-  /**
-   *Check to see if player is allowed to jump
-   *
-   */
-  playerCanJump() {
-    if (input.jump && this.body.onFloor()) {
-      this.body.setVelocityY(-330);
-    }
+  playerAnimate(
+    player,
+    { animation = 'run', setVelocityX = 0, flipX = false } = {}
+  ) {
+    this.body.setVelocityX(setVelocityX);
+    player.flipX = flipX;
+    this.anims.play(animation, true);
   }
 
   /**
@@ -151,6 +137,6 @@ export default class Player extends phaser.GameObjects.Sprite {
   cancelSlideAndAttack() {
     this.isSliding = false;
     this.isAttacking = false;
-    // this.anims.play('run', true);
+    this.anims.play('run', true);
   }
 }
