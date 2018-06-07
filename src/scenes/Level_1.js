@@ -23,7 +23,7 @@ export class Level_1 extends Scene {
 
     this.keys = {
       jump: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
-      jump2: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+      slide: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
       attack: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
       fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
       left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
