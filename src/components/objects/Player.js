@@ -129,7 +129,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
     // ===== Jump ===== //
     else if (input.jump && this.body.onFloor()) {
-      this.body.setVelocityY(thi.jumpDistance);
+      this.body.setVelocityY(this.jumpDistance);
     }
     // Do nothing, 0 frame sprite ===== //
     else {
