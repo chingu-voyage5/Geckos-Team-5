@@ -4,7 +4,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     config.scene.physics.world.enable(this);
     config.scene.add.existing(this);
     this.body.setCollideWorldBounds(true);
-    this.type = 'player';
     this.isSliding = false;
     this.isAttacking = false;
 
@@ -22,12 +21,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       attack: keys.attack.isDown,
       fire: keys.fire.isDown
     };
-    const Z_KEY = this.scene.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.Z
-    );
-    const SPACE_KEY = this.scene.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SPACE
-    );
 
     // ===== If space or z key is held, add new logic to move direction ===== //
     if (input.slide || input.attack) {
@@ -78,7 +71,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         }
 
         // ===== Once the player releases the space bar, reset slide ===== //
-      } else if (SPACE_KEY.isUp || Z_KEY.isUp) {
+      } else if (!input.slide || !input.attack) {
         this.cancelSlideAndAttack();
       } else {
         this.anims.play('run', true);
@@ -113,7 +106,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
           });
           this.scene.time.delayedCall(200, () => (this.isSliding = true));
         }
-      } else if (SPACE_KEY.isUp || Z_KEY.isUp) {
+      } else if (!input.slide || !input.attack) {
         this.cancelSlideAndAttack();
       } else {
         this.anims.play('run', true);
