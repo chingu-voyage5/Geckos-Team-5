@@ -27,13 +27,25 @@ export class UIScene extends Scene {
     //timer value in the form of 00 min, : string, 00 seconds and timerValue[5] for the amount of hours
     this.timerValue = [0, 0, ':', 0, 0, 0];
     this.timerValueFormatted = '';
+
+    //the variables for the score and the text of the score
+    this.score = 0;
+    this.scoreText;
   }
 
   create() {
+    //currently the timer start now as the scene loads in
     this.startGameClock();
 
+    // Check the registry and hit the updateData function every time the data is changed.
+    // this includes the TIMER and SCORE
+    this.registry.events.on('changedata', this.updateData, this);
+
+    //initial display of the score
+    this.scoreText = this.add.text(66, 0, 'Score: ' + this.score, UIFONT);
+
     //initial display of the level
-    this.levelText = this.add.text(4, 0, 'Stage 1-1', UIFONT);
+    this.levelText = this.add.text(5, 0, 'Stage 1-1', UIFONT);
 
     //adds the initial timer text
     this.timerText = this.add.text(446, 0, '00:00', UIFONT);
@@ -102,6 +114,22 @@ export class UIScene extends Scene {
     }
   }
 
+  //updates all the data which was changed in the registry, currently that is : TIMER && SCORE
+  updateData(parent, key, data) {
+    //changes the score        
+    if (key === 'SCORE')
+    {
+      this.scoreText.setText('Score: ' + data);
+    }
+    //changes the timer
+    else if (key === 'TIMER')
+    {
+      //the writerTimerText function uses the timerValue which is why its updated.
+      this.timerValue = data;
+      this.writeTimerText()
+    }
+  }
+
   gameClock() {
     //pushes the second number of seconds one up  00:00 --> 00:01
     this.timerValue[4]++;
@@ -129,9 +157,6 @@ export class UIScene extends Scene {
 
     //registering the current Timer Value to the registry across the scenes
     this.registry.set('TIMER', this.timerValue);
-
-    //outputing the timer to the screen
-    this.writeTimerText();
   }
 
   stopGameClock() {
