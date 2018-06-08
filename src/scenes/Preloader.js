@@ -10,7 +10,7 @@ export class Preloader extends phaser.Scene {
   }
   preload() {
     this.load.image('sky', 'src/assets/images/sky.png');
-    this.load.image('platform', 'src/assets/images/platform.png');
+    this.load.image('bullet', 'src/assets/images/bullet.png');
     this.load.atlas(
       'player',
       'src/assets/spritesheets/player.png',
