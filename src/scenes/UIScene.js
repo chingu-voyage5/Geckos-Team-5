@@ -31,21 +31,29 @@ export class UIScene extends Scene {
     //the variables for the score and the text of the score
     this.score = 0;
     this.scoreText;
+
+    //the variables for the display of lifes
+    this.lifeText;
   }
 
   create() {
     //currently the timer start now as the scene loads in
     this.startGameClock();
 
+    console.log(this);
+
     // Check the registry and hit the updateData function every time the data is changed.
     // this includes the TIMER and SCORE
     this.registry.events.on('changedata', this.updateData, this);
 
+    //initial display of the level
+    this.levelText = this.add.text(5, 0, 'Stage 1-1', UIFONT);
+
     //initial display of the score
     this.scoreText = this.add.text(66, 0, 'Score: ' + this.score, UIFONT);
 
-    //initial display of the level
-    this.levelText = this.add.text(5, 0, 'Stage 1-1', UIFONT);
+    //initial display of the life text
+    this.lifeText = this.add.text(160, 0, 'Lifes: ', UIFONT);
 
     //adds the initial timer text
     this.timerText = this.add.text(446, 0, '00:00', UIFONT);
