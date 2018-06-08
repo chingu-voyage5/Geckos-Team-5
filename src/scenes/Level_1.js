@@ -10,6 +10,11 @@ export class Level_1 extends Scene {
 
     // ===== Global Definitions For This FILE ===== //
     this.Bricks;
+
+    //amount of lifes on the level
+    this.lifes = 1;
+    //used for the init loading of hearts at the start of the level
+    this.gameStart = true;
   }
 
   create() {
@@ -39,5 +44,22 @@ export class Level_1 extends Scene {
   update(time, delta) {
     // Run the update method of Player
     this.player.update(this.keys, time, delta);
+
+    //fun little animation for the initial heart load, delete if the amount of initial lifes is less than 8 
+    if (this.gameStart === true) {
+      this.startLifeAnim();
+    }
   }
+
+  //its using the update function to increase the amount of hearts with the frequency of update
+  startLifeAnim() {
+  if (this.lifes < 14) {
+    if (this.lifes == 13) {
+      //stops the startLifeAnim()
+      this.gameStart = false;
+    }
+    this.registry.set('HEARTS', this.lifes)
+    this.lifes++;
+  }
+}
 }
