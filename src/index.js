@@ -3,24 +3,7 @@ import { WIDTH, HEIGHT } from './util/constants';
 import { Preloader } from './scenes/Preloader';
 import { Level_1 } from './scenes/Level_1';
 import { UIScene } from './scenes/UIScene';
-// import { HeartPlugin } from './components/objects/HeartPlugin';
-
-import { heartObject } from './components/objects/heartObject';
-
-class HeartPlugin extends Phaser.Plugins.BasePlugin {
-
-  constructor(pluginManager) {
-    super(pluginManager);
-
-    //  Register our new Game Object type
-    pluginManager.registerGameObject('heart', this.createHeart);
-  }
-
-  createHeart(x, y) {
-    return this.displayList.add(new heartObject(this.scene, x, y));
-  }
-
-}
+import HeartPlugin from './components/objects/HeartPlugin';
 
 const config = {
   type: Phaser.AUTO,
