@@ -65,49 +65,55 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
 
-    playAnimationDirection( input, flipX, velocityX ) {
-        this.body.setVelocityX(velocityX);
-        this.flipX = flipX;
-        if (input.jump && this.body.onFloor()) {
-          this.body.setVelocityY(this.jumpDistance);
+  /**
+   * Checks Logic to render the direction of player animation
+   * @param {input}     object  Input keys object
+   * @param {flipX}     boolean Flip player animations from left to right
+   * @param {velocityX} number  Player speed on X axis. Negatives move player left
+   */
+  playAnimationDirection( input, flipX, velocityX ) {
+      this.body.setVelocityX(velocityX);
+      this.flipX = flipX;
+      if (input.jump && this.body.onFloor()) {
+        this.body.setVelocityY(this.jumpDistance);
+      }
+
+      // ===== Check to see if we should swing sword ===== //
+      if (input.attack) {
+        // ===== Check if player is currently attacking. ===== //
+        // ===== Do sword attack, stop animation after 3/10ths of a second ===== //
+        if (!this.isAttacking) {
+          this.playerAnimate(this.body, {
+            animation: 'sword',
+            setVelocityX: velocityX
+          });
+          this.scene.time.delayedCall(
+            this.slideTimer,
+            () => (this.isAttacking = true)
+          );
         }
-  
-        // ===== Check to see if we should swing sword ===== //
-        if (input.attack) {
-          // ===== Check if player is currently attacking. ===== //
-          // ===== Do sword attack, stop animation after 3/10ths of a second ===== //
-          if (!this.isAttacking) {
-            this.playerAnimate(this.body, {
-              animation: 'sword',
-              setVelocityX: velocityX
-            });
-            this.scene.time.delayedCall(
-              this.slideTimer,
-              () => (this.isAttacking = true)
-            );
-          }
-          // ===== Slide, add speed ===== //
-        } else if (input.slide) {
-          // ===== Check if player is currently sliding. ===== //
-          // ===== Do slide, stop animation after 3/10ths of a second ===== //
-          if (!this.isSliding) {
-            this.playerAnimate(this.body, {
-              animation: 'slide',
-              setVelocityX: ( flipX ? this.slideDistance : -this.slideDistance )
-            });
-            this.scene.time.delayedCall(
-              this.slideTimer,
-              () => (this.isSliding = true)
-            );
-          }
-  
-          // ===== Once the player releases the space bar, reset slide ===== //
-        } else if (!input.slide || !input.attack) {
-          this.cancelSlideAndAttack();
-        } else {
-          this.anims.play('run', true);
+        // ===== Slide, add speed ===== //
+      } else if (input.slide) {
+        // ===== Check if player is currently sliding. ===== //
+        // ===== Do slide, stop animation after 3/10ths of a second ===== //
+        if (!this.isSliding) {
+          this.playerAnimate(this.body, {
+            animation: 'slide',
+            setVelocityX: ( flipX ? this.slideDistance : -this.slideDistance )
+          });
+          this.scene.time.delayedCall(
+            this.slideTimer,
+            () => (this.isSliding = true)
+          );
         }
-    }
+
+        // ===== Once the player releases the space bar, reset slide ===== //
+      } else if (!input.slide || !input.attack) {
+        this.cancelSlideAndAttack();
+      } else {
+        this.anims.play('run', true);
+      }
+  }
 
 
   /**
