@@ -11,6 +11,8 @@ export class Preloader extends phaser.Scene {
   preload() {
     this.load.image('sky', 'src/assets/images/sky.png');
     this.load.image('bullet', 'src/assets/images/bullet.png');
+    this.load.image('platform', 'src/assets/images/platform.png');
+    this.load.image('heart', 'src/assets/images/heart.png');
     this.load.atlas(
       'player',
       'src/assets/spritesheets/player.png',
@@ -38,6 +40,6 @@ export class Preloader extends phaser.Scene {
       progress.destroy();
       this.scene.start('Level_1');
       this.scene.start('UIScene');
-    });
+    });    
   }
 }
