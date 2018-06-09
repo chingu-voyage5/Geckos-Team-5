@@ -1,27 +1,26 @@
-export default class Player extends Phaser.GameObjects.Sprite {
+import { HEIGHT } from '../../util/constants'
 
-    constructor(config) {
-        super(config.scene, config.x, config.y, config.key);
-        Phaser.GameObjects.Image.call(this, config.scene, 0, 0, "bullet");
-        this.speed = Phaser.Math.GetSpeed(400, 1);
-        this.born = 0;
+export default class Bullet extends Phaser.GameObjects.Image {
+
+    constructor({ scene, x, y, key }) {
+        super(scene, x, y, key);
+        this.speed = Phaser.Math.GetSpeed(200, 1);
     }
 
-    fire(player) {
-        this.setPosition(config.x, config.y);
+
+    fire(x) {
+        this.setPosition(x, y);
+
         this.setActive(true);
-        this.setVisible(true);       
-        this.born = 0;
+        this.setVisible(true);
     }
 
-    update(time, delta) {
+    update(delta) {
         this.y -= this.speed * delta;
-        this.x -= this.speed * delta;
 
-        // this.born += delta;
-        if (this.y < -50) {
+        if (this.y > HEIGHT) {
             this.setActive(false);
             this.setVisible(false);
-          }
+        }
     }
 }

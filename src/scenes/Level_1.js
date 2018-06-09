@@ -12,6 +12,7 @@ export class Level_1 extends Scene {
     // ===== Global Definitions For This FILE ===== //
     this.Bricks;
     this.Bullet;
+    this.bricks;
 
     //amount of lifes on the level
     this.lifes = 1;
@@ -21,6 +22,49 @@ export class Level_1 extends Scene {
 
   create() {
     this.image = this.add.sprite(400, 300, 'sky');
+
+    // ===== BRIIIIIICKS HEART ===== //
+
+    this.bricks = this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick4'],
+      frameQuantity: 3,
+      gridAlign: { width: 3, height: 1, cellWidth: 33, cellHeight: 33, x: 100, y: 50 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick4'],
+      frameQuantity: 3,
+      gridAlign: { width: 3, height: 1, cellWidth: 33, cellHeight: 33, x: 298, y: 50 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick5'],
+      frameQuantity: 4,
+      gridAlign: { width: 4, height: 1, cellWidth: 33, cellHeight: 33, x: 100, y: 83 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick5'],
+      frameQuantity: 4,
+      gridAlign: { width: 4, height: 1, cellWidth: 33, cellHeight: 33, x: 265, y: 83 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick7'],
+      frameQuantity: 9,
+      gridAlign: { width: 9, height: 1, cellWidth: 33, cellHeight: 33, x: 100, y: 116 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick8'],
+      frameQuantity: 7,
+      gridAlign: { width: 7, height: 1, cellWidth: 33, cellHeight: 33, x: 133, y: 149 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick1'],
+      frameQuantity: 5,
+      gridAlign: { width: 5, height: 1, cellWidth: 33, cellHeight: 33, x: 166, y: 182 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick2'],
+      frameQuantity: 3,
+      gridAlign: { width: 3, height: 1, cellWidth: 33, cellHeight: 33, x: 199, y: 215 }
+    });
 
     // ===== CUSTOM KEYS ===== //
 
@@ -32,7 +76,6 @@ export class Level_1 extends Scene {
       left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
       right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
       down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
-      arrow: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X)
     };
 
     // Create Player
@@ -43,7 +86,8 @@ export class Level_1 extends Scene {
       y: HEIGHT - 30
     });
 
-    var Bullet = new Phaser.Class({
+
+    const Bullets = new Phaser.Class({
 
       Extends: Phaser.GameObjects.Image,
 
@@ -73,20 +117,26 @@ export class Level_1 extends Scene {
 
     });
 
+
+    
     this.bullets = this.add.group({
-      classType: Bullet,
+      classType: Bullets,
       runChildUpdate: true
     });
+
+    console.log(this.bullets)
 
   }
 
   update(time, delta) {
-    if (this.keys.arrow.isDown) {
+    if (this.keys.fire.isDown) {
       let bullet = this.bullets.get();
       if (bullet) {
+        console.log(bullet)
         bullet.fire(this.player.x);
       }
     }
+
     this.player.update(this.keys, time, delta);
 
     //fun little animation for the initial heart load, delete if the amount of initial lifes is less than 8 
