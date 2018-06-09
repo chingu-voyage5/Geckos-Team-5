@@ -1,7 +1,6 @@
 import { Scene } from 'phaser';
 import { WIDTH, HEIGHT } from '../util/constants';
 import Player from '../components/objects/Player';
-import Ball from '../components/objects/Ball';
 
 export class Level_1 extends Scene {
   constructor() {
@@ -10,7 +9,10 @@ export class Level_1 extends Scene {
     });
 
     // ===== Global Definitions For This FILE ===== //
-    this.bricks;
+    //here the bricks will be stored
+    this.bricks = [];
+    //how many bricks are used on this map
+    this.amountBricks = 38;
     this.ball;
 
     //amount of lifes on the level
@@ -24,42 +26,42 @@ export class Level_1 extends Scene {
 
     // ===== BRIIIIIICKS HEART ===== //
 
-    this.bricks = this.physics.add.staticGroup({
+    this.bricks[0] = this.physics.add.staticGroup({
       key: 'bricks', frame: ['brick4'],
       frameQuantity: 3,
       gridAlign: { width: 3, height: 1, cellWidth: 33, cellHeight: 33, x: 100, y: 50 }
     });
-    this.bricks += this.physics.add.staticGroup({
+    this.bricks[1] = this.physics.add.staticGroup({
       key: 'bricks', frame: ['brick4'],
       frameQuantity: 3,
       gridAlign: { width: 3, height: 1, cellWidth: 33, cellHeight: 33, x: 298, y: 50 }
     });
-    this.bricks += this.physics.add.staticGroup({
+    this.bricks[2] = this.physics.add.staticGroup({
       key: 'bricks', frame: ['brick5'],
       frameQuantity: 4,
       gridAlign: { width: 4, height: 1, cellWidth: 33, cellHeight: 33, x: 100, y: 83 }
     });
-    this.bricks += this.physics.add.staticGroup({
+    this.bricks[3] = this.physics.add.staticGroup({
       key: 'bricks', frame: ['brick5'],
       frameQuantity: 4,
       gridAlign: { width: 4, height: 1, cellWidth: 33, cellHeight: 33, x: 265, y: 83 }
     });
-    this.bricks += this.physics.add.staticGroup({
+    this.bricks[5] = this.physics.add.staticGroup({
       key: 'bricks', frame: ['brick7'],
       frameQuantity: 9,
       gridAlign: { width: 9, height: 1, cellWidth: 33, cellHeight: 33, x: 100, y: 116 }
     });
-    this.bricks += this.physics.add.staticGroup({
+    this.bricks[6] = this.physics.add.staticGroup({
       key: 'bricks', frame: ['brick8'],
       frameQuantity: 7,
       gridAlign: { width: 7, height: 1, cellWidth: 33, cellHeight: 33, x: 133, y: 149 }
     });
-    this.bricks += this.physics.add.staticGroup({
+    this.bricks[7] = this.physics.add.staticGroup({
       key: 'bricks', frame: ['brick1'],
       frameQuantity: 5,
       gridAlign: { width: 5, height: 1, cellWidth: 33, cellHeight: 33, x: 166, y: 182 }
     });
-    this.bricks += this.physics.add.staticGroup({
+    this.bricks[8] = this.physics.add.staticGroup({
       key: 'bricks', frame: ['brick2'],
       frameQuantity: 3,
       gridAlign: { width: 3, height: 1, cellWidth: 33, cellHeight: 33, x: 199, y: 215 }
@@ -86,14 +88,13 @@ export class Level_1 extends Scene {
     });
 
     // Create Ball
-    this.ball = this.physics.add.image(100, HEIGHT - 100, 'ball').setCollideWorldBounds(true).setBounce(1);
+    //adding to the world
+    this.ball = this.physics.add.image(0, HEIGHT - 100, 'ball').setCollideWorldBounds(true).setBounce(1);
+    //setting the collides with bricks and player
     this.physics.add.collider(this.ball, this.bricks, this.hitBrick, null, this);
     this.physics.add.collider(this.ball, this.player, this.hitPlayer, null, this);
-    this.ball.setVelocity(-100, -100);
-    console.log(this.ball);
-    console.log(this.physics);
-    
-    
+    //initial velocity
+    this.ball.setVelocity(100, -80);
   }
 
   update(time, delta) {
@@ -103,14 +104,7 @@ export class Level_1 extends Scene {
     //fun little animation for the initial heart load, delete if the amount of initial lifes is less than 8 
     if (this.gameStart === true) {
       this.startLifeAnim();
-    }
-
-    if (this.ball.y > 309) {
-      this.wallCollision();
-    }
-
-    console.log(this.ball.body.velocity);
-    
+    }  
   }
 
   //its using the update function to increase the amount of hearts with the frequency of update
@@ -125,8 +119,56 @@ export class Level_1 extends Scene {
     }
   }
 
-  wallCollision() {
-    console.log('wallCollision');
-    // this.ball.setVelocity(this.ball.body.velocity.x, this.ball.body.velocity.y - 100);
+  hitPlayer() {
+    //difference between the x positions of the player and ball
+    let diff = 0;
+
+    //  Ball is on the left-hand side of the player
+    if (this.ball.x < this.player.x) {
+      //logging the difference
+      diff = this.player.x - this.ball.x;
+
+      //adding some difference based velocity
+      this.ball.setVelocityX(-5 * diff);
+
+      //add some y velocity if ball too slow
+      if (this.ball.body.velocity.y < 100 && this.ball.body.velocity.y > -50) {
+        this.ball.setVelocityY(this.ball.body.velocity.y - 100);
+      }
+    }
+
+    //  Ball is on the right-hand side of the player
+    else if (this.ball.x > this.player.x) {
+      //logging the difference
+      diff = this.ball.x - this.player.x;
+
+      //setting the difference based velocity
+      this.ball.setVelocityX(5 * diff);
+
+      //add some y velocity if ball too slow
+      if (this.ball.body.velocity.y < 100 && this.ball.body.velocity.y > -50) {
+        this.ball.setVelocityY(this.ball.body.velocity.y - 100);
+      }
+    }
+
+    //  Ball is perfectly in the middle
+    //  Add a little random X to stop it bouncing straight up!
+    else {
+      this.ball.setVelocityX(2 + Math.random() * 8);
+      this.ball.setVelocityY(this.ball.body.velocity.y - 100);
+    }
+  }
+
+  hitBrick(ball, brick) {
+    //hides the brick, not destroyed
+    brick.disableBody(true, true);
+    //tracks the progress of the brick destroying
+    this.amountBricks--;
+
+    //when the last brick died it it should trigger the end of the stage
+    if (this.amountBricks == 0) {
+      // this.resetLevel();
+      console.log("MY FAMILY IS DEAD");
+    }
   }
 }
