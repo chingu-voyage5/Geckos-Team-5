@@ -17,9 +17,13 @@ export default class Bullet extends Phaser.GameObjects.Image {
 
     update(time, delta) {
         this.y -= this.speed * 30;
-        if (this.y > HEIGHT) {
+
+        // comment below line in if you want to see the bullet children get deleted
+        // console.log(this.scene.bullets.children.entries.length)
+        if (this.y < 0) {
             this.setActive(false);
             this.setVisible(false);
+            this.destroy();
         }
     }
 }
