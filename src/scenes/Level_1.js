@@ -9,7 +9,7 @@ export class Level_1 extends Scene {
     });
 
     // ===== Global Definitions For This FILE ===== //
-    this.Bricks;
+    this.bricks;
 
     //amount of lifes on the level
     this.lifes = 1;
@@ -19,6 +19,49 @@ export class Level_1 extends Scene {
 
   create() {
     this.image = this.add.sprite(400, 300, 'sky');
+
+    // ===== BRIIIIIICKS HEART ===== //
+
+    this.bricks = this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick4'],
+      frameQuantity: 3,
+      gridAlign: { width: 3, height: 1, cellWidth: 33, cellHeight: 33, x: 100, y: 50 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick4'],
+      frameQuantity: 3,
+      gridAlign: { width: 3, height: 1, cellWidth: 33, cellHeight: 33, x: 298, y: 50 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick5'],
+      frameQuantity: 4,
+      gridAlign: { width: 4, height: 1, cellWidth: 33, cellHeight: 33, x: 100, y: 83 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick5'],
+      frameQuantity: 4,
+      gridAlign: { width: 4, height: 1, cellWidth: 33, cellHeight: 33, x: 265, y: 83 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick7'],
+      frameQuantity: 9,
+      gridAlign: { width: 9, height: 1, cellWidth: 33, cellHeight: 33, x: 100, y: 116 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick8'],
+      frameQuantity: 7,
+      gridAlign: { width: 7, height: 1, cellWidth: 33, cellHeight: 33, x: 133, y: 149 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick1'],
+      frameQuantity: 5,
+      gridAlign: { width: 5, height: 1, cellWidth: 33, cellHeight: 33, x: 166, y: 182 }
+    });
+    this.bricks += this.physics.add.staticGroup({
+      key: 'bricks', frame: ['brick2'],
+      frameQuantity: 3,
+      gridAlign: { width: 3, height: 1, cellWidth: 33, cellHeight: 33, x: 199, y: 215 }
+    });
 
     // ===== CUSTOM KEYS ===== //
 
