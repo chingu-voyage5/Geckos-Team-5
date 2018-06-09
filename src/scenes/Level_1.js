@@ -10,8 +10,6 @@ export class Level_1 extends Scene {
     });
 
     // ===== Global Definitions For This FILE ===== //
-    this.Bricks;
-    this.Bullet;
     this.bricks;
 
     //amount of lifes on the level

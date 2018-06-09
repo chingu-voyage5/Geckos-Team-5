@@ -2,9 +2,8 @@ import { HEIGHT } from '../../util/constants'
 
 export default class Bullet extends Phaser.GameObjects.Image {
 
-    constructor(scene) {
-        super(scene);
-        Phaser.GameObjects.Image.call(this, scene, 0, 0, "bullet");
+    constructor(config) {
+        super(config, 0, 0, 'bullet');
         this.speed = Phaser.Math.GetSpeed(200, 1);
     }
 
