@@ -17,6 +17,11 @@ export class Preloader extends phaser.Scene {
       'src/assets/spritesheets/player.png',
       'src/assets/spritesheets/player.json'
     );
+    this.load.atlas(
+      'bricks',
+      'src/assets/spritesheets/brick.png',
+      'src/assets/spritesheets/brick.json'
+    );
 
     const progress = this.add.graphics();
 
