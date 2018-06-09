@@ -16,7 +16,7 @@ export default class Bullet extends Phaser.GameObjects.Image {
     }
 
     update(time, delta) {
-        this.y -= this.speed * delta;
+        this.y -= this.speed * 30;
         if (this.y > HEIGHT) {
             this.setActive(false);
             this.setVisible(false);
