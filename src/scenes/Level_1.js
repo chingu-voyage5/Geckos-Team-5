@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import { WIDTH, HEIGHT } from '../util/constants';
 import Player from '../components/objects/Player';
+import Ball from '../components/objects/Ball';
 
 export class Level_1 extends Scene {
   constructor() {
@@ -10,6 +11,7 @@ export class Level_1 extends Scene {
 
     // ===== Global Definitions For This FILE ===== //
     this.bricks;
+    this.ball;
 
     //amount of lifes on the level
     this.lifes = 1;
@@ -82,6 +84,16 @@ export class Level_1 extends Scene {
       x: 400,
       y: HEIGHT - 30
     });
+
+    // Create Ball
+    this.ball = this.physics.add.image(100, HEIGHT - 100, 'ball').setCollideWorldBounds(true).setBounce(1);
+    this.physics.add.collider(this.ball, this.bricks, this.hitBrick, null, this);
+    this.physics.add.collider(this.ball, this.player, this.hitPlayer, null, this);
+    this.ball.setVelocity(-100, -100);
+    console.log(this.ball);
+    console.log(this.physics);
+    
+    
   }
 
   update(time, delta) {
@@ -92,17 +104,29 @@ export class Level_1 extends Scene {
     if (this.gameStart === true) {
       this.startLifeAnim();
     }
+
+    if (this.ball.y > 309) {
+      this.wallCollision();
+    }
+
+    console.log(this.ball.body.velocity);
+    
   }
 
   //its using the update function to increase the amount of hearts with the frequency of update
   startLifeAnim() {
   if (this.lifes < 14) {
-    if (this.lifes == 13) {
-      //stops the startLifeAnim()
-      this.gameStart = false;
+      if (this.lifes == 13) {
+        //stops the startLifeAnim()
+        this.gameStart = false;
+      }
+      this.registry.set('HEARTS', this.lifes)
+      this.lifes++;
     }
-    this.registry.set('HEARTS', this.lifes)
-    this.lifes++;
   }
-}
+
+  wallCollision() {
+    console.log('wallCollision');
+    // this.ball.setVelocity(this.ball.body.velocity.x, this.ball.body.velocity.y - 100);
+  }
 }

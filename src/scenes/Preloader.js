@@ -12,6 +12,7 @@ export class Preloader extends phaser.Scene {
     this.load.image('sky', 'src/assets/images/sky.png');
     this.load.image('platform', 'src/assets/images/platform.png');
     this.load.image('heart', 'src/assets/images/heart.png');
+    this.load.image('ball', 'src/assets/images/test-brick.png')
     this.load.atlas(
       'player',
       'src/assets/spritesheets/player.png',
