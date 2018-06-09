@@ -85,55 +85,22 @@ export class Level_1 extends Scene {
       x: 400,
       y: HEIGHT - 30
     });
-
-
-    const Bullets = new Phaser.Class({
-
-      Extends: Phaser.GameObjects.Image,
-
-      initialize:
-
-        function Bullet(scene) {
-          Phaser.GameObjects.Image.call(this, scene, 0, 0, 'bullet');
-
-          this.speed = Phaser.Math.GetSpeed(200, 1);
-        },
-
-      fire: function (x) {
-        this.setPosition( x, HEIGHT - 70 );
-
-        this.setActive(true);
-        this.setVisible(true);
-      },
-
-      update: function (time, delta) {
-        this.y -= this.speed * delta;
-
-        if (this.y > HEIGHT) {
-          this.setActive(false);
-          this.setVisible(false);
-        }
-      }
-
-    });
-
-
     
     this.bullets = this.add.group({
-      classType: Bullets,
+      classType: Bullet,
       runChildUpdate: true
     });
 
-    console.log(this.bullets)
 
   }
 
   update(time, delta) {
+
+    // ===== BULLET ===== //
     if (this.keys.fire.isDown) {
       let bullet = this.bullets.get();
       if (bullet) {
-        console.log(bullet)
-        bullet.fire(this.player.x);
+        bullet.fire(this.player.x, this.player.y - 40);
       }
     }
 

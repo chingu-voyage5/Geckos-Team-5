@@ -2,22 +2,22 @@ import { HEIGHT } from '../../util/constants'
 
 export default class Bullet extends Phaser.GameObjects.Image {
 
-    constructor({ scene, x, y, key }) {
-        super(scene, x, y, key);
+    constructor(scene) {
+        super(scene);
+        Phaser.GameObjects.Image.call(this, scene, 0, 0, "bullet");
         this.speed = Phaser.Math.GetSpeed(200, 1);
     }
 
 
-    fire(x) {
+    fire(x, y) {
         this.setPosition(x, y);
 
         this.setActive(true);
         this.setVisible(true);
     }
 
-    update(delta) {
+    update(time, delta) {
         this.y -= this.speed * delta;
-
         if (this.y > HEIGHT) {
             this.setActive(false);
             this.setVisible(false);
