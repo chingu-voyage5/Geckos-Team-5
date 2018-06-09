@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import { WIDTH, HEIGHT } from '../util/constants';
 import Player from '../components/objects/Player';
+import Bullet from '../components/objects/Bullet';
 
 export class Level_1 extends Scene {
   constructor() {
@@ -72,7 +73,7 @@ export class Level_1 extends Scene {
       fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
       left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
       right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
-      down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
+      down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
     };
 
     // Create Player
@@ -82,10 +83,29 @@ export class Level_1 extends Scene {
       x: 400,
       y: HEIGHT - 30
     });
+    
+
+    // ===== Set up a creation of bullets for the scene ===== //
+    // ===== Can Probably move this to Player file for refactor ===== //
+    
+    this.bullets = this.add.group({
+      classType: Bullet,
+      runChildUpdate: true
+    });
+
+
   }
 
   update(time, delta) {
-    // Run the update method of Player
+
+    // ===== BULLET ===== //
+    if (this.keys.fire.isDown) {
+      let bullet = this.bullets.get();
+      if (bullet) {
+        bullet.fire(this.player.x, this.player.y - 30);
+      }
+    }
+
     this.player.update(this.keys, time, delta);
 
     //fun little animation for the initial heart load, delete if the amount of initial lifes is less than 8 

@@ -44,8 +44,36 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     // ===== Move left ===== //
     if (input.left) {
-      this.body.setVelocityX(-160);
-      this.flipX = false;
+        this.playAnimationDirection.call(this, input, false, -160);
+    }
+
+    // ===== Move right ===== //
+    // ===== Need to flip frames on x axis. Sprites dont have moving to the right frames ===== //
+    // ===== All same logic as above, but backwards ===== //
+    else if (input.right) {
+        this.playAnimationDirection.call(this, input, true, 160);
+    }
+    // ===== Jump ===== //
+    else if (input.jump && this.body.onFloor()) {
+      this.body.setVelocityY(this.jumpDistance);
+    }
+    // Do nothing, 0 frame sprite ===== //
+    else {
+      this.body.setVelocityX(0);
+      this.anims.play('turn');
+    }
+  }
+
+
+  /**
+   * Checks Logic to render the direction of player animation
+   * @param {input}     object  Input keys object
+   * @param {flipX}     boolean Flip player animations from left to right
+   * @param {velocityX} number  Player speed on X axis. Negatives move player left
+   */
+  playAnimationDirection( input, flipX, velocityX ) {
+      this.body.setVelocityX(velocityX);
+      this.flipX = flipX;
       if (input.jump && this.body.onFloor()) {
         this.body.setVelocityY(this.jumpDistance);
       }
@@ -57,7 +85,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         if (!this.isAttacking) {
           this.playerAnimate(this.body, {
             animation: 'sword',
-            setVelocityX: -160
+            setVelocityX: velocityX
           });
           this.scene.time.delayedCall(
             this.slideTimer,
@@ -71,7 +99,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         if (!this.isSliding) {
           this.playerAnimate(this.body, {
             animation: 'slide',
-            setVelocityX: -this.slideDistance
+            setVelocityX: ( flipX ? this.slideDistance : -this.slideDistance )
           });
           this.scene.time.delayedCall(
             this.slideTimer,
@@ -85,58 +113,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
       } else {
         this.anims.play('run', true);
       }
-    }
-
-    // ===== Move right ===== //
-    // ===== Need to flip frames on x axis. Sprites dont have moving to the right frames ===== //
-    // ===== All same logic as above, but backwards ===== //
-    else if (input.right) {
-      this.body.setVelocityX(160);
-      this.flipX = true;
-      if (input.jump && this.body.onFloor()) {
-        this.body.setVelocityY(this.jumpDistance);
-      }
-
-      if (input.attack) {
-        if (!this.isAttacking) {
-          this.playerAnimate(this.body, {
-            animation: 'sword',
-            setVelocityX: 160,
-            flipX: true
-          });
-          this.scene.time.delayedCall(
-            this.slideTimer,
-            () => (this.isAttacking = true)
-          );
-        }
-      } else if (input.slide) {
-        if (!this.isSliding) {
-          this.playerAnimate(this.body, {
-            animation: 'slide',
-            setVelocityX: this.slideDistance,
-            flipX: true
-          });
-          this.scene.time.delayedCall(
-            this.slideTimer,
-            () => (this.isSliding = true)
-          );
-        }
-      } else if (!input.slide || !input.attack) {
-        this.cancelSlideAndAttack();
-      } else {
-        this.anims.play('run', true);
-      }
-    }
-    // ===== Jump ===== //
-    else if (input.jump && this.body.onFloor()) {
-      this.body.setVelocityY(this.jumpDistance);
-    }
-    // Do nothing, 0 frame sprite ===== //
-    else {
-      this.body.setVelocityX(0);
-      this.anims.play('turn');
-    }
   }
+
+
   /**
    *
    * Reusable Player animation function.
