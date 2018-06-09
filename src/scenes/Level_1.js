@@ -84,6 +84,10 @@ export class Level_1 extends Scene {
       y: HEIGHT - 30
     });
     
+
+    // ===== Set up a creation of bullets for the scene ===== //
+    // ===== Can Probably move this to Player file for refactor ===== //
+    
     this.bullets = this.add.group({
       classType: Bullet,
       runChildUpdate: true
@@ -98,7 +102,7 @@ export class Level_1 extends Scene {
     if (this.keys.fire.isDown) {
       let bullet = this.bullets.get();
       if (bullet) {
-        bullet.fire(this.player.x, this.player.y - 40);
+        bullet.fire(this.player.x, this.player.y - 30);
       }
     }
 
