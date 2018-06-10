@@ -1,4 +1,4 @@
-export default class Ball extends Phaser.GameObjects.Image {
+export default class Ball extends Phaser.GameObjects.Sprite {
       constructor(config) {
             //takes in the scene the x position, the y pposition, the key of the picture and and an object to set the velocity, {x:2,y:3}
             super(config.scene, config.x, config.y, config.key, config.veloc.x, config.veloc.y);
@@ -7,6 +7,11 @@ export default class Ball extends Phaser.GameObjects.Image {
             config.scene.add.existing(this);
             //stting the bounce on walls
             this.body.setCollideWorldBounds(true).setBounce(1);
+            
+            //starts the animation for the ball
+            this.anims.play('ballAnim');
+            //when the animations are finished they get started again
+            this.on('animationcomplete', this.animComplete, this);
 
             //collider for the bricks
             config.scene.physics.add.collider(
@@ -81,5 +86,9 @@ export default class Ball extends Phaser.GameObjects.Image {
                   // this.resetLevel();
                   console.log('MY FAMILY IS DEAD');
             }
+      }
+
+      animComplete(animation, frame) {
+            this.anims.play('ballAnim');
       }
 }

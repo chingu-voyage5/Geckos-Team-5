@@ -42,4 +42,12 @@ export default function makeAnimations(scene) {
     frameRate: 20
   };
   scene.anims.create(config);
+
+  config = {
+    key: 'ballAnim',
+    frames: scene.anims.generateFrameNumbers('ball', { start: 0, end: 3, first: 0 }),
+    frameRate: 8
+  };
+
+  scene.anims.create(config);
 }
