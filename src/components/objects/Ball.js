@@ -81,6 +81,12 @@ export default class Ball extends Phaser.GameObjects.Sprite {
             //tracks the progress of the brick destroying
             this.scene.amountBricks--;
 
+            //passing variable for the current score
+            let oldScore = this.scene.registry.list.SCORE;
+
+            //setting the new score
+            this.scene.registry.set('SCORE', oldScore + 100);
+
             //when the last brick died it it should trigger the end of the stage
             if (this.scene.amountBricks == 0) {
                   // this.resetLevel();

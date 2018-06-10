@@ -107,6 +107,9 @@ export class UIScene extends Scene {
 
     //setting the initial amount of hearts to the player
     this.registry.set('HEARTS', this.heartsAmount);
+
+    //setting the initial score
+    this.registry.set('SCORE', 0);
   }
 
   updateLevel(uiScene) {
