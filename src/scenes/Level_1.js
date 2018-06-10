@@ -2,6 +2,7 @@ import { Scene } from 'phaser';
 import { WIDTH, HEIGHT } from '../util/constants';
 import Player from '../components/objects/Player';
 import Bullet from '../components/objects/Bullet';
+import Ball from '../components/objects/Ball';
 
 export class Level_1 extends Scene {
   constructor() {
@@ -153,28 +154,17 @@ export class Level_1 extends Scene {
     });
 
     // Create Ball
-    //adding to the world
-    this.ball = this.physics.add
-      .image(0, HEIGHT - 100, 'ball')
-      .setCollideWorldBounds(true)
-      .setBounce(1);
-    //setting the collides with bricks and player
-    this.physics.add.collider(
-      this.ball,
-      this.bricks,
-      this.hitBrick,
-      null,
-      this
-    );
-    this.physics.add.collider(
-      this.ball,
-      this.player,
-      this.hitPlayer,
-      null,
-      this
-    );
-    //initial velocity
-    this.ball.setVelocity(100, -80);
+    //veloc means velocity
+    this.ball = new Ball({
+      scene: this,
+      key: 'ball',
+      x: 0,
+      y: HEIGHT - 100,
+      veloc: {
+        x:100,
+        y: -80
+      }
+    });
 
     // ===== Set up a creation of bullets for the scene ===== //
     // ===== Can Probably move this to Player file for refactor ===== //
@@ -211,59 +201,6 @@ export class Level_1 extends Scene {
       }
       this.registry.set('HEARTS', this.lifes);
       this.lifes++;
-    }
-  }
-
-  hitPlayer() {
-    //difference between the x positions of the player and ball
-    let diff = 0;
-
-    //  Ball is on the left-hand side of the player
-    if (this.ball.x < this.player.x) {
-      //logging the difference
-      diff = this.player.x - this.ball.x;
-
-      //adding some difference based velocity
-      this.ball.setVelocityX(-5 * diff);
-
-      //add some y velocity if ball too slow
-      if (this.ball.body.velocity.y < 100 && this.ball.body.velocity.y > -50) {
-        this.ball.setVelocityY(this.ball.body.velocity.y - 100);
-      }
-    }
-
-    //  Ball is on the right-hand side of the player
-    else if (this.ball.x > this.player.x) {
-      //logging the difference
-      diff = this.ball.x - this.player.x;
-
-      //setting the difference based velocity
-      this.ball.setVelocityX(5 * diff);
-
-      //add some y velocity if ball too slow
-      if (this.ball.body.velocity.y < 100 && this.ball.body.velocity.y > -50) {
-        this.ball.setVelocityY(this.ball.body.velocity.y - 100);
-      }
-    }
-
-    //  Ball is perfectly in the middle
-    //  Add a little random X to stop it bouncing straight up!
-    else {
-      this.ball.setVelocityX(2 + Math.random() * 8);
-      this.ball.setVelocityY(this.ball.body.velocity.y - 100);
-    }
-  }
-
-  hitBrick(ball, brick) {
-    //hides the brick, not destroyed
-    brick.disableBody(true, true);
-    //tracks the progress of the brick destroying
-    this.amountBricks--;
-
-    //when the last brick died it it should trigger the end of the stage
-    if (this.amountBricks == 0) {
-      // this.resetLevel();
-      console.log('MY FAMILY IS DEAD');
     }
   }
 }

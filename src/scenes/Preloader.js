@@ -13,7 +13,6 @@ export class Preloader extends phaser.Scene {
     this.load.image('bullet', 'src/assets/images/bullet.png');
     this.load.image('platform', 'src/assets/images/platform.png');
     this.load.image('heart', 'src/assets/images/heart.png');
-    this.load.image('ball', 'src/assets/images/test-brick.png')
     this.load.atlas(
       'player',
       'src/assets/spritesheets/player.png',
@@ -24,6 +23,7 @@ export class Preloader extends phaser.Scene {
       'src/assets/spritesheets/brick.png',
       'src/assets/spritesheets/brick.json'
     );
+    this.load.spritesheet('ball', 'src/assets/spritesheets/ball.png', { frameWidth: 25, frameHeight: 25, endFrame: 3 });
 
     const progress = this.add.graphics();
 
