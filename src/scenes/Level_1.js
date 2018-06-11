@@ -24,7 +24,7 @@ export class Level_1 extends Scene {
   }
 
   create() {
-    this.image = this.add.sprite(400, 300, 'sky');
+    this.image = this.add.sprite(240, 160, 'background');
 
     // ===== BRIIIIIICKS HEART ===== //
 
