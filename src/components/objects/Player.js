@@ -26,21 +26,21 @@ export default class Player extends Phaser.GameObjects.Sprite {
     };
 
     // ===== If space or z key is held, add new logic to move direction ===== //
-    if (input.slide || input.attack) {
-      if (input.left) {
-        this.playerAnimate(this.body, {
-          animation: 'run',
-          setVelocityX: -160,
-          flipX: false
-        });
-      } else if (input.right) {
-        this.playerAnimate(this.body, {
-          animation: 'run',
-          setVelocityX: 160,
-          flipX: true
-        });
-      }
-    }
+    // if (input.slide || input.attack) {
+    //   if (input.left) {
+    //     this.playerAnimate(this.body, {
+    //       animation: 'run',
+    //       setVelocityX: -160,
+    //       flipX: false
+    //     });
+    //   } else if (input.right) {
+    //     this.playerAnimate(this.body, {
+    //       animation: 'run',
+    //       setVelocityX: 160,
+    //       flipX: true
+    //     });
+    //   }
+    // }
 
     // ===== Move left ===== //
     if (input.left) {
