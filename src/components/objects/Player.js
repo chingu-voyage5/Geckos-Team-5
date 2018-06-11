@@ -23,7 +23,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // When this is called, you need to bind it to whichever scene you're calling from.
     // The bullets need to be created per level 
     // So something like `this.player.create.call(this)` if you were inside Level_1
-    // `this` points to 
+    // `this` points to Level_1, therefore creating `Level_1.bullets = ......`
     this.bullets = this.add.group({
       classType: Bullet,
       runChildUpdate: true
