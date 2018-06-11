@@ -4,7 +4,19 @@ export default class Bullet extends Phaser.GameObjects.Image {
 
     constructor(config) {
         super(config, 0, 0, 'bullet');
+        const { scene: { scene } } = config; 
+        this.scene = scene;
         this.speed = Phaser.Math.GetSpeed(200, 1);
+
+        // console.log(scene.physics)
+    //     scene.physics.add.collider(
+    //         this,
+    //         scene.ball,
+    //         this.hitBrick,
+    //         null,
+    //         this
+    //   );
+        
     }
 
 
@@ -25,5 +37,10 @@ export default class Bullet extends Phaser.GameObjects.Image {
             this.setVisible(false);
             this.destroy();
         }
+    }
+
+    hitBullet(bullet, ball) {
+        console.log('hi');
+        this.destroy();
     }
 }
