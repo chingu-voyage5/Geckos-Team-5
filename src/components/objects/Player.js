@@ -1,4 +1,7 @@
+import Bullet from './Bullet';
+
 export default class Player extends Phaser.GameObjects.Sprite {
+
   constructor(config) {
     super(config.scene, config.x, config.y, config.key);
     config.scene.physics.world.enable(this);
@@ -12,6 +15,19 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.slideTimer = 200;
     this.slideDistance = 250;
     this.jumpDistance = -330;
+  }
+
+
+  create() {
+
+    // When this is called, you need to bind it to whichever scene you're calling from.
+    // The bullets need to be created per level 
+    // So something like `this.player.create.call(this)` if you were inside Level_1
+    // `this` points to 
+    this.bullets = this.add.group({
+      classType: Bullet,
+      runChildUpdate: true
+    });
   }
 
   update(keys, time, delta) {
