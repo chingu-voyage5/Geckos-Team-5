@@ -1,4 +1,7 @@
+import Bullet from './Bullet';
+
 export default class Player extends Phaser.GameObjects.Sprite {
+
   constructor(config) {
     super(config.scene, config.x, config.y, config.key);
     config.scene.physics.world.enable(this);
@@ -14,6 +17,19 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.jumpDistance = -330;
   }
 
+
+  create() {
+
+    // When this is called, you need to bind it to whichever scene you're calling from.
+    // The bullets need to be created per level 
+    // So something like `this.player.create.call(this)` if you were inside Level_1
+    // `this` points to Level_1, therefore creating `Level_1.bullets = ......`
+    this.bullets = this.add.group({
+      classType: Bullet,
+      runChildUpdate: true
+    });
+  }
+
   update(keys, time, delta) {
     let input = {
       left: keys.left.isDown,
@@ -26,21 +42,21 @@ export default class Player extends Phaser.GameObjects.Sprite {
     };
 
     // ===== If space or z key is held, add new logic to move direction ===== //
-    if (input.slide || input.attack) {
-      if (input.left) {
-        this.playerAnimate(this.body, {
-          animation: 'run',
-          setVelocityX: -160,
-          flipX: false
-        });
-      } else if (input.right) {
-        this.playerAnimate(this.body, {
-          animation: 'run',
-          setVelocityX: 160,
-          flipX: true
-        });
-      }
-    }
+    // if (input.slide || input.attack) {
+    //   if (input.left) {
+    //     this.playerAnimate(this.body, {
+    //       animation: 'run',
+    //       setVelocityX: -160,
+    //       flipX: false
+    //     });
+    //   } else if (input.right) {
+    //     this.playerAnimate(this.body, {
+    //       animation: 'run',
+    //       setVelocityX: 160,
+    //       flipX: true
+    //     });
+    //   }
+    // }
 
     // ===== Move left ===== //
     if (input.left) {
