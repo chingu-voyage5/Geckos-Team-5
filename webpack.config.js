@@ -23,11 +23,25 @@ module.exports = {
       }
     ]
   },
+  optimization: {
+    minimize: true
+  },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebPackPlugin({
       template: './src/index.html',
-      filename: './index.html'
-    })
+      filename: './index.html',
+      minify: {
+        removeAttributeQuotes: true,
+        collapseWhitespace: true,
+        html5: true,
+        minifyCSS: true,
+        minifyJS: true,
+        minifyURLs: true,
+        removeComments: true,
+        removeEmptyAttributes: true
+      }
+    }),
+    new CopyWebpackPlugin([{ from: './src/assets', to: 'assets' }])
   ]
 };
