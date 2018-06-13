@@ -9,21 +9,25 @@ export class Preloader extends phaser.Scene {
     });
   }
   preload() {
-    this.load.image('background', 'src/assets/images/background.png');
-    this.load.image('bullet', 'src/assets/images/bullet.png');
-    this.load.image('platform', 'src/assets/images/platform.png');
-    this.load.image('heart', 'src/assets/images/heart.png');
+    this.load.image('background', './assets/images/background.png');
+    this.load.image('bullet', './assets/images/bullet.png');
+    this.load.image('platform', './assets/images/platform.png');
+    this.load.image('heart', './assets/images/heart.png');
     this.load.atlas(
       'player',
-      'src/assets/spritesheets/player.png',
-      'src/assets/spritesheets/player.json'
+      './assets/spritesheets/player.png',
+      './assets/spritesheets/player.json'
     );
     this.load.atlas(
       'bricks',
-      'src/assets/spritesheets/brick.png',
-      'src/assets/spritesheets/brick.json'
+      './assets/spritesheets/brick.png',
+      './assets/spritesheets/brick.json'
     );
-    this.load.spritesheet('ball', 'src/assets/spritesheets/ball.png', { frameWidth: 25, frameHeight: 25, endFrame: 3 });
+    this.load.spritesheet('ball', './assets/spritesheets/ball.png', {
+      frameWidth: 25,
+      frameHeight: 25,
+      endFrame: 3
+    });
 
     const progress = this.add.graphics();
 
@@ -46,6 +50,6 @@ export class Preloader extends phaser.Scene {
       progress.destroy();
       this.scene.start('Level_1');
       this.scene.start('UIScene');
-    });    
+    });
   }
 }
