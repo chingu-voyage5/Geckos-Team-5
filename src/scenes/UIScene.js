@@ -137,7 +137,7 @@ export class UIScene extends Scene {
     //changes the score        
     if (key === 'SCORE')
     {
-      this.scoreText.setText('Score: ' + data);
+      this.scoreText.setText('Score: ' + this.registry.list.SCORE);
     }
     //changes the timer
     else if (key === 'TIMER')

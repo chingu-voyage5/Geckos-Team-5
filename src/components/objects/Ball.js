@@ -1,7 +1,7 @@
 export default class Ball extends Phaser.GameObjects.Sprite {
       constructor(config) {
             //takes in the scene the x position, the y pposition, the key of the picture and and an object to set the velocity, {x:2,y:3}
-            super(config.scene, config.x, config.y, config.key, config.veloc.x, config.veloc.y);
+            super(config.scene, config.x, config.y, config.key);
             config.scene.physics.world.enable(this);
             //adding the picture of the ball
             config.scene.add.existing(this);

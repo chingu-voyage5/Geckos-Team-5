@@ -57,7 +57,7 @@ export class Level_1 extends Scene {
       x: 0,
       y: HEIGHT - 100,
       veloc: {
-        x:100,
+        x: 100,
         y: -80
       }
     });
