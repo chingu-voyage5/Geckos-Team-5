@@ -5,6 +5,8 @@ export default class Ball extends Phaser.GameObjects.Sprite {
             config.scene.physics.world.enable(this);
             //adding the picture of the ball
             config.scene.add.existing(this);
+            //saving config to be able to use later
+            this.config = config;
             //stting the bounce on walls
             this.body.setCollideWorldBounds(true).setBounce(1);
 
@@ -34,62 +36,81 @@ export default class Ball extends Phaser.GameObjects.Sprite {
             );
 
             //initial velocity
-            this.body.setVelocity(config.veloc.x, config.veloc.y);
+            this.body.setVelocity(config.veloc.x, config.veloc.y); 
+
+            //saves the current velocity y so that we can fix collider
+            this.currentVelocY;
+            //difference between the x coordinates of player and ball, it is used to set the velocity on sword strike and bounce
+            this.difference;
       }
 
       hitPlayer(ball, player) {  
-            console.log(player);
-                      
-            if (player.anims.currentAnim.key == 'slide' || player.anims.currentAnim.key == 'sword') {
-                  if (this.hitPlayerVariable == false) {
-                        console.log('success-test');
-                        this.ball
-                        this.hitPlayerVariable = true;
+            //accounting for the collider setting the y velocity to 0
+            this.body.setVelocityY(this.currentVelocY * (-1));
+
+            //the velocity changes for the swortd strike
+            if (player.anims.currentAnim.key == 'sword') {
+                  //the ball should have some max velocity, so an if
+                  if (this.body.velocity.y < 300 && this.body.velocity.y > -300) {
+                        //adds upwards velocity to the ball
+                        this.body.setVelocityY(this.body.velocity.y - 200);
+                  } 
+                  //calculates the x position difference
+                  this.difference = this.xDifferenceCalc(ball, player);
+                  //uses the x difference to add velocity to ball
+                  this.body.setVelocityX(this.body.velocity.x + 10 * this.difference);
+
+                  //overrides too muich x velocity
+                  if (this.body.velocity.x > 200) {
+                        this.body.setVelocityX(200);
                   }
-                  this.scene.time.delayedCall(100, () => (this.hitPlayerVariable = false));
-            } else {
-                  this.ballPlayerBounce(ball, player);
+                  if (this.body.velocity.x < -200) {
+                        this.body.setVelocityX(-200);
+                  }
+            } 
+            //the velocity changes for hitting the player
+            else {
+                  //takes away a life since the player was hit
+                  this.config.scene.registry.set('HEARTS', this.config.scene.registry.list.HEARTS - 1);
+
+                  //calculates the x position difference
+                  this.difference = this.xDifferenceCalc(ball, player);
+                  //uses the x difference to add velocity to ball
+                  this.body.setVelocityX(this.body.velocity.x + 5 * this.difference);
+
+                  //overrides too muich x velocity
+                  if (this.body.velocity.x > 200) {
+                        this.body.setVelocityX(200);
+                  }
+                  if (this.body.velocity.x < -200) {
+                        this.body.setVelocityX(-200);
+                  }
             }
       }
 
-      ballPlayerBounce(ball, player) {
+      update() {
+            //necessary variable to override the strange collider velocity behavior
+            this.currentVelocY = this.body.velocity.y;
+      }
+
+      //calculates the difference between the player and balls x coordinates
+      xDifferenceCalc(ball, player) {
             //difference between the x positions of the player and ball
             let diff = 0;
-
             //  Ball is on the left-hand side of the player
-            if (this.x < player.x) {
-                  //logging the difference
-                  diff = player.x - this.x;
-
-                  //adding some difference based velocity
-                  this.body.setVelocityX(-5 * diff);
-
-                  //add some y velocity if ball too slow
-                  if (this.body.velocity.y < 100 && this.body.velocity.y > -50) {
-                        this.body.setVelocityY(this.body.velocity.y - 100);
-                  }
+            if (this.x < player.x) { 
+                  diff = (player.x - this.x) * (-1);   
             }
-
             //  Ball is on the right-hand side of the player
             else if (this.x > player.x) {
-                  //logging the difference
                   diff = this.x - player.x;
-
-                  //setting the difference based velocity
-                  this.body.setVelocityX(5 * diff);
-
-                  //add some y velocity if ball too slow
-                  if (this.body.velocity.y < 100 && this.body.velocity.y > -50) {
-                        this.body.setVelocityY(this.body.velocity.y - 100);
-                  }
             }
-
             //  Ball is perfectly in the middle
-            //  Add a little random X to stop it bouncing straight up!
             else {
-                  this.body.setVelocityX(2 + Math.random() * 8);
-                  this.body.setVelocityY(this.body.velocity.y - 100);
+                  diff = (2 + Math.random() * 8) / 5;
             }
+
+            return diff
       }
 
       hitBrick(ball, brick) {

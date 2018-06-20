@@ -12,7 +12,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.isSliding = false;
     this.isAttacking = false;
     this.body.setGravityY(300);
-    this.slideTimer = 200;
+    this.slideTimer = 100;
     this.slideDistance = 250;
     this.jumpDistance = -330;
   }

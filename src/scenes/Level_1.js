@@ -81,6 +81,8 @@ export class Level_1 extends Scene {
     }
 
     this.player.update(this.keys, time, delta);
+    //tracks the y changes in the velocity because add.collider is a bitch
+    this.ball.update();
 
     //fun little animation for the initial heart load, delete if the amount of initial lifes is less than 8
     if (this.gameStart === true) {
@@ -90,8 +92,8 @@ export class Level_1 extends Scene {
 
   //its using the update function to increase the amount of hearts with the frequency of update
   startLifeAnim() {
-    if (this.lifes < 14) {
-      if (this.lifes == 13) {
+    if (this.lifes < 5) {
+      if (this.lifes == 4) {
         //stops the startLifeAnim()
         this.gameStart = false;
       }
