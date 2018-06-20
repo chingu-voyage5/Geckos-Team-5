@@ -7,7 +7,9 @@ export default class Ball extends Phaser.GameObjects.Sprite {
             config.scene.add.existing(this);
             //stting the bounce on walls
             this.body.setCollideWorldBounds(true).setBounce(1);
-            
+
+            this.hitPlayerVariable = false;
+
             //starts the animation for the ball
             this.anims.play('ballAnim');
             //when the animations are finished they get started again
@@ -35,14 +37,29 @@ export default class Ball extends Phaser.GameObjects.Sprite {
             this.body.setVelocity(config.veloc.x, config.veloc.y);
       }
 
-      hitPlayer(ball, player) {
+      hitPlayer(ball, player) {  
+            console.log(player);
+                      
+            if (player.anims.currentAnim.key == 'slide' || player.anims.currentAnim.key == 'sword') {
+                  if (this.hitPlayerVariable == false) {
+                        console.log('success-test');
+                        this.ball
+                        this.hitPlayerVariable = true;
+                  }
+                  this.scene.time.delayedCall(100, () => (this.hitPlayerVariable = false));
+            } else {
+                  this.ballPlayerBounce(ball, player);
+            }
+      }
+
+      ballPlayerBounce(ball, player) {
             //difference between the x positions of the player and ball
             let diff = 0;
 
             //  Ball is on the left-hand side of the player
             if (this.x < player.x) {
                   //logging the difference
-                  diff =player.x - this.x;
+                  diff = player.x - this.x;
 
                   //adding some difference based velocity
                   this.body.setVelocityX(-5 * diff);
