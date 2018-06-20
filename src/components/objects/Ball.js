@@ -10,8 +10,6 @@ export default class Ball extends Phaser.GameObjects.Sprite {
             //stting the bounce on walls
             this.body.setCollideWorldBounds(true).setBounce(1);
 
-            this.hitPlayerVariable = false;
-
             //starts the animation for the ball
             this.anims.play('ballAnim');
             //when the animations are finished they get started again
