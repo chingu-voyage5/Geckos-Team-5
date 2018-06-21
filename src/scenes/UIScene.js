@@ -133,7 +133,7 @@ export class UIScene extends Scene {
   }
 
   //updates all the data which was changed in the registry, currently that is : TIMER && SCORE && HEARTS
-  updateData(parent, key, data) {
+  updateData(parent, key, data) {    
     //changes the score        
     if (key === 'SCORE')
     {
@@ -147,8 +147,8 @@ export class UIScene extends Scene {
       this.writeTimerText()
     }
     //changes the hearts
-    else if (key === 'HEARTS') {
-      this.setLifes(data);
+    else if (key === 'HEARTS') {  
+      this.setLifes();
     }
   }
 
@@ -210,8 +210,9 @@ export class UIScene extends Scene {
   }
 
   //deletes all hearts first before passing on to the write function (which makes the hearts)
-  setLifes(numberHearts) {    
-
+  setLifes() {    
+    let numberHearts = this.registry.list.HEARTS;
+    
     this.UISceneGameObjects = this.add.displayList.list;    
 
     //filters all objects out which are not hearts
