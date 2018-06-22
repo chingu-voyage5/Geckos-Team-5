@@ -16,14 +16,16 @@ export class Level_1 extends Scene {
     //how many bricks are used on this map
     this.amountBricks = 38;
     this.ball;
-
-    //amount of lifes on the level
-    this.lifes = 1;
-    //used for the init loading of hearts at the start of the level
-    this.gameStart = true;
   }
 
   create() {
+    //used for the init loading of hearts at the start of the level
+    this.gameStart = true;
+    //amount of lifes on the level
+    this.lifes = 1;
+
+    this.scene.launch('UIScene');
+
     this.image = this.add.sprite(240, 160, 'background');
 
     // ===== BRIIIIIICKS HEART ===== //
@@ -88,6 +90,10 @@ export class Level_1 extends Scene {
     if (this.gameStart === true) {
       this.startLifeAnim();
     }
+
+    if (this.registry.list.HEARTS < 1) {
+      this.gameOver();
+    }
   }
 
   //its using the update function to increase the amount of hearts with the frequency of update
@@ -100,5 +106,35 @@ export class Level_1 extends Scene {
       this.registry.set('HEARTS', this.lifes);
       this.lifes++;
     }
+  }
+
+  //end the game
+  gameOver() {
+    this.scene.stop('UIScene');
+
+    this.cameras.main.shake(500);
+
+    // fade camera
+    this.time.delayedCall(
+      250,
+      () => {
+        this.cameras.main.fade(250);
+      },
+      [],
+      this
+    );
+
+    // restart game
+    this.time.delayedCall(
+      500,
+      () => {
+        // this.registry.set('HEARTS', 4);
+        this.registry.set('SCORE', 0);
+        this.registry.set('TIMER', [0, 0, ':', 0, 0, 0]);
+        this.scene.restart();
+      },
+      [],
+      this
+    );
   }
 }
