@@ -1,7 +1,6 @@
 import Bullet from './Bullet';
 
 export default class Player extends Phaser.GameObjects.Sprite {
-
   constructor(config) {
     super(config.scene, config.x, config.y, config.key);
     config.scene.physics.world.enable(this);
@@ -18,11 +17,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.jumpDistance = -330;
   }
 
-
   create() {
-
     // When this is called, you need to bind it to whichever scene you're calling from.
-    // The bullets need to be created per level 
+    // The bullets need to be created per level
     // So something like `this.player.create.call(this)` if you were inside Level_1
     // `this` points to Level_1, therefore creating `Level_1.bullets = ......`
     this.bullets = this.add.group({
@@ -43,14 +40,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
     };
 
     // ===== Attack Up if no arrow keys are pressed while attacking ===== //
-    if( ( !input.left && !input.right ) && input.attack ) {
-        this.anims.play('attackUp', true);
-        this.isAttackingUp = true;
-        this.on(
-          'animationcomplete',
-          () => this.isAttackingUp = false,
-          this
-        );
+    if (!input.left && !input.right && input.attack) {
+      this.anims.play('attackUp', true);
+      this.isAttackingUp = true;
+      this.on('animationcomplete', () => (this.isAttackingUp = false), this);
     }
 
     // ===== Move left ===== //
@@ -70,7 +63,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
     // Do nothing, 0 frame sprite ===== //
     else {
-      if(!this.isAttackingUp) {
+      if (!this.isAttackingUp) {
         this.body.setVelocityX(0);
         this.anims.play('turn');
       }

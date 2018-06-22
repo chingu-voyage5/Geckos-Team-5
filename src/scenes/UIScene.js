@@ -33,9 +33,8 @@ export class UIScene extends Scene {
     this.scoreText;
 
     //the text which says Lifes:
-    this.lifeText;
-    // fallback heartsAmount and init setting
-    this.heartsAmount = 1;
+    this.livesText;
+
     //array for storage of heart objects
     this.hearts;
     //all game objects of ui scene (such as text, hearts and so on)
@@ -43,6 +42,9 @@ export class UIScene extends Scene {
   }
 
   create() {
+    // display hearts for each player life on level start
+    this.setLives(this.registry.list.lives);
+
     //currently the timer start now as the scene loads in
     this.startGameClock();   
 
@@ -57,7 +59,7 @@ export class UIScene extends Scene {
     this.scoreText = this.add.text(67, 0, 'Score: ' + this.score, UIFONT);
 
     //initial display of the life text
-    this.lifeText = this.add.text(161, 0, 'Lifes: ', UIFONT);
+    this.livesText = this.add.text(161, 0, 'Lives: ', UIFONT);
 
     //adds the initial timer text
     this.timerText = this.add.text(446, 0, '00:00', UIFONT);
@@ -105,9 +107,6 @@ export class UIScene extends Scene {
       );
     }
 
-    //setting the initial amount of hearts to the player
-    this.registry.set('HEARTS', this.heartsAmount);
-
     //setting the initial score
     this.registry.set('SCORE', 0);
   }
@@ -135,20 +134,18 @@ export class UIScene extends Scene {
   //updates all the data which was changed in the registry, currently that is : TIMER && SCORE && HEARTS
   updateData(parent, key, data) {    
     //changes the score        
-    if (key === 'SCORE')
-    {
-      this.scoreText.setText('Score: ' + this.registry.list.SCORE);
+    if (key === 'SCORE') {
+      this.scoreText.setText('Score: ' + data);
     }
     //changes the timer
-    else if (key === 'TIMER')
-    {
+    else if (key === 'TIMER') {
       //the writerTimerText function uses the timerValue which is why its updated.
       this.timerValue = data;
-      this.writeTimerText()
+      this.writeTimerText();
     }
     //changes the hearts
-    else if (key === 'HEARTS') {  
-      this.setLifes();
+    else if (key === 'lives') {
+      this.setLives(data);
     }
   }
 
@@ -216,11 +213,11 @@ export class UIScene extends Scene {
     this.UISceneGameObjects = this.add.displayList.list;    
 
     //filters all objects out which are not hearts
-    this.hearts = this.UISceneGameObjects.filter(function (element, i) {
+    this.hearts = this.UISceneGameObjects.filter(function(element, i) {
       if ('texture' in element) {
         if ('key' in element.texture) {
           if (element.texture.key === 'heart') {
-            return element
+            return element;
           }
         }
       }
@@ -232,14 +229,14 @@ export class UIScene extends Scene {
     }
 
     //write function which sets lifes
-    this.writeLifes(numberHearts);
+    this.writeLives(numberHearts);
   }
 
   //function to make heart objects
-  writeLifes(numberHearts) {
+  writeLives(numberHearts) {
     for (let i = 0; i < numberHearts; i++) {
       if (i > 12) {
-        break
+        break;
       }
       //it looks nice when the next heart is 15 further then the last one
       this.add.heart(200 + (15 * i), 8);      
