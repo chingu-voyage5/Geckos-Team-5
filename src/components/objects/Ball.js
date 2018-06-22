@@ -46,6 +46,9 @@ export default class Ball extends Phaser.GameObjects.Sprite {
             //accounting for the collider setting the y velocity to 0
             this.body.setVelocityY(this.currentVelocY * (-1));
 
+            if( player.anims.currentAnim.key === 'attackUp' ) {
+                this.body.setVelocityY(this.body.velocity.y - 200)
+            }
             //the velocity changes for the swortd strike
             if (player.anims.currentAnim.key == 'sword') {
                   //the ball should have some max velocity, so an if

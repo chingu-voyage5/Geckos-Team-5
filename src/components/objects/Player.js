@@ -11,6 +11,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // ===== Player Setup ===== //
     this.isSliding = false;
     this.isAttacking = false;
+    this.isAttackingUp = false;
     this.body.setGravityY(300);
     this.slideTimer = 100;
     this.slideDistance = 250;
@@ -41,22 +42,16 @@ export default class Player extends Phaser.GameObjects.Sprite {
       fire: keys.fire.isDown
     };
 
-    // ===== If space or z key is held, add new logic to move direction ===== //
-    // if (input.slide || input.attack) {
-    //   if (input.left) {
-    //     this.playerAnimate(this.body, {
-    //       animation: 'run',
-    //       setVelocityX: -160,
-    //       flipX: false
-    //     });
-    //   } else if (input.right) {
-    //     this.playerAnimate(this.body, {
-    //       animation: 'run',
-    //       setVelocityX: 160,
-    //       flipX: true
-    //     });
-    //   }
-    // }
+    // ===== Attack Up if no arrow keys are pressed while attacking ===== //
+    if( ( !input.left && !input.right ) && input.attack ) {
+        this.anims.play('attackUp', true);
+        this.isAttackingUp = true;
+        this.on(
+          'animationcomplete',
+          () => this.isAttackingUp = false,
+          this
+        );
+    }
 
     // ===== Move left ===== //
     if (input.left) {
@@ -75,8 +70,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
     // Do nothing, 0 frame sprite ===== //
     else {
-      this.body.setVelocityX(0);
-      this.anims.play('turn');
+      if(!this.isAttackingUp) {
+        this.body.setVelocityX(0);
+        this.anims.play('turn');
+      }
     }
   }
 
