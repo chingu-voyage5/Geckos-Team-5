@@ -49,7 +49,6 @@ export class Preloader extends phaser.Scene {
       makeAnimations(this);
       progress.destroy();
       this.scene.start('Level_1');
-      this.scene.start('UIScene');
     });
   }
 }
