@@ -16,13 +16,14 @@ export class Level_1 extends Scene {
     //how many bricks are used on this map
     this.amountBricks = 38;
     this.ball;
+    this.lives = 5;
   }
 
   create() {
+    this.registry.set('lives', this.lives);
+
     //used for the init loading of hearts at the start of the level
-    this.gameStart = true;
-    //amount of lifes on the level
-    this.lifes = 1;
+    // this.gameStart = true;
 
     this.scene.launch('UIScene');
 
@@ -87,26 +88,26 @@ export class Level_1 extends Scene {
     this.ball.update();
 
     //fun little animation for the initial heart load, delete if the amount of initial lifes is less than 8
-    if (this.gameStart === true) {
-      this.startLifeAnim();
-    }
+    // if (this.gameStart === true) {
+    //   this.startLifeAnim();
+    // }
 
-    if (this.registry.list.HEARTS < 1) {
+    if (this.registry.list.lives < 1) {
       this.gameOver();
     }
   }
 
   //its using the update function to increase the amount of hearts with the frequency of update
-  startLifeAnim() {
-    if (this.lifes < 5) {
-      if (this.lifes == 4) {
-        //stops the startLifeAnim()
-        this.gameStart = false;
-      }
-      this.registry.set('HEARTS', this.lifes);
-      this.lifes++;
-    }
-  }
+  // startLifeAnim() {
+  //   if (this.lives < 5) {
+  //     if (this.lives == 4) {
+  //       //stops the startLifeAnim()
+  //       this.gameStart = false;
+  //     }
+  //     this.registry.set('lives', this.lives);
+  //     this.lives++;
+  //   }
+  // }
 
   //end the game
   gameOver() {
