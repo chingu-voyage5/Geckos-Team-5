@@ -238,8 +238,8 @@ export class UIScene extends Scene {
       if (i > 12) {
         break;
       }
-      //it looks nice when the next heart is 15 further then the last one
-      this.add.heart(200 + (15 * i), 8);      
+      //space out each heart by 17.5 pixels
+      this.add.heart(200 + 17.5 * i, 8);
     }
   }
 }
