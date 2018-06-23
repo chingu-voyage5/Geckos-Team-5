@@ -99,6 +99,10 @@ export class Level_1 extends Scene {
     ) {
       this.gameOver();
     }
+
+    if (!this.isPlayerAlive) {
+      this.restartGame();
+    }
   }
 
   //its using the update function to increase the amount of hearts with the frequency of update
@@ -142,27 +146,29 @@ export class Level_1 extends Scene {
     }
   }
 
-    // fade camera
-    this.time.delayedCall(
-      250,
-      () => {
-        this.cameras.main.fade(250);
-      },
-      [],
-      this
-    );
+  restartGame() {
+    if (this.keys.attack.isDown || this.keys.slide.isDown) {
+      // fade camera
+      this.time.delayedCall(
+        250,
+        () => {
+          this.cameras.main.fade(250);
+        },
+        [],
+        this
+      );
 
-    // restart game
-    this.time.delayedCall(
-      500,
-      () => {
-        // this.registry.set('HEARTS', 4);
-        this.registry.set('SCORE', 0);
-        this.registry.set('TIMER', [0, 0, ':', 0, 0, 0]);
-        this.scene.restart();
-      },
-      [],
-      this
-    );
+      // restart game
+      this.time.delayedCall(
+        500,
+        () => {
+          this.registry.set('SCORE', 0);
+          this.registry.set('TIMER', [0, 0, ':', 0, 0, 0]);
+          this.scene.restart();
+        },
+        [],
+        this
+      );
+    }
   }
 }
