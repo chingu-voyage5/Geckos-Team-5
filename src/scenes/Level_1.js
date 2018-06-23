@@ -16,10 +16,11 @@ export class Level_1 extends Scene {
     //how many bricks are used on this map
     this.amountBricks = 38;
     this.ball;
-    this.lives = 5;
+    this.lives = 3;
   }
 
   create() {
+    this.isPlayerAlive = true;
     this.registry.set('lives', this.lives);
 
     //used for the init loading of hearts at the start of the level
@@ -92,7 +93,10 @@ export class Level_1 extends Scene {
     //   this.startLifeAnim();
     // }
 
-    if (this.registry.list.lives < 1) {
+    if (
+      (this.registry.list.lives < 1 && this.isPlayerAlive) ||
+      (this.amountBricks === 0 && this.isPlayerAlive)
+    ) {
       this.gameOver();
     }
   }
@@ -111,9 +115,32 @@ export class Level_1 extends Scene {
 
   //end the game
   gameOver() {
+    this.isPlayerAlive = false;
+    this.cameras.main.shake(500);
+    this.time.delayedCall(
+      250,
+      () => {
+        this.physics.world.pause();
+      },
+      [],
+      this
+    );
     this.scene.stop('UIScene');
 
-    this.cameras.main.shake(500);
+    if (this.registry.list.lives === 0) {
+      this.add.text(
+        (WIDTH / 2) * 0.5,
+        HEIGHT / 2,
+        'Game Over! \n Press any key to try again!'
+      );
+    } else {
+      this.add.text(
+        (WIDTH / 2) * 0.5,
+        HEIGHT / 2,
+        'You won!! \n Press any key to play again!'
+      );
+    }
+  }
 
     // fade camera
     this.time.delayedCall(
