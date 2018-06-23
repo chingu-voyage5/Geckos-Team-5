@@ -46,7 +46,7 @@ export class UIScene extends Scene {
     this.setLives(this.registry.list.lives);
 
     //currently the timer start now as the scene loads in
-    this.startGameClock();   
+    this.startGameClock();
 
     // Check the registry and hit the updateData function every time the data is changed.
     // this includes the TIMER and SCORE
@@ -132,8 +132,8 @@ export class UIScene extends Scene {
   }
 
   //updates all the data which was changed in the registry, currently that is : TIMER && SCORE && HEARTS
-  updateData(parent, key, data) {    
-    //changes the score        
+  updateData(parent, key, data) {
+    //changes the score
     if (key === 'SCORE') {
       this.scoreText.setText('Score: ' + data);
     }
@@ -207,10 +207,10 @@ export class UIScene extends Scene {
   }
 
   //deletes all hearts first before passing on to the write function (which makes the hearts)
-  setLifes() {    
-    let numberHearts = this.registry.list.HEARTS;
-    
-    this.UISceneGameObjects = this.add.displayList.list;    
+  setLives(lives) {
+    let numberHearts = lives;
+
+    this.UISceneGameObjects = this.add.displayList.list;
 
     //filters all objects out which are not hearts
     this.hearts = this.UISceneGameObjects.filter(function(element, i) {
@@ -225,7 +225,7 @@ export class UIScene extends Scene {
 
     //souless heart destroyer D:
     for (let i = 0; i < this.hearts.length; i++) {
-      this.hearts[i].destroy();      
+      this.hearts[i].destroy();
     }
 
     //write function which sets lifes
