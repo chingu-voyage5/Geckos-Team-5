@@ -13,14 +13,15 @@ export class Level_1 extends Scene {
     // ===== Global Definitions For This FILE ===== //
     //here the bricks will be stored
     this.bricks = [];
-    //how many bricks are used on this map
-    this.amountBricks = 38;
     this.ball;
-    this.lives = 3;
   }
 
   create() {
+    //how many bricks are used on this map
+    this.lives = 3;
+    this.amountBricks = 38;
     this.isPlayerAlive = true;
+
     this.registry.set('lives', this.lives);
 
     //used for the init loading of hearts at the start of the level
