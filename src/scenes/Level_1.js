@@ -13,17 +13,22 @@ export class Level_1 extends Scene {
     // ===== Global Definitions For This FILE ===== //
     //here the bricks will be stored
     this.bricks = [];
-    //how many bricks are used on this map
-    this.amountBricks = 38;
     this.ball;
-
-    //amount of lifes on the level
-    this.lifes = 1;
-    //used for the init loading of hearts at the start of the level
-    this.gameStart = true;
   }
 
   create() {
+    //how many bricks are used on this map
+    this.lives = 3;
+    this.amountBricks = 38;
+    this.isPlayerAlive = true;
+
+    this.registry.set('lives', this.lives);
+
+    //used for the init loading of hearts at the start of the level
+    // this.gameStart = true;
+
+    this.scene.launch('UIScene');
+
     this.image = this.add.sprite(240, 160, 'background');
 
     // ===== BRIIIIIICKS HEART ===== //
@@ -85,20 +90,86 @@ export class Level_1 extends Scene {
     this.ball.update();
 
     //fun little animation for the initial heart load, delete if the amount of initial lifes is less than 8
-    if (this.gameStart === true) {
-      this.startLifeAnim();
+    // if (this.gameStart === true) {
+    //   this.startLifeAnim();
+    // }
+
+    if (
+      (this.registry.list.lives < 1 && this.isPlayerAlive) ||
+      (this.amountBricks === 0 && this.isPlayerAlive)
+    ) {
+      this.gameOver();
+    }
+
+    if (!this.isPlayerAlive) {
+      this.restartGame();
     }
   }
 
   //its using the update function to increase the amount of hearts with the frequency of update
-  startLifeAnim() {
-    if (this.lifes < 5) {
-      if (this.lifes == 4) {
-        //stops the startLifeAnim()
-        this.gameStart = false;
-      }
-      this.registry.set('HEARTS', this.lifes);
-      this.lifes++;
+  // startLifeAnim() {
+  //   if (this.lives < 5) {
+  //     if (this.lives == 4) {
+  //       //stops the startLifeAnim()
+  //       this.gameStart = false;
+  //     }
+  //     this.registry.set('lives', this.lives);
+  //     this.lives++;
+  //   }
+  // }
+
+  //end the game
+  gameOver() {
+    this.isPlayerAlive = false;
+    this.cameras.main.shake(500);
+    this.time.delayedCall(
+      250,
+      () => {
+        this.physics.world.pause();
+      },
+      [],
+      this
+    );
+    this.scene.stop('UIScene');
+
+    if (this.registry.list.lives === 0) {
+      this.add.text(
+        (WIDTH / 2) * 0.5,
+        HEIGHT / 2,
+        'Game Over! \n Press any key to try again!'
+      );
+    } else {
+      this.add.text(
+        (WIDTH / 2) * 0.5,
+        HEIGHT / 2,
+        'You won!! \n Press any key to play again!'
+      );
+    }
+  }
+
+  restartGame() {
+    if (this.keys.attack.isDown || this.keys.slide.isDown) {
+      // fade camera
+      this.time.delayedCall(
+        250,
+        () => {
+          this.cameras.main.fade(250);
+        },
+        [],
+        this
+      );
+
+      // restart game
+      this.time.delayedCall(
+        500,
+        () => {
+          this.registry.set('SCORE', 0);
+          this.registry.set('TIMER', [0, 0, ':', 0, 0, 0]);
+          this.scene.restart();
+        },
+        [],
+        this
+      );
     }
   }
 }
