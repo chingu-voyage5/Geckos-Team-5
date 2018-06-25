@@ -147,7 +147,7 @@ export class Level_1 extends Scene {
   }
 
   restartGame() {
-    if (this.keys.attack.isDown || this.keys.jump.isDown) {
+    if (this.keys.attack.isDown || this.keys.slide.isDown) {
       // fade camera
       this.time.delayedCall(
         250,
