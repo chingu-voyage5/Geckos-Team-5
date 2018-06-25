@@ -33,7 +33,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       left: keys.left.isDown,
       right: keys.right.isDown,
       down: keys.down.isDown,
-      jump: keys.jump.isDown,
       slide: keys.slide.isDown,
       attack: keys.attack.isDown,
       fire: keys.fire.isDown,
@@ -82,9 +81,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
   playAnimationDirection(input, flipX, velocityX) {
     this.body.setVelocityX(velocityX);
     this.flipX = flipX;
-    if (input.jump && this.body.onFloor()) {
-      this.body.setVelocityY(this.jumpDistance);
-    }
 
     // ===== Check to see if we should swing sword ===== //
     if (input.attack) {
@@ -101,10 +97,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
         );
       }
       // ===== Slide, add speed ===== //
-    } else if (input.slide) {
+    } else if (input.slide && this.body.onFloor()) {
       // ===== Check if player is currently sliding. ===== //
       // ===== Do slide, stop animation after 3/10ths of a second ===== //
       if (!this.isSliding) {
+        console.log('sliding');
         this.playerAnimate(this.body, {
           animation: 'slide',
           setVelocityX: flipX ? this.slideDistance : -this.slideDistance
