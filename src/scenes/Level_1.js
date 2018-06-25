@@ -1,13 +1,13 @@
-import { Scene } from 'phaser';
-import { WIDTH, HEIGHT, BRICKS } from '../util/constants';
-import Player from '../components/objects/Player';
-import Bullet from '../components/objects/Bullet';
-import Ball from '../components/objects/Ball';
+import { Scene } from "phaser";
+import { WIDTH, HEIGHT, BRICKS } from "../util/constants";
+import Player from "../components/objects/Player";
+import Bullet from "../components/objects/Bullet";
+import Ball from "../components/objects/Ball";
 
 export class Level_1 extends Scene {
   constructor() {
     super({
-      key: 'Level_1'
+      key: "Level_1"
     });
 
     // ===== Global Definitions For This FILE ===== //
@@ -22,14 +22,14 @@ export class Level_1 extends Scene {
     this.amountBricks = 38;
     this.isPlayerAlive = true;
 
-    this.registry.set('lives', this.lives);
+    this.registry.set("lives", this.lives);
 
     //used for the init loading of hearts at the start of the level
     // this.gameStart = true;
 
-    this.scene.launch('UIScene');
+    this.scene.launch("UIScene");
 
-    this.image = this.add.sprite(240, 160, 'background');
+    this.image = this.add.sprite(240, 160, "background");
 
     // ===== BRIIIIIICKS HEART ===== //
     BRICKS.LEVEL_1.call(this);
@@ -37,7 +37,6 @@ export class Level_1 extends Scene {
     // ===== CUSTOM KEYS ===== //
 
     this.keys = {
-      jump: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
       slide: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
       attack: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
       fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
@@ -49,7 +48,7 @@ export class Level_1 extends Scene {
     // Create Player
     this.player = new Player({
       scene: this,
-      key: 'player',
+      key: "player",
       x: 400,
       y: HEIGHT - 30
     });
@@ -58,7 +57,7 @@ export class Level_1 extends Scene {
     //veloc means velocity
     this.ball = new Ball({
       scene: this,
-      key: 'ball',
+      key: "ball",
       x: 0,
       y: HEIGHT - 100,
       veloc: {
@@ -130,19 +129,19 @@ export class Level_1 extends Scene {
       [],
       this
     );
-    this.scene.stop('UIScene');
+    this.scene.stop("UIScene");
 
     if (this.registry.list.lives === 0) {
       this.add.text(
         (WIDTH / 2) * 0.5,
         HEIGHT / 2,
-        'Game Over! \n Press any key to try again!'
+        "Game Over! \n Press any key to try again!"
       );
     } else {
       this.add.text(
         (WIDTH / 2) * 0.5,
         HEIGHT / 2,
-        'You won!! \n Press any key to play again!'
+        "You won!! \n Press any key to play again!"
       );
     }
   }
@@ -163,8 +162,8 @@ export class Level_1 extends Scene {
       this.time.delayedCall(
         500,
         () => {
-          this.registry.set('SCORE', 0);
-          this.registry.set('TIMER', [0, 0, ':', 0, 0, 0]);
+          this.registry.set("SCORE", 0);
+          this.registry.set("TIMER", [0, 0, ":", 0, 0, 0]);
           this.scene.restart();
         },
         [],
