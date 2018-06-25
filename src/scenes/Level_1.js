@@ -1,13 +1,13 @@
-import { Scene } from 'phaser';
-import { WIDTH, HEIGHT, BRICKS } from '../util/constants';
-import Player from '../components/objects/Player';
-import Bullet from '../components/objects/Bullet';
-import Ball from '../components/objects/Ball';
+import { Scene } from "phaser";
+import { WIDTH, HEIGHT, BRICKS } from "../util/constants";
+import Player from "../components/objects/Player";
+import Bullet from "../components/objects/Bullet";
+import Ball from "../components/objects/Ball";
 
 export class Level_1 extends Scene {
   constructor() {
     super({
-      key: 'Level_1'
+      key: "Level_1"
     });
 
     // ===== Global Definitions For This FILE ===== //
@@ -24,7 +24,7 @@ export class Level_1 extends Scene {
   }
 
   create() {
-    this.image = this.add.sprite(240, 160, 'background');
+    this.image = this.add.sprite(240, 160, "background");
 
     // ===== BRIIIIIICKS HEART ===== //
     BRICKS.LEVEL_1.call(this);
@@ -38,13 +38,14 @@ export class Level_1 extends Scene {
       fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
       left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
       right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
-      down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
+      down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
+      bomb: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C)
     };
 
     // Create Player
     this.player = new Player({
       scene: this,
-      key: 'player',
+      key: "player",
       x: 400,
       y: HEIGHT - 30
     });
@@ -53,7 +54,7 @@ export class Level_1 extends Scene {
     //veloc means velocity
     this.ball = new Ball({
       scene: this,
-      key: 'ball',
+      key: "ball",
       x: 0,
       y: HEIGHT - 100,
       veloc: {
@@ -95,7 +96,7 @@ export class Level_1 extends Scene {
         //stops the startLifeAnim()
         this.gameStart = false;
       }
-      this.registry.set('HEARTS', this.lifes);
+      this.registry.set("HEARTS", this.lifes);
       this.lifes++;
     }
   }
