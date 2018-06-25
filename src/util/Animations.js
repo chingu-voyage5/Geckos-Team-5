@@ -17,6 +17,16 @@ export default function makeAnimations(scene) {
       start: 14,
       end: 17
     }),
+    frameRate: 20
+  };
+  scene.anims.create(config);
+
+  config = {
+    key: 'attackUp',
+    frames: scene.anims.generateFrameNumbers('player', {
+      start: 27,
+      end: 30
+    }),
     frameRate: 10
   };
   scene.anims.create(config);

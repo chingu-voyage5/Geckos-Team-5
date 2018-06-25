@@ -1,4 +1,4 @@
-import Bullet from "./Bullet";
+import Bullet from './Bullet';
 
 export default class Player extends Phaser.GameObjects.Sprite {
   constructor(config) {
@@ -10,8 +10,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // ===== Player Setup ===== //
     this.isSliding = false;
     this.isAttacking = false;
+    this.isAttackingUp = false;
     this.body.setGravityY(300);
-    this.slideTimer = 200;
+    this.slideTimer = 100;
     this.slideDistance = 250;
     this.jumpDistance = -330;
   }
@@ -39,22 +40,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
       bomb: keys.bomb.isDown
     };
 
-    // ===== If space or z key is held, add new logic to move direction ===== //
-    // if (input.slide || input.attack) {
-    //   if (input.left) {
-    //     this.playerAnimate(this.body, {
-    //       animation: 'run',
-    //       setVelocityX: -160,
-    //       flipX: false
-    //     });
-    //   } else if (input.right) {
-    //     this.playerAnimate(this.body, {
-    //       animation: 'run',
-    //       setVelocityX: 160,
-    //       flipX: true
-    //     });
-    //   }
-    // }
+    // ===== Attack Up if no arrow keys are pressed while attacking ===== //
+    if (!input.left && !input.right && input.attack) {
+      this.anims.play('attackUp', true);
+      this.isAttackingUp = true;
+      this.on('animationcomplete', () => (this.isAttackingUp = false), this);
+    }
 
     // ===== Move left ===== //
     if (input.left) {
@@ -71,12 +62,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
     else if (input.jump && this.body.onFloor()) {
       this.body.setVelocityY(this.jumpDistance);
     } else if (input.bomb) {
-      console.log("bomb fired");
+      console.log('bomb fired');
     }
     // Do nothing, 0 frame sprite ===== //
     else {
-      this.body.setVelocityX(0);
-      this.anims.play("turn");
+      if (!this.isAttackingUp) {
+        this.body.setVelocityX(0);
+        this.anims.play('turn');
+      }
     }
   }
 
@@ -99,7 +92,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       // ===== Do sword attack, stop animation after 3/10ths of a second ===== //
       if (!this.isAttacking) {
         this.playerAnimate(this.body, {
-          animation: "sword",
+          animation: 'sword',
           setVelocityX: velocityX
         });
         this.scene.time.delayedCall(
@@ -113,7 +106,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       // ===== Do slide, stop animation after 3/10ths of a second ===== //
       if (!this.isSliding) {
         this.playerAnimate(this.body, {
-          animation: "slide",
+          animation: 'slide',
           setVelocityX: flipX ? this.slideDistance : -this.slideDistance
         });
         this.scene.time.delayedCall(
@@ -126,7 +119,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     } else if (!input.slide || !input.attack) {
       this.cancelSlideAndAttack();
     } else {
-      this.anims.play("run", true);
+      this.anims.play('run', true);
     }
   }
 
@@ -140,7 +133,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
    */
   playerAnimate(
     player,
-    { animation = "run", setVelocityX = 0, flipX = false } = {}
+    { animation = 'run', setVelocityX = 0, flipX = false } = {}
   ) {
     this.body.setVelocityX(setVelocityX);
     player.flipX = flipX;
@@ -154,9 +147,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.isSliding = false;
     this.isAttacking = false;
     this.on(
-      "animationcomplete",
+      'animationcomplete',
       () => {
-        this.anims.play("run", true);
+        this.anims.play('run', true);
       },
       this
     );
