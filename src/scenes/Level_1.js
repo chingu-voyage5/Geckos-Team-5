@@ -182,7 +182,7 @@ export class Level_1 extends Scene {
   fireEnemyBullet(x, y) {
     let bullet = this.enemyBullets.get();
     if (bullet) {
-      bullet.fire(x, y);
+      bullet.fire(x, y, this.player.x, this.player.y);
     }
   }
 }
