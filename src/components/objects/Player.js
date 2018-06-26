@@ -41,7 +41,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     // ===== Attack Up if no arrow keys are pressed while attacking ===== //
     if (!input.left && !input.right && input.attack) {
-      this.anims.play('attackUp', true);
+      this.anims.play('sword', true);
       this.isAttackingUp = true;
       this.on('animationcomplete', () => (this.isAttackingUp = false), this);
     }
