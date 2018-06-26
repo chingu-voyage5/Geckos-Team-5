@@ -9,7 +9,7 @@ export class Preloader extends phaser.Scene {
     });
   }
   preload() {
-    let picture = "background" + (Math.floor(Math.random() * 2) + 1);    
+    let picture = "background" + (Math.floor(Math.random() * 5) + 1);    
     this.load.image('background', './assets/images/' + picture + '.png');
     this.load.image("bullet", "./assets/images/bullet.png");
     this.load.image("enemy-bullet", "./assets/images/enemy-bullet.png");
