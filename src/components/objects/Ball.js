@@ -11,9 +11,9 @@ export default class Ball extends Phaser.GameObjects.Sprite {
     this.body.setCollideWorldBounds(true).setBounce(1);
 
     //starts the animation for the ball
-    this.anims.play('ballAnim');
+    this.anims.play("ballAnim");
     //when the animations are finished they get started again
-    this.on('animationcomplete', this.animComplete, this);
+    this.on("animationcomplete", this.animComplete, this);
 
     //collider for the bricks
     config.scene.physics.add.collider(
@@ -46,11 +46,11 @@ export default class Ball extends Phaser.GameObjects.Sprite {
     //accounting for the collider setting the y velocity to 0
     this.body.setVelocityY(this.currentVelocY * -1);
 
-    if (player.anims.currentAnim.key === 'attackUp') {
+    if (player.anims.currentAnim.key === "attackUp") {
       this.body.setVelocityY(this.body.velocity.y - 200);
     }
     //the velocity changes for the swortd strike
-    if (player.anims.currentAnim.key == 'sword') {
+    if (player.anims.currentAnim.key == "sword") {
       //the ball should have some max velocity, so an if
       if (this.body.velocity.y < 300 && this.body.velocity.y > -300) {
         //adds upwards velocity to the ball
@@ -73,7 +73,7 @@ export default class Ball extends Phaser.GameObjects.Sprite {
     else {
       //takes away a life since the player was hit
       this.config.scene.registry.set(
-        'lives',
+        "lives",
         this.config.scene.registry.list.lives - 1
       );
 
@@ -120,6 +120,7 @@ export default class Ball extends Phaser.GameObjects.Sprite {
   hitBrick(ball, brick) {
     //hides the brick, not destroyed
     brick.disableBody(true, true);
+
     //tracks the progress of the brick destroying
     this.scene.amountBricks--;
 
@@ -127,16 +128,18 @@ export default class Ball extends Phaser.GameObjects.Sprite {
     let oldScore = this.scene.registry.list.SCORE;
 
     //setting the new score
-    this.scene.registry.set('SCORE', oldScore + 100);
+    this.scene.registry.set("SCORE", oldScore + 100);
+
+    this.scene.fireEnemyBullet(brick.x, brick.y);
 
     //when the last brick died it it should trigger the end of the stage
     if (this.scene.amountBricks == 0) {
       // this.resetLevel();
-      console.log('MY FAMILY IS DEAD');
+      console.log("MY FAMILY IS DEAD");
     }
   }
 
   animComplete(animation, frame) {
-    this.anims.play('ballAnim');
+    this.anims.play("ballAnim");
   }
 }
