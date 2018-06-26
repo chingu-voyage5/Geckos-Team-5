@@ -36,8 +36,8 @@ export default class EnemyBullet extends Phaser.GameObjects.Image {
   }
 
   update(time, delta) {
-    this.y += this.speedY * 30;
-    this.x += this.speedX * 30;
+    this.y += this.speedY * 20;
+    this.x += this.speedX * 20;
 
     if (this.y > HEIGHT) {
       this.setActive(false);
