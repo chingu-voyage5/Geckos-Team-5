@@ -3,6 +3,7 @@ import { WIDTH, HEIGHT, BRICKS } from "../util/constants";
 import Player from "../components/objects/Player";
 import Bullet from "../components/objects/Bullet";
 import Ball from "../components/objects/Ball";
+import EnemyBullet from "../components/enemy/EnemyBullet";
 
 export class Level_1 extends Scene {
   constructor() {
@@ -72,6 +73,11 @@ export class Level_1 extends Scene {
 
     this.bullets = this.add.group({
       classType: Bullet,
+      runChildUpdate: true
+    });
+
+    this.enemyBullets = this.add.group({
+      classType: EnemyBullet,
       runChildUpdate: true
     });
   }
@@ -170,6 +176,13 @@ export class Level_1 extends Scene {
         [],
         this
       );
+    }
+  }
+
+  fireEnemyBullet(x, y) {
+    let bullet = this.enemyBullets.get();
+    if (bullet) {
+      bullet.fire(x, y);
     }
   }
 }
