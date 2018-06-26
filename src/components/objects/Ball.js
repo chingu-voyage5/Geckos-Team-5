@@ -1,5 +1,3 @@
-import EnemyBullet from "../enemy/EnemyBullet";
-
 export default class Ball extends Phaser.GameObjects.Sprite {
   constructor(config) {
     //takes in the scene the x position, the y pposition, the key of the picture and and an object to set the velocity, {x:2,y:3}
