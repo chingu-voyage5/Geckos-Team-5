@@ -26,10 +26,9 @@ export default class EnemyBullet extends Phaser.GameObjects.Image {
       this.targetX,
       HEIGHT
     );
-    targetAngle = Phaser.Math.RadToDeg(targetAngle);
-    targetAngle = this.targetX > this.startingX ? -targetAngle : targetAngle;
+    targetAngle = Math.PI - targetAngle;
 
-    this.angle = targetAngle;
+    this.rotation = targetAngle;
 
     this.setActive(true);
     this.setVisible(true);
