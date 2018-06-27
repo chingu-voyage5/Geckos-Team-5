@@ -42,104 +42,86 @@ export default class Ball extends Phaser.GameObjects.Sprite {
     this.difference;
   }
 
-  hitPlayer(ball, player) {
-    //accounting for the collider setting the y velocity to 0
-    this.body.setVelocityY(this.currentVelocY * -1);
-
-    if (player.anims.currentAnim.key === "attackUp") {
-      this.body.setVelocityY(this.body.velocity.y - 200);
-    }
-    //the velocity changes for the swortd strike
-    if (player.anims.currentAnim.key == "sword") {
-      //the ball should have some max velocity, so an if
-      if (this.body.velocity.y < 300 && this.body.velocity.y > -300) {
-        //adds upwards velocity to the ball
-        this.body.setVelocityY(this.body.velocity.y - 200);
-      }
-      //calculates the x position difference
-      this.difference = this.xDifferenceCalc(ball, player);
-      //uses the x difference to add velocity to ball
-      this.body.setVelocityX(this.body.velocity.x + 10 * this.difference);
-
-      //overrides too muich x velocity
-      if (this.body.velocity.x > 200) {
-        this.body.setVelocityX(200);
-      }
-      if (this.body.velocity.x < -200) {
-        this.body.setVelocityX(-200);
-      }
-    }
-    //the velocity changes for hitting the player
-    else {
-      //takes away a life since the player was hit
-      this.config.scene.registry.set(
-        "lives",
-        this.config.scene.registry.list.lives - 1
-      );
-
-      //calculates the x position difference
-      this.difference = this.xDifferenceCalc(ball, player);
-      //uses the x difference to add velocity to ball
-      this.body.setVelocityX(this.body.velocity.x + 5 * this.difference);
-
-      //overrides too muich x velocity
-      if (this.body.velocity.x > 200) {
-        this.body.setVelocityX(200);
-      }
-      if (this.body.velocity.x < -200) {
-        this.body.setVelocityX(-200);
-      }
-    }
-  }
-
   update() {
     //necessary variable to override the strange collider velocity behavior
     this.currentVelocY = this.body.velocity.y;
   }
 
-  //calculates the difference between the player and balls x coordinates
-  xDifferenceCalc(ball, player) {
-    //difference between the x positions of the player and ball
-    let diff = 0;
-    //  Ball is on the left-hand side of the player
-    if (this.x < player.x) {
-      diff = (player.x - this.x) * -1;
-    }
-    //  Ball is on the right-hand side of the player
-    else if (this.x > player.x) {
-      diff = this.x - player.x;
-    }
-    //  Ball is perfectly in the middle
-    else {
-      diff = (2 + Math.random() * 8) / 5;
-    }
-
-    return diff;
+  animComplete(animation, frame) {
+    this.anims.play("ballAnim");
   }
 
   hitBrick(ball, brick) {
-    //hides the brick, not destroyed
+    //hides the brick
     brick.disableBody(true, true);
-
     //tracks the progress of the brick destroying
     this.scene.amountBricks--;
-
-    //passing variable for the current score
-    let oldScore = this.scene.registry.list.SCORE;
-
-    //setting the new score
-    this.scene.registry.set("SCORE", oldScore + 100);
-
+    //setting the new score as the old score plus 100
+    this.scene.registry.set("SCORE", this.scene.registry.list.SCORE + 100);
+    //firing homing bullets onto the player
     this.scene.fireEnemyBullet(brick.x, brick.y);
+  }
 
-    //when the last brick died it it should trigger the end of the stage
-    if (this.scene.amountBricks == 0) {
-      // this.resetLevel();
-      console.log("MY FAMILY IS DEAD");
+  hitPlayer(ball, player) {
+    //accounting for the collider setting the y velocity to 0
+    this.body.setVelocityY(this.currentVelocY * -1);
+
+    //the velocity changes for the swortd strike
+    if (player.anims.currentAnim.key == "sword") {
+      this.changeVelocity(300, 200, 10, ball, player);
+    }
+    //the velocity changes for the slide strike
+    else if (player.anims.currentAnim.key == "slide") {
+      // ---------------------------------------------------- VARIABLES NEEDS CHANGE -------------------------------------
+      this.changeVelocity(300, 300, 10, ball, player);
+    }
+    //the velocity changes for hitting the player
+    else {
+      //takes away a life since the player was hit
+      this.config.scene.registry.set("lives", this.config.scene.registry.list.lives - 1);
+      this.changeVelocX(200, 5, ball, player);
     }
   }
 
-  animComplete(animation, frame) {
-    this.anims.play("ballAnim");
+  changeVelocity(maxY, addY, multiplier, ball, player) {
+    console.log(this.body.velocity);
+    
+    //the ball should have some max velocity, so an if
+    if (this.body.velocity.y < maxY && this.body.velocity.y > maxY * (-1)) {
+      //adds upwards velocity to the ball
+      this.body.setVelocityY(this.body.velocity.y - addY);
+    }
+    this.changeVelocX(addY, multiplier, ball, player);
+  }
+
+  changeVelocX(addY, multiplier, ball, player) {
+    //calculates the x position difference
+    this.difference = this.calculateXDistance(ball, player);
+    //uses the x difference to add velocity to ball
+    this.body.setVelocityX(this.body.velocity.x + multiplier * this.difference);
+
+    //overrides too muich x velocity
+    if (this.body.velocity.x > addY) {
+      this.body.setVelocityX(addY);
+    }
+    if (this.body.velocity.x < addY * (-1)) {
+      this.body.setVelocityX(addY * (-1));
+    }
+  }
+
+  //calculates the difference between the player and balls x coordinates
+  calculateXDistance(ball, player) {
+    //  Ball is on the left-hand side of the player
+    if (this.x < player.x) {
+      return (player.x - this.x) * -1;
+    }
+    //  Ball is on the right-hand side of the player
+    else if (this.x > player.x) {
+      return this.x - player.x;
+    }
+    //  Ball is perfectly in the middle
+    else {
+      return (2 + Math.random() * 8) / 5;
+    }
   }
 }
