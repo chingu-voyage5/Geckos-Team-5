@@ -10,10 +10,12 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
     this.targetX = 0;
     this.startingX = 0;
     this.startingY = 0;
+    this.scene = config.scene.scene;
+    this.player = this.scene.player;
 
-    config.scene.scene.physics.add.collider(
+    this.scene.physics.add.collider(
       this,
-      config.scene.scene.player,
+      this.player,
       this.hitPlayer,
       null,
       this
@@ -57,6 +59,14 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
   }
 
   hitPlayer() {
-    console.log("Player hit");
+    if (
+      !(
+        this.player.anims.currentAnim.key == "sword" ||
+        this.player.anims.currentAnim.key === "attackUp"
+      )
+    ) {
+      this.scene.registry.set("lives", this.scene.registry.list.lives - 1);
+    }
+    this.destroy();
   }
 }
