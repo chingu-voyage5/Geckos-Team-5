@@ -1,16 +1,27 @@
 import { HEIGHT } from "../../util/constants";
 
-export default class EnemyBullet extends Phaser.GameObjects.Image {
+export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
     super(config, 0, 0, "enemy-bullet");
+    config.scene.scene.physics.world.enable(this);
+
     this.speedX = 0;
     this.speedY = 0;
     this.targetX = 0;
     this.startingX = 0;
     this.startingY = 0;
+
+    config.scene.scene.physics.add.collider(
+      this,
+      config.scene.scene.player,
+      this.hitPlayer,
+      null,
+      this
+    );
   }
 
   fire(startingX, startingY, targetX, targetY) {
+    this.setAccelerationY(-300);
     this.setPosition(startingX, startingY);
     this.targetX = targetX;
     this.startingX = startingX;
@@ -43,5 +54,9 @@ export default class EnemyBullet extends Phaser.GameObjects.Image {
       this.setVisible(false);
       this.destroy();
     }
+  }
+
+  hitPlayer() {
+    console.log("Player hit");
   }
 }
