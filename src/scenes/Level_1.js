@@ -30,7 +30,9 @@ export class Level_1 extends Scene {
 
     this.scene.launch("UIScene");
 
-    this.image = this.add.sprite(240, 160, "background");
+    // random background on start and new games
+    let picture = "background" + (Math.floor(Math.random() * 5) + 1);
+    this.image = this.add.sprite(240, 160, picture);
 
     // ===== BRIIIIIICKS HEART ===== //
     BRICKS.LEVEL_1.call(this);

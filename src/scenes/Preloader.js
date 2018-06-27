@@ -8,9 +8,11 @@ export class Preloader extends phaser.Scene {
       key: "preloader"
     });
   }
-  preload() {
-    let picture = "background" + (Math.floor(Math.random() * 5) + 1);    
-    this.load.image('background', './assets/images/' + picture + '.png');
+  preload() {  
+    //loading however there are backgrounds  currently there are 5, names start from background1
+    for (let i = 1; i < 6; i++) {
+      this.load.image('background'+i, './assets/images/background'+i+'.png');
+    }
     this.load.image("bullet", "./assets/images/bullet.png");
     this.load.image("enemy-bullet", "./assets/images/enemy-bullet.png");
     this.load.image("platform", "./assets/images/platform.png");
