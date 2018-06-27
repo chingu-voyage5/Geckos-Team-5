@@ -1,16 +1,29 @@
 import { HEIGHT } from "../../util/constants";
 
-export default class EnemyBullet extends Phaser.GameObjects.Image {
+export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
     super(config, 0, 0, "enemy-bullet");
+    config.scene.scene.physics.world.enable(this);
+
     this.speedX = 0;
     this.speedY = 0;
     this.targetX = 0;
     this.startingX = 0;
     this.startingY = 0;
+    this.scene = config.scene.scene;
+    this.player = this.scene.player;
+
+    this.scene.physics.add.collider(
+      this,
+      this.player,
+      this.hitPlayer,
+      null,
+      this
+    );
   }
 
   fire(startingX, startingY, targetX, targetY) {
+    this.setAccelerationY(-300);
     this.setPosition(startingX, startingY);
     this.targetX = targetX;
     this.startingX = startingX;
@@ -26,10 +39,9 @@ export default class EnemyBullet extends Phaser.GameObjects.Image {
       this.targetX,
       HEIGHT
     );
-    targetAngle = Phaser.Math.RadToDeg(targetAngle);
-    targetAngle = this.targetX > this.startingX ? -targetAngle : targetAngle;
+    targetAngle = Math.PI - targetAngle;
 
-    this.angle = targetAngle;
+    this.rotation = targetAngle;
 
     this.setActive(true);
     this.setVisible(true);
@@ -44,5 +56,17 @@ export default class EnemyBullet extends Phaser.GameObjects.Image {
       this.setVisible(false);
       this.destroy();
     }
+  }
+
+  hitPlayer() {
+    if (
+      !(
+        this.player.anims.currentAnim.key == "sword" ||
+        this.player.anims.currentAnim.key === "attackUp"
+      )
+    ) {
+      this.scene.registry.set("lives", this.scene.registry.list.lives - 1);
+    }
+    this.destroy();
   }
 }
