@@ -101,7 +101,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       // ===== Check if player is currently sliding. ===== //
       // ===== Do slide, stop animation after 3/10ths of a second ===== //
       if (!this.isSliding) {
-        console.log('sliding');
         this.playerAnimate(this.body, {
           animation: 'slide',
           setVelocityX: flipX ? this.slideDistance : -this.slideDistance
