@@ -71,6 +71,9 @@ export class Level_1 extends Scene {
     });
 
     // ===== Set up a creation of bullets for the scene ===== //
+
+    this.player.create.call(this);
+
     // ===== Can Probably move this to Player file for refactor ===== //
 
     this.bullets = this.add.group({

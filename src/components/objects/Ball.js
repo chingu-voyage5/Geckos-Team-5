@@ -1,4 +1,4 @@
-export default class Ball extends Phaser.GameObjects.Sprite {
+export default class Ball extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
     //takes in the scene the x position, the y pposition, the key of the picture and and an object to set the velocity, {x:2,y:3}
     super(config.scene, config.x, config.y, config.key);
@@ -35,6 +35,7 @@ export default class Ball extends Phaser.GameObjects.Sprite {
 
     //initial velocity
     this.body.setVelocity(config.veloc.x, config.veloc.y);
+
 
     //saves the current velocity y so that we can fix collider
     this.currentVelocY;
