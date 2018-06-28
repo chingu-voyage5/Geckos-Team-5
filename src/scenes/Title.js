@@ -31,16 +31,14 @@ export class Title extends Scene {
     this.creditsText = this.add
       .text(WIDTH / 2, HEIGHT - 80, 'C: CREDITS', UIFONT)
       .setOrigin(0.5);
-
-    console.log(this.text);
   }
 
   update() {
-    if (this.keys.start.isDown) {
+    if (Phaser.Input.Keyboard.JustDown(this.keys.start)) {
       this.scene.start('Level_1');
-    } else if (this.keys.help.isDown) {
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.help)) {
       this.scene.start('Help');
-    } else if (this.keys.credits.isDown) {
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.credits)) {
       this.scene.start('Credits');
     }
   }
