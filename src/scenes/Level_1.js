@@ -28,7 +28,7 @@ export class Level_1 extends Scene {
   }
 
   create() {
-    this.lives = 99;
+    this.lives = 3;
     this.amountBricks = 38; //how many bricks are used on this map
     this.isPlayerAlive = true;
 
