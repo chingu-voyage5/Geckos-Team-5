@@ -37,7 +37,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
       slide: keys.slide.isDown,
       attack: keys.attack.isDown,
       fire: keys.fire.isDown,
-      bomb: keys.bomb.isDown
+      bomb: keys.bomb.isDown,
+      esc: keys.esc.isDown
     };
 
     // ===== Attack Up if no arrow keys are pressed while attacking ===== //

@@ -15,7 +15,6 @@ export class Level_1 extends Scene {
 
     this.bricks = []; //here the bricks will be stored
     this.ball;
-    this.gameStart = true;
 
     // ===== Background ===== //
 
@@ -28,6 +27,7 @@ export class Level_1 extends Scene {
   }
 
   create() {
+    this.gameStart = true;
     this.lives = 3;
     this.amountBricks = 38; //how many bricks are used on this map
     this.isPlayerAlive = true;
@@ -56,7 +56,8 @@ export class Level_1 extends Scene {
       left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
       right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
       down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
-      bomb: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C)
+      bomb: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C),
+      esc: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
     };
 
     // Create Player
@@ -137,6 +138,13 @@ export class Level_1 extends Scene {
     if (!this.isPlayerAlive) {
       this.gameStart = true;
       this.restartGame();
+    }
+    if (Phaser.Input.Keyboard.JustDown(this.keys.esc)) {
+      // this.registry.destroy();
+      // this.events.off();
+      this.scene.start('Title');
+      this.scene.stop('Level_1');
+      this.scene.stop('UIScene');
     }
   }
 
