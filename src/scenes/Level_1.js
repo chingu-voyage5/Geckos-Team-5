@@ -15,6 +15,7 @@ export class Level_1 extends Scene {
 
     this.bricks = []; //here the bricks will be stored
     this.ball;
+    this.gameStart = true;
 
     // ===== Background ===== //
 
@@ -27,7 +28,7 @@ export class Level_1 extends Scene {
   }
 
   create() {
-    this.lives = 3;
+    this.lives = 99;
     this.amountBricks = 38; //how many bricks are used on this map
     this.isPlayerAlive = true;
 
@@ -94,9 +95,23 @@ export class Level_1 extends Scene {
       classType: EnemyBullet,
       runChildUpdate: true
     });
+
+    this.startText = this.add.text(
+      (WIDTH / 2) * 0.5,
+      HEIGHT / 2,
+      'Press space to start game!'
+    );
+
+    this.physics.world.pause();
   }
 
   update(time, delta) {
+    if (this.gameStart && this.keys.slide.isDown) {
+      console.log(this.startText);
+      this.startText.visible = false;
+      this.gameStart = false;
+      this.physics.world.resume();
+    }
     // ===== BULLET ===== //
     if (this.keys.fire.isDown) {
       let bullet = this.bullets.get();
@@ -114,10 +129,12 @@ export class Level_1 extends Scene {
       (this.registry.list.lives < 1 && this.isPlayerAlive) ||
       (this.amountBricks === 0 && this.isPlayerAlive)
     ) {
+      this.gameStart = true;
       this.gameOver();
     }
 
     if (!this.isPlayerAlive) {
+      this.gameStart = true;
       this.restartGame();
     }
   }
