@@ -76,17 +76,18 @@ export default class Ball extends Phaser.GameObjects.Sprite {
       this.changeVelocity(300, 300, 10, ball, player);
     }
     //the velocity changes for hitting the player
-    else if (!player.isInvincible) {
-      //takes away a life since the player was hit
-      this.config.scene.registry.set(
-        'lives',
-        this.config.scene.registry.list.lives - 1
-      );
-      this.changeVelocX(200, 5, ball, player);
-    }
+    else  {
+      if (!player.isInvincible) {
+        //takes away a life since the player was hit
+        this.config.scene.registry.set(
+          'lives',
+          this.config.scene.registry.list.lives - 1
+        );
 
-    if (!player.isInvincible) {
-      player.setTemporaryInvincibility();
+        player.setTemporaryInvincibility();
+      }
+      
+      this.changeVelocX(200, 5, ball, player);
     }
   }
 
