@@ -102,6 +102,7 @@ export class Level_1 extends Scene {
       'Press space to start game!'
     );
 
+    // pause and start game on player input
     this.physics.world.pause();
   }
 
