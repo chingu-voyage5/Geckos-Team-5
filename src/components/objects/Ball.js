@@ -11,9 +11,9 @@ export default class Ball extends Phaser.GameObjects.Sprite {
     this.body.setCollideWorldBounds(true).setBounce(1);
 
     //starts the animation for the ball
-    this.anims.play("ballAnim");
+    this.anims.play('ballAnim');
     //when the animations are finished they get started again
-    this.on("animationcomplete", this.animComplete, this);
+    this.on('animationcomplete', this.animComplete, this);
 
     //collider for the bricks
     config.scene.physics.add.collider(
@@ -48,7 +48,7 @@ export default class Ball extends Phaser.GameObjects.Sprite {
   }
 
   animComplete(animation, frame) {
-    this.anims.play("ballAnim");
+    this.anims.play('ballAnim');
   }
 
   hitBrick(ball, brick) {
@@ -57,7 +57,7 @@ export default class Ball extends Phaser.GameObjects.Sprite {
     //tracks the progress of the brick destroying
     this.scene.amountBricks--;
     //setting the new score as the old score plus 100
-    this.scene.registry.set("SCORE", this.scene.registry.list.SCORE + 100);
+    this.scene.registry.set('SCORE', this.scene.registry.list.SCORE + 100);
     //firing homing bullets onto the player
     this.scene.fireEnemyBullet(brick.x, brick.y);
   }
@@ -67,27 +67,34 @@ export default class Ball extends Phaser.GameObjects.Sprite {
     this.body.setVelocityY(this.currentVelocY * -1);
 
     //the velocity changes for the swortd strike
-    if (player.anims.currentAnim.key == "sword") {
+    if (player.anims.currentAnim.key == 'sword') {
       this.changeVelocity(300, 200, 10, ball, player);
     }
     //the velocity changes for the slide strike
-    else if (player.anims.currentAnim.key == "slide") {
+    else if (player.anims.currentAnim.key == 'slide') {
       // ---------------------------------------------------- VARIABLES NEEDS CHANGE -------------------------------------
       this.changeVelocity(300, 300, 10, ball, player);
     }
     //the velocity changes for hitting the player
-    else {
+    else if (!player.isInvincible) {
       //takes away a life since the player was hit
-      this.config.scene.registry.set("lives", this.config.scene.registry.list.lives - 1);
+      this.config.scene.registry.set(
+        'lives',
+        this.config.scene.registry.list.lives - 1
+      );
       this.changeVelocX(200, 5, ball, player);
+    }
+
+    if (!player.isInvincible) {
+      player.setTemporaryInvincibility();
     }
   }
 
   changeVelocity(maxY, addY, multiplier, ball, player) {
     console.log(this.body.velocity);
-    
+
     //the ball should have some max velocity, so an if
-    if (this.body.velocity.y < maxY && this.body.velocity.y > maxY * (-1)) {
+    if (this.body.velocity.y < maxY && this.body.velocity.y > maxY * -1) {
       //adds upwards velocity to the ball
       this.body.setVelocityY(this.body.velocity.y - addY);
     }
@@ -104,8 +111,8 @@ export default class Ball extends Phaser.GameObjects.Sprite {
     if (this.body.velocity.x > addY) {
       this.body.setVelocityX(addY);
     }
-    if (this.body.velocity.x < addY * (-1)) {
-      this.body.setVelocityX(addY * (-1));
+    if (this.body.velocity.x < addY * -1) {
+      this.body.setVelocityX(addY * -1);
     }
   }
 

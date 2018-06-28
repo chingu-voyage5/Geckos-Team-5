@@ -1,8 +1,8 @@
-import { HEIGHT } from "../../util/constants";
+import { HEIGHT } from '../../util/constants';
 
 export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
-    super(config, 0, 0, "enemy-bullet");
+    super(config, 0, 0, 'enemy-bullet');
     config.scene.scene.physics.world.enable(this);
 
     this.speedX = 0;
@@ -61,12 +61,17 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
   hitPlayer() {
     if (
       !(
-        this.player.anims.currentAnim.key == "sword" ||
-        this.player.anims.currentAnim.key === "attackUp"
+        this.player.anims.currentAnim.key == 'sword' ||
+        this.player.anims.currentAnim.key === 'attackUp' ||
+        this.player.isInvincible
       )
     ) {
-      this.scene.registry.set("lives", this.scene.registry.list.lives - 1);
+      this.scene.registry.set('lives', this.scene.registry.list.lives - 1);
+      this.player.setTemporaryInvincibility();
     }
     this.destroy();
+    if (!this.player.isInvincible) {
+      this.player.setTemporaryInvincibility();
+    }
   }
 }
