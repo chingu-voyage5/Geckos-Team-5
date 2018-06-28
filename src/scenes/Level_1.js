@@ -12,11 +12,12 @@ export class Level_1 extends Scene {
     });
 
     // ===== Global Definitions For This FILE ===== //
-    //here the bricks will be stored
-    this.bricks = [];
+
+    this.bricks = []; //here the bricks will be stored
     this.ball;
 
     // ===== Background ===== //
+
     //on background changes do not forget to change this.newbackgroundArray()
     this.backgroundArray = [];
     //spawns new background order
@@ -26,22 +27,23 @@ export class Level_1 extends Scene {
   }
 
   create() {
-    //how many bricks are used on this map
     this.lives = 3;
-    this.amountBricks = 38;
+    this.amountBricks = 38; //how many bricks are used on this map
     this.isPlayerAlive = true;
 
     this.registry.set('lives', this.lives);
 
-    //used for the init loading of hearts at the start of the level
-    // this.gameStart = true;
-
     this.scene.launch('UIScene');
 
     // adding the background / inside backgroundArray are the numbers for the pictures and they are randomly sorted, with the help of the Index it can be shifted  to the next one in the array on new game
-    this.image = this.add.sprite(240, 160, 'background' + this.backgroundArray[(this.backgroundArrayIndex)]);
+    this.image = this.add.sprite(
+      240,
+      160,
+      'background' + this.backgroundArray[this.backgroundArrayIndex]
+    );
 
     // ===== BRIIIIIICKS HEART ===== //
+
     BRICKS.LEVEL_1.call(this);
 
     // ===== CUSTOM KEYS ===== //
@@ -104,13 +106,9 @@ export class Level_1 extends Scene {
     }
 
     this.player.update(this.keys, time, delta);
+
     //tracks the y changes in the velocity because add.collider is a bitch
     this.ball.update();
-
-    //fun little animation for the initial heart load, delete if the amount of initial lifes is less than 8
-    // if (this.gameStart === true) {
-    //   this.startLifeAnim();
-    // }
 
     if (
       (this.registry.list.lives < 1 && this.isPlayerAlive) ||
@@ -123,18 +121,6 @@ export class Level_1 extends Scene {
       this.restartGame();
     }
   }
-
-  //its using the update function to increase the amount of hearts with the frequency of update
-  // startLifeAnim() {
-  //   if (this.lives < 5) {
-  //     if (this.lives == 4) {
-  //       //stops the startLifeAnim()
-  //       this.gameStart = false;
-  //     }
-  //     this.registry.set('lives', this.lives);
-  //     this.lives++;
-  //   }
-  // }
 
   //end the game
   gameOver() {
@@ -199,7 +185,7 @@ export class Level_1 extends Scene {
     }
   }
 
-  //cycles to the next background 
+  //cycles to the next background
   nextBackground() {
     this.backgroundArrayIndex++;
 
@@ -226,13 +212,16 @@ export class Level_1 extends Scene {
 
   //shuffles an array randomly
   shuffle(array) {
-    var tmp, current, top = array.length;
-    if (top) while (--top) {
-      current = Math.floor(Math.random() * (top + 1));
-      tmp = array[current];
-      array[current] = array[top];
-      array[top] = tmp;
-    }
+    var tmp,
+      current,
+      top = array.length;
+    if (top)
+      while (--top) {
+        current = Math.floor(Math.random() * (top + 1));
+        tmp = array[current];
+        array[current] = array[top];
+        array[top] = tmp;
+      }
     return array;
   }
 }
