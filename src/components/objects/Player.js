@@ -1,7 +1,6 @@
 import Bullet from './Bullet';
 
 export default class Player extends Phaser.GameObjects.Sprite {
-
   constructor(config) {
     super(config.scene, config.x, config.y, config.key);
     config.scene.physics.world.enable(this);
@@ -11,17 +10,16 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // ===== Player Setup ===== //
     this.isSliding = false;
     this.isAttacking = false;
+    this.isAttackingUp = false;
     this.body.setGravityY(300);
-    this.slideTimer = 200;
+    this.slideTimer = 100;
     this.slideDistance = 250;
     this.jumpDistance = -330;
   }
 
-
   create() {
-
     // When this is called, you need to bind it to whichever scene you're calling from.
-    // The bullets need to be created per level 
+    // The bullets need to be created per level
     // So something like `this.player.create.call(this)` if you were inside Level_1
     // `this` points to Level_1, therefore creating `Level_1.bullets = ......`
     this.bullets = this.add.group({
@@ -35,28 +33,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
       left: keys.left.isDown,
       right: keys.right.isDown,
       down: keys.down.isDown,
-      jump: keys.jump.isDown,
       slide: keys.slide.isDown,
       attack: keys.attack.isDown,
-      fire: keys.fire.isDown
+      fire: keys.fire.isDown,
+      bomb: keys.bomb.isDown
     };
 
-    // ===== If space or z key is held, add new logic to move direction ===== //
-    // if (input.slide || input.attack) {
-    //   if (input.left) {
-    //     this.playerAnimate(this.body, {
-    //       animation: 'run',
-    //       setVelocityX: -160,
-    //       flipX: false
-    //     });
-    //   } else if (input.right) {
-    //     this.playerAnimate(this.body, {
-    //       animation: 'run',
-    //       setVelocityX: 160,
-    //       flipX: true
-    //     });
-    //   }
-    // }
+    // ===== Attack Up if no arrow keys are pressed while attacking ===== //
+    if (!input.left && !input.right && input.attack) {
+      this.anims.play('sword', true);
+      this.isAttackingUp = true;
+      this.on('animationcomplete', () => (this.isAttackingUp = false), this);
+    }
 
     // ===== Move left ===== //
     if (input.left) {
@@ -72,11 +60,15 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // ===== Jump ===== //
     else if (input.jump && this.body.onFloor()) {
       this.body.setVelocityY(this.jumpDistance);
+    } else if (input.bomb) {
+      console.log('bomb fired');
     }
     // Do nothing, 0 frame sprite ===== //
     else {
-      this.body.setVelocityX(0);
-      this.anims.play('turn');
+      if (!this.isAttackingUp) {
+        this.body.setVelocityX(0);
+        this.anims.play('turn');
+      }
     }
   }
 
@@ -89,9 +81,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
   playAnimationDirection(input, flipX, velocityX) {
     this.body.setVelocityX(velocityX);
     this.flipX = flipX;
-    if (input.jump && this.body.onFloor()) {
-      this.body.setVelocityY(this.jumpDistance);
-    }
 
     // ===== Check to see if we should swing sword ===== //
     if (input.attack) {
@@ -108,7 +97,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         );
       }
       // ===== Slide, add speed ===== //
-    } else if (input.slide) {
+    } else if (input.slide && this.body.onFloor()) {
       // ===== Check if player is currently sliding. ===== //
       // ===== Do slide, stop animation after 3/10ths of a second ===== //
       if (!this.isSliding) {

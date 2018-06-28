@@ -1,8 +1,9 @@
 import { Scene } from 'phaser';
-import { WIDTH, HEIGHT } from '../util/constants';
+import { WIDTH, HEIGHT, BRICKS } from '../util/constants';
 import Player from '../components/objects/Player';
 import Bullet from '../components/objects/Bullet';
 import Ball from '../components/objects/Ball';
+import EnemyBullet from '../components/enemy/EnemyBullet';
 
 export class Level_1 extends Scene {
   constructor() {
@@ -13,136 +14,39 @@ export class Level_1 extends Scene {
     // ===== Global Definitions For This FILE ===== //
     //here the bricks will be stored
     this.bricks = [];
-    //how many bricks are used on this map
-    this.amountBricks = 38;
     this.ball;
-
-    //amount of lifes on the level
-    this.lifes = 1;
-    //used for the init loading of hearts at the start of the level
-    this.gameStart = true;
   }
 
   create() {
-    this.image = this.add.sprite(240, 160, 'background');
+    //how many bricks are used on this map
+    this.lives = 999;
+    this.amountBricks = 38;
+    this.isPlayerAlive = true;
+
+    this.registry.set('lives', this.lives);
+
+    //used for the init loading of hearts at the start of the level
+    // this.gameStart = true;
+
+    this.scene.launch('UIScene');
+
+    // random background on start and new games
+    let picture = 'background' + (Math.floor(Math.random() * 5) + 1);
+    this.image = this.add.sprite(240, 160, picture);
 
     // ===== BRIIIIIICKS HEART ===== //
-
-    this.bricks[0] = this.physics.add.staticGroup({
-      key: 'bricks',
-      frame: ['brick4'],
-      frameQuantity: 3,
-      gridAlign: {
-        width: 3,
-        height: 1,
-        cellWidth: 33,
-        cellHeight: 33,
-        x: 100,
-        y: 50
-      }
-    });
-    this.bricks[1] = this.physics.add.staticGroup({
-      key: 'bricks',
-      frame: ['brick4'],
-      frameQuantity: 3,
-      gridAlign: {
-        width: 3,
-        height: 1,
-        cellWidth: 33,
-        cellHeight: 33,
-        x: 298,
-        y: 50
-      }
-    });
-    this.bricks[2] = this.physics.add.staticGroup({
-      key: 'bricks',
-      frame: ['brick5'],
-      frameQuantity: 4,
-      gridAlign: {
-        width: 4,
-        height: 1,
-        cellWidth: 33,
-        cellHeight: 33,
-        x: 100,
-        y: 83
-      }
-    });
-    this.bricks[3] = this.physics.add.staticGroup({
-      key: 'bricks',
-      frame: ['brick5'],
-      frameQuantity: 4,
-      gridAlign: {
-        width: 4,
-        height: 1,
-        cellWidth: 33,
-        cellHeight: 33,
-        x: 265,
-        y: 83
-      }
-    });
-    this.bricks[5] = this.physics.add.staticGroup({
-      key: 'bricks',
-      frame: ['brick7'],
-      frameQuantity: 9,
-      gridAlign: {
-        width: 9,
-        height: 1,
-        cellWidth: 33,
-        cellHeight: 33,
-        x: 100,
-        y: 116
-      }
-    });
-    this.bricks[6] = this.physics.add.staticGroup({
-      key: 'bricks',
-      frame: ['brick8'],
-      frameQuantity: 7,
-      gridAlign: {
-        width: 7,
-        height: 1,
-        cellWidth: 33,
-        cellHeight: 33,
-        x: 133,
-        y: 149
-      }
-    });
-    this.bricks[7] = this.physics.add.staticGroup({
-      key: 'bricks',
-      frame: ['brick1'],
-      frameQuantity: 5,
-      gridAlign: {
-        width: 5,
-        height: 1,
-        cellWidth: 33,
-        cellHeight: 33,
-        x: 166,
-        y: 182
-      }
-    });
-    this.bricks[8] = this.physics.add.staticGroup({
-      key: 'bricks',
-      frame: ['brick2'],
-      frameQuantity: 3,
-      gridAlign: {
-        width: 3,
-        height: 1,
-        cellWidth: 33,
-        cellHeight: 33,
-        x: 199,
-        y: 215
-      }
-    });
+    BRICKS.LEVEL_1.call(this);
 
     // ===== CUSTOM KEYS ===== //
 
     this.keys = {
-      jump: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
       slide: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
       attack: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
       fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
       left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
       right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
-      down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
+      down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
+      bomb: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C)
     };
 
     // Create Player
@@ -161,13 +65,26 @@ export class Level_1 extends Scene {
       x: 0,
       y: HEIGHT - 100,
       veloc: {
-        x:100,
+        x: 100,
         y: -80
       }
     });
 
     // ===== Set up a creation of bullets for the scene ===== //
+
     this.player.create.call(this);
+
+    // ===== Can Probably move this to Player file for refactor ===== //
+
+    this.bullets = this.add.group({
+      classType: Bullet,
+      runChildUpdate: true
+    });
+
+    this.enemyBullets = this.add.group({
+      classType: EnemyBullet,
+      runChildUpdate: true
+    });
   }
 
   update(time, delta) {
@@ -180,22 +97,97 @@ export class Level_1 extends Scene {
     }
 
     this.player.update(this.keys, time, delta);
+    //tracks the y changes in the velocity because add.collider is a bitch
+    this.ball.update();
 
     //fun little animation for the initial heart load, delete if the amount of initial lifes is less than 8
-    if (this.gameStart === true) {
-      this.startLifeAnim();
+    // if (this.gameStart === true) {
+    //   this.startLifeAnim();
+    // }
+
+    if (
+      (this.registry.list.lives < 1 && this.isPlayerAlive) ||
+      (this.amountBricks === 0 && this.isPlayerAlive)
+    ) {
+      this.gameOver();
+    }
+
+    if (!this.isPlayerAlive) {
+      this.restartGame();
     }
   }
 
   //its using the update function to increase the amount of hearts with the frequency of update
-  startLifeAnim() {
-    if (this.lifes < 14) {
-      if (this.lifes == 13) {
-        //stops the startLifeAnim()
-        this.gameStart = false;
-      }
-      this.registry.set('HEARTS', this.lifes);
-      this.lifes++;
+  // startLifeAnim() {
+  //   if (this.lives < 5) {
+  //     if (this.lives == 4) {
+  //       //stops the startLifeAnim()
+  //       this.gameStart = false;
+  //     }
+  //     this.registry.set('lives', this.lives);
+  //     this.lives++;
+  //   }
+  // }
+
+  //end the game
+  gameOver() {
+    this.isPlayerAlive = false;
+    this.cameras.main.shake(500);
+    this.time.delayedCall(
+      250,
+      () => {
+        this.physics.world.pause();
+      },
+      [],
+      this
+    );
+    this.scene.stop('UIScene');
+
+    if (this.registry.list.lives === 0) {
+      this.add.text(
+        (WIDTH / 2) * 0.5,
+        HEIGHT / 2,
+        'Game Over! \n Press any key to try again!'
+      );
+    } else {
+      this.add.text(
+        (WIDTH / 2) * 0.5,
+        HEIGHT / 2,
+        'You won!! \n Press any key to play again!'
+      );
+    }
+  }
+
+  restartGame() {
+    if (this.keys.attack.isDown || this.keys.slide.isDown) {
+      // fade camera
+      this.time.delayedCall(
+        250,
+        () => {
+          this.cameras.main.fade(250);
+        },
+        [],
+        this
+      );
+
+      // restart game
+      this.time.delayedCall(
+        500,
+        () => {
+          this.registry.destroy();
+          this.events.off();
+          this.scene.restart();
+        },
+        [],
+        this
+      );
+    }
+  }
+
+  fireEnemyBullet(x, y) {
+    let bullet = this.enemyBullets.get();
+    if (bullet) {
+      bullet.fire(x, y, this.player.x, this.player.y);
     }
   }
 }

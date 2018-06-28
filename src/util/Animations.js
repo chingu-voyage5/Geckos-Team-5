@@ -15,7 +15,17 @@ export default function makeAnimations(scene) {
     key: 'sword',
     frames: scene.anims.generateFrameNumbers('player', {
       start: 14,
-      end: 17
+      end: 16
+    }),
+    frameRate: 20
+  };
+  scene.anims.create(config);
+
+  config = {
+    key: 'attackUp',
+    frames: scene.anims.generateFrameNumbers('player', {
+      start: 27,
+      end: 30
     }),
     frameRate: 10
   };
@@ -45,7 +55,11 @@ export default function makeAnimations(scene) {
 
   config = {
     key: 'ballAnim',
-    frames: scene.anims.generateFrameNumbers('ball', { start: 0, end: 3, first: 0 }),
+    frames: scene.anims.generateFrameNumbers('ball', {
+      start: 0,
+      end: 3,
+      first: 0
+    }),
     frameRate: 8
   };
 
