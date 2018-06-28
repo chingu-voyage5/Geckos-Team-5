@@ -108,8 +108,7 @@ export class Level_1 extends Scene {
   }
 
   update(time, delta) {
-    if (this.gameStart && this.keys.slide.isDown) {
-      console.log(this.startText);
+    if (this.gameStart && Phaser.Input.Keyboard.JustDown(this.keys.slide)) {
       this.startText.visible = false;
       this.gameStart = false;
       this.physics.world.resume();
