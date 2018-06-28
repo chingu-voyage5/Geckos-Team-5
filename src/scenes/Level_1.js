@@ -15,6 +15,14 @@ export class Level_1 extends Scene {
     //here the bricks will be stored
     this.bricks = [];
     this.ball;
+
+    // ===== Background ===== //
+    //on background changes do not forget to change this.newbackgroundArray()
+    this.backgroundArray = [];
+    //spawns new background order
+    this.newBackgroundArray();
+    //starts always at 1
+    this.backgroundArrayIndex = 1;
   }
 
   create() {
@@ -30,9 +38,8 @@ export class Level_1 extends Scene {
 
     this.scene.launch('UIScene');
 
-    // random background on start and new games
-    let picture = 'background' + (Math.floor(Math.random() * 5) + 1);
-    this.image = this.add.sprite(240, 160, picture);
+    // adding the background / inside backgroundArray are the numbers for the pictures and they are randomly sorted, with the help of the Index it can be shifted  to the next one in the array on new game
+    this.image = this.add.sprite(240, 160, 'background' + this.backgroundArray[(this.backgroundArrayIndex)]);
 
     // ===== BRIIIIIICKS HEART ===== //
     BRICKS.LEVEL_1.call(this);
@@ -131,6 +138,7 @@ export class Level_1 extends Scene {
 
   //end the game
   gameOver() {
+    this.nextBackground();
     this.isPlayerAlive = false;
     this.cameras.main.shake(500);
     this.time.delayedCall(
@@ -189,5 +197,42 @@ export class Level_1 extends Scene {
     if (bullet) {
       bullet.fire(x, y, this.player.x, this.player.y);
     }
+  }
+
+  //cycles to the next background 
+  nextBackground() {
+    this.backgroundArrayIndex++;
+
+    //if we had 5 backgrounds it makes a new order for the backgrounds and resets the backgroundArrayIndex
+    if (this.backgroundArrayIndex == this.backgroundArray.length) {
+      let oldBackgroundArray = this.backgroundArray;
+      this.backgroundArrayIndex = 1;
+
+      this.newBackgroundArray(this.backgroundArray);
+      //prevents the new order to start with the last background
+      while (oldBackgroundArray[5] == this.backgroundArray[1]) {
+        this.newBackgroundArray(this.backgroundArray);
+      }
+    }
+  }
+
+  //just use whoever backgrounds there are as numbers --> 3 background is [1,2,3] || 10 background is [1,2,3,4,5,6,7,8,9,10]
+  newBackgroundArray() {
+    //the shuffle function shuffles the array numbers randomly
+    this.backgroundArray = this.shuffle([1, 2, 3, 4, 5]);
+    //the zero does not represent a background but is to allow the backgroundArrayIndex to be easier to read and all following code to be understood easier
+    this.backgroundArray.unshift(0);
+  }
+
+  //shuffles an array randomly
+  shuffle(array) {
+    var tmp, current, top = array.length;
+    if (top) while (--top) {
+      current = Math.floor(Math.random() * (top + 1));
+      tmp = array[current];
+      array[current] = array[top];
+      array[top] = tmp;
+    }
+    return array;
   }
 }
