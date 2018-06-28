@@ -36,7 +36,6 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     //initial velocity
     this.body.setVelocity(config.veloc.x, config.veloc.y);
 
-
     //saves the current velocity y so that we can fix collider
     this.currentVelocY;
     //difference between the x coordinates of player and ball, it is used to set the velocity on sword strike and bounce
@@ -77,7 +76,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       this.changeVelocity(300, 300, 10, ball, player);
     }
     //the velocity changes for hitting the player
-    else  {
+    else {
       if (!player.isInvincible) {
         //takes away a life since the player was hit
         this.config.scene.registry.set(
@@ -87,14 +86,12 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
 
         player.setTemporaryInvincibility();
       }
-      
+
       this.changeVelocX(200, 5, ball, player);
     }
   }
 
   changeVelocity(maxY, addY, multiplier, ball, player) {
-    console.log(this.body.velocity);
-
     //the ball should have some max velocity, so an if
     if (this.body.velocity.y < maxY && this.body.velocity.y > maxY * -1) {
       //adds upwards velocity to the ball
