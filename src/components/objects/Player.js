@@ -15,6 +15,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.slideTimer = 100;
     this.slideDistance = 250;
     this.jumpDistance = -330;
+    this.isInvincible = false;
   }
 
   create() {
@@ -149,5 +150,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
       },
       this
     );
+  }
+
+  setTemporaryInvincibility() {
+    this.isInvincible = true;
+    setTimeout(() => {
+      this.isInvincible = false;
+    }, 3000);
   }
 }
