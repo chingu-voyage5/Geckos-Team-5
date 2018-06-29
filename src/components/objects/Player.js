@@ -15,6 +15,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.slideTimer = 100;
     this.slideDistance = 250;
     this.jumpDistance = -330;
+    this.bulletsOnCooldown = false;
     this.isInvincible = false;
   }
 
@@ -158,5 +159,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
     setTimeout(() => {
       this.isInvincible = false;
     }, 3000);
+  }
+
+  triggerBulletCooldown() {
+    this.bulletsOnCooldown = true;
+    setTimeout(() => (this.bulletsOnCooldown = false), 200);
   }
 }

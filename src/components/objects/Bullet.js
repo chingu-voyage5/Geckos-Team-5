@@ -8,6 +8,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     } = config;
     this.scene = scene;
     this.speed = Phaser.Math.GetSpeed(200, 1);
+    this.player = this.scene.player;
     this.scene.physics.world.enable(this);
 
     this.scene.physics.add.collider(
@@ -22,9 +23,12 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
   }
 
   fire(x, y) {
-    this.setPosition(x, y);
-    this.setActive(true);
-    this.setVisible(true);
+    if (!this.player.bulletsOnCooldown) {
+      this.setPosition(x, y);
+      this.setActive(true);
+      this.setVisible(true);
+      this.player.triggerBulletCooldown();
+    }
   }
 
   update(time, delta) {
@@ -36,7 +40,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
       this.destroy();
     }
   }
-  
+
   hitBall(bullet, ball) {
     this.destroy();
     ball.setVelocityY(-220);
