@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { WIDTH, HEIGHT, UIFONT } from '../util/constants';
+import { musicStart, musicStop } from '../components/objects/Music';
 
 export class Credits extends Scene {
   constructor() {
@@ -16,8 +17,14 @@ export class Credits extends Scene {
 
     this.keys = {
       space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
-      esc: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
+      esc: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
+      music: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M)
     };
+
+    //if the scene starts while music is activated, run music
+    if (this.registry.list.musicControll) {
+      musicStart('theme', this);
+    }
   }
 
   text() {
@@ -37,6 +44,12 @@ export class Credits extends Scene {
       Phaser.Input.Keyboard.JustDown(this.keys.space)
     ) {
       this.scene.start('Title');
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.music)) {      //music start stop
+      if (!this.registry.list.musicControll) {
+        musicStart('theme', this);
+      } else {
+        musicStop(this);
+      }
     }
   }
 }
