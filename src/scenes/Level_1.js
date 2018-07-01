@@ -80,7 +80,6 @@ export class Level_1 extends Scene {
     BRICKS.LEVEL_1.call(this);
 
     // ===== CUSTOM KEYS ===== //
-
     this.keys = {
       slide: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
       attack: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
@@ -140,13 +139,32 @@ export class Level_1 extends Scene {
   }
 
   update(time, delta) {
-    if (this.gameStart && Phaser.Input.Keyboard.JustDown(this.keys.slide)) {
+    let pad = this.input.gamepad.gamepads[0];
+
+    // let pad = this.input.gamepad.gamepads[0];
+
+    // if (this.keys.slide.isDown || pad.buttons[0].pressed) {
+    //   console.log(pad);
+    // }
+
+    // let pad = pads[0];
+    // if (pad.left) {
+    //   console.log('button pressed');
+    // }
+    if (
+      (this.gameStart && Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
+      pad.buttons[0].pressed
+    ) {
       this.startText.visible = false;
       this.gameStart = false;
       this.physics.world.resume();
     }
     // ===== BULLET ===== //
-    if (this.keys.fire.isDown) {
+    if (
+      this.keys.fire.isDown ||
+      pad.buttons[1].pressed ||
+      pad.buttons[7].pressed
+    ) {
       let bullet = this.bullets.get();
       if (bullet) {
         bullet.fire(this.player.x, this.player.y - 30);
@@ -170,7 +188,10 @@ export class Level_1 extends Scene {
       this.gameStart = true;
       this.restartGame();
     }
-    if (Phaser.Input.Keyboard.JustDown(this.keys.esc)) {
+    if (
+      Phaser.Input.Keyboard.JustDown(this.keys.esc) ||
+      pad.buttons[9].pressed
+    ) {
       // this.registry.destroy();
       // this.events.off();
       this.scene.start('Title');
@@ -210,7 +231,11 @@ export class Level_1 extends Scene {
   }
 
   restartGame() {
-    if (this.keys.attack.isDown || this.keys.slide.isDown) {
+    if (
+      this.keys.attack.isDown ||
+      this.keys.slide.isDown ||
+      this.input.gamepad.gamepads[0].buttons[0].pressed
+    ) {
       // fade camera
       this.time.delayedCall(
         250,
