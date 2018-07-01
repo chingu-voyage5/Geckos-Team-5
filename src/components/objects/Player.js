@@ -160,10 +160,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   setTemporaryInvincibility() {
+    // === Can probably make flashing sprite here, but it's expensve === //
+    // === Have to do some nesting with setInterval/Timeout
+
+    let originalTint = 16777215;
+    this.setTint(0xff9955);
+    this.scene.cameras.main.shake(100);
     this.isInvincible = true;
+
     setTimeout(() => {
       this.isInvincible = false;
-    }, 3000);
+      this.setTint(originalTint);
+    }, 300);
   }
 
   triggerBulletCooldown() {

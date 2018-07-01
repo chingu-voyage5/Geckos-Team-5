@@ -27,7 +27,10 @@ const config = {
       debug: false
     }
   },
-  scene: [Preloader, Title, Credits, Help, Level_1, UIScene]
+  scene: [Preloader, Title, Credits, Help, Level_1, UIScene],
+  audio: {
+    disableWebAudio: true
+  }
 };
 
 const game = new Phaser.Game(config);

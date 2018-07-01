@@ -4,6 +4,11 @@ import Player from '../components/objects/Player';
 import Bullet from '../components/objects/Bullet';
 import Ball from '../components/objects/Ball';
 import EnemyBullet from '../components/enemy/EnemyBullet';
+import {
+  musicStart,
+  musicStop,
+  songDecider
+} from '../components/objects/Music';
 
 export class Level_1 extends Scene {
   constructor() {
@@ -88,7 +93,8 @@ export class Level_1 extends Scene {
       right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
       down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
       bomb: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C),
-      esc: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
+      esc: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
+      music: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M)
     };
 
     // Create Player
@@ -136,6 +142,14 @@ export class Level_1 extends Scene {
 
     // pause and start game on player input
     this.physics.world.pause();
+
+    //the song name is being chosen
+    this.currentSong = 'song' + Number(this.registry.list.currentSongNumber);
+
+    //if the scene is restarted and music is activated, it will start the new track
+    if (this.registry.list.musicControll) {
+      musicStart(this.currentSong, this);
+    }
   }
 
   update(time, delta) {
@@ -198,11 +212,24 @@ export class Level_1 extends Scene {
       this.scene.stop('Level_1');
       this.scene.stop('UIScene');
     }
+
+    //music start stop
+    if (Phaser.Input.Keyboard.JustDown(this.keys.music)) {
+      if (!this.registry.list.musicControll) {
+        musicStart(this.currentSong, this);
+      } else {
+        musicStop(this);
+      }
+    }
   }
 
   //end the game
   gameOver() {
     this.nextBackground();
+    //switches to the next track
+    let songNumber = songDecider(this.registry.list.currentSongNumber);
+    //saves the track number in the registry
+    this.registry.set('currentSongNumber', songNumber);
     this.isPlayerAlive = false;
     this.cameras.main.shake(500);
     this.time.delayedCall(
@@ -236,6 +263,10 @@ export class Level_1 extends Scene {
       this.keys.slide.isDown ||
       this.input.gamepad.gamepads[0].buttons[0].pressed
     ) {
+      //stops the current track for the next to come in
+      if (this.registry.list.musicControll) {
+        this.music.stop();
+      }
       // fade camera
       this.time.delayedCall(
         250,
@@ -250,7 +281,7 @@ export class Level_1 extends Scene {
       this.time.delayedCall(
         500,
         () => {
-          this.registry.destroy();
+          this.registry.set('TIMER', [0, 0, ':', 0, 0, 0]);
           this.events.off();
           this.scene.restart();
         },
