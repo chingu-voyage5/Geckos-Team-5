@@ -78,6 +78,9 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     //the velocity changes for hitting the player
     else {
       if (!player.isInvincible) {
+        
+        player.setTemporaryInvincibility();
+        
         //takes away a life since the player was hit
         this.config.scene.registry.set(
           'lives',
