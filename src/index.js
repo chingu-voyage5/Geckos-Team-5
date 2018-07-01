@@ -12,6 +12,9 @@ const config = {
   type: Phaser.AUTO,
   width: WIDTH,
   height: HEIGHT,
+  input: {
+    gamepad: true
+  },
   pixelArt: true,
   parent: 'phaser',
   plugins: {
