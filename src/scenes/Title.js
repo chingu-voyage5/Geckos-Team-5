@@ -48,7 +48,12 @@ export class Title extends Scene {
   }
 
   update() {
-    if (Phaser.Input.Keyboard.JustDown(this.keys.start)) {
+    let pad = this.input.gamepad.gamepads[0];
+
+    if (
+      Phaser.Input.Keyboard.JustDown(this.keys.start) ||
+      pad.buttons[0].pressed
+    ) {
       this.scene.start('Level_1');
       //transition to next scene and music
       if (this.registry.list.musicControll) {

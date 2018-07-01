@@ -4,7 +4,11 @@ import Player from '../components/objects/Player';
 import Bullet from '../components/objects/Bullet';
 import Ball from '../components/objects/Ball';
 import EnemyBullet from '../components/enemy/EnemyBullet';
-import { musicStart, musicStop, songDecider } from '../components/objects/Music';
+import {
+  musicStart,
+  musicStop,
+  songDecider
+} from '../components/objects/Music';
 
 export class Level_1 extends Scene {
   constructor() {
@@ -28,6 +32,38 @@ export class Level_1 extends Scene {
   }
 
   create() {
+    // Enables fullscreen on canvas click
+    let fullscreenFunc = true;
+
+    document.querySelector('#phaser').addEventListener('click', function() {
+      if (fullscreenFunc) {
+        fullscreenFunc();
+        fullscreenFunc = false;
+      } else {
+        document.querySelector('canvas').style.height = '';
+        document.querySelector('canvas').style.margin = '25vh auto';
+        fullscreenFunc = true;
+      }
+    });
+
+    this.input.on(
+      'pointerdown',
+      function(event) {
+        const canvas = this.sys.game.canvas;
+        const fullscreen = this.sys.game.device.fullscreen;
+        if (!fullscreen.available) {
+          return;
+        }
+        fullscreenFunc = function() {
+          canvas[fullscreen.request]();
+          document.querySelector('canvas').style.height = '80vh';
+          document.querySelector('canvas').style.margin = '0';
+        };
+      },
+      this
+    );
+
+    // ===== Level Variables ===== //
     this.gameStart = true;
     this.lives = 3;
     this.amountBricks = 38; //how many bricks are used on this map
@@ -49,7 +85,6 @@ export class Level_1 extends Scene {
     BRICKS.LEVEL_1.call(this);
 
     // ===== CUSTOM KEYS ===== //
-
     this.keys = {
       slide: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
       attack: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
@@ -110,7 +145,7 @@ export class Level_1 extends Scene {
 
     //the song name is being chosen
     this.currentSong = 'song' + Number(this.registry.list.currentSongNumber);
-    
+
     //if the scene is restarted and music is activated, it will start the new track
     if (this.registry.list.musicControll) {
       musicStart(this.currentSong, this);
@@ -118,13 +153,32 @@ export class Level_1 extends Scene {
   }
 
   update(time, delta) {
-    if (this.gameStart && Phaser.Input.Keyboard.JustDown(this.keys.slide)) {
+    let pad = this.input.gamepad.gamepads[0];
+
+    // let pad = this.input.gamepad.gamepads[0];
+
+    // if (this.keys.slide.isDown || pad.buttons[0].pressed) {
+    //   console.log(pad);
+    // }
+
+    // let pad = pads[0];
+    // if (pad.left) {
+    //   console.log('button pressed');
+    // }
+    if (
+      (this.gameStart && Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
+      pad.buttons[0].pressed
+    ) {
       this.startText.visible = false;
       this.gameStart = false;
       this.physics.world.resume();
     }
     // ===== BULLET ===== //
-    if (this.keys.fire.isDown) {
+    if (
+      this.keys.fire.isDown ||
+      pad.buttons[1].pressed ||
+      pad.buttons[7].pressed
+    ) {
       let bullet = this.bullets.get();
       if (bullet) {
         bullet.fire(this.player.x, this.player.y - 30);
@@ -148,7 +202,10 @@ export class Level_1 extends Scene {
       this.gameStart = true;
       this.restartGame();
     }
-    if (Phaser.Input.Keyboard.JustDown(this.keys.esc)) {
+    if (
+      Phaser.Input.Keyboard.JustDown(this.keys.esc) ||
+      pad.buttons[9].pressed
+    ) {
       // this.registry.destroy();
       // this.events.off();
       this.scene.start('Title');
@@ -201,7 +258,11 @@ export class Level_1 extends Scene {
   }
 
   restartGame() {
-    if (this.keys.attack.isDown || this.keys.slide.isDown) {
+    if (
+      this.keys.attack.isDown ||
+      this.keys.slide.isDown ||
+      this.input.gamepad.gamepads[0].buttons[0].pressed
+    ) {
       //stops the current track for the next to come in
       if (this.registry.list.musicControll) {
         this.music.stop();
