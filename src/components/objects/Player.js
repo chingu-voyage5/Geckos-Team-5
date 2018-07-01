@@ -31,15 +31,20 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   update(keys, time, delta) {
+    let pad = this.scene.input.gamepad.gamepads[0];
     let input = {
-      left: keys.left.isDown,
-      right: keys.right.isDown,
-      down: keys.down.isDown,
-      slide: keys.slide.isDown,
-      attack: keys.attack.isDown,
-      fire: keys.fire.isDown,
-      bomb: keys.bomb.isDown,
-      esc: keys.esc.isDown
+      left:
+        keys.left.isDown || pad.buttons[14].pressed || pad.axes[0].value < 0,
+      right:
+        keys.right.isDown || pad.buttons[15].pressed || pad.axes[0].value > 0.1,
+      down:
+        keys.down.isDown || pad.buttons[13].pressed || pad.axes[1].value > 0,
+      slide: keys.slide.isDown || pad.buttons[0].pressed,
+      attack:
+        keys.attack.isDown || pad.buttons[2].pressed || pad.buttons[6].pressed,
+      fire: keys.fire.isDown || pad.buttons[1].pressed,
+      bomb: keys.bomb.isDown || pad.buttons[3].pressed,
+      esc: keys.esc.isDown || pad.buttons[9].pressed
     };
 
     // ===== Attack Up if no arrow keys are pressed while attacking ===== //
