@@ -70,8 +70,5 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
       this.player.setTemporaryInvincibility();
     }
     this.destroy();
-    if (!this.player.isInvincible) {
-      this.player.setTemporaryInvincibility();
-    }
   }
 }
