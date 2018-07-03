@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 import { WIDTH, HEIGHT, UIFONT } from '../util/constants';
 import { musicStart, musicStop } from '../components/objects/Music';
-import { DEFAULT_PAD } from '../util/constants';
+import { checkGamepad } from '../util/constants';
 
 export class Title extends Scene {
   constructor() {
@@ -49,9 +49,7 @@ export class Title extends Scene {
   }
 
   update() {
-    let pad = this.input.gamepad.gamepads.length > 0 
-            ? this.input.gamepad.gamepads[0]
-            : DEFAULT_PAD;
+    let pad = checkGamepad.call(this);
 
     if (
       Phaser.Input.Keyboard.JustDown(this.keys.start) ||

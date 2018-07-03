@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { WIDTH, HEIGHT, BRICKS, DEFAULT_PAD } from '../util/constants';
+import { WIDTH, HEIGHT, BRICKS, checkGamepad } from '../util/constants';
 import Player from '../components/objects/Player';
 import Bullet from '../components/objects/Bullet';
 import Ball from '../components/objects/Ball';
@@ -153,9 +153,7 @@ export class Level_1 extends Scene {
   }
 
   update(time, delta) {
-    let pad = this.input.gamepad.gamepads.length > 0 
-            ? this.input.gamepad.gamepads[0]
-            : DEFAULT_PAD 
+    let pad = checkGamepad.call(this); 
 
     // let pad = this.input.gamepad.gamepads[0];
 
