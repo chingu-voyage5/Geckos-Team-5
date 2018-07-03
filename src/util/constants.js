@@ -23,6 +23,18 @@ export const DEFAULT_PAD = {
 };
 
 
+/**
+ *  Need ES5 function here cause we don't want to catch the `this` value 
+ *  Call function and bind it to a scene this value 
+ *  something like checkGamepad.call(this.scene), etc 
+ */
+export const checkGamepad = function() {
+    return this.input.gamepad.gamepads.length > 0 
+            ? this.scene.input.gamepad.gamepads[0]
+            : DEFAULT_PAD;
+}
+
+
 // Brick setup for each level 
 export const BRICKS = {
     LEVEL_1() {
