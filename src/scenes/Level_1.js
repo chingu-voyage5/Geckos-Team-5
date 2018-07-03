@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { WIDTH, HEIGHT, BRICKS } from '../util/constants';
+import { DefaultPad } from '../util/defaultGamePad';
 import Player from '../components/objects/Player';
 import Bullet from '../components/objects/Bullet';
 import Ball from '../components/objects/Ball';
@@ -153,7 +154,9 @@ export class Level_1 extends Scene {
   }
 
   update(time, delta) {
-    let pad = this.input.gamepad.gamepads[0];
+    let pad = this.input.gamepad.gamepads.length > 0 
+            ? this.input.gamepad.gamepads[0]
+            : DefaultPad 
 
     // let pad = this.input.gamepad.gamepads[0];
 
@@ -261,7 +264,7 @@ export class Level_1 extends Scene {
     if (
       this.keys.attack.isDown ||
       this.keys.slide.isDown ||
-      this.input.gamepad.gamepads[0].buttons[0].pressed
+      ( this.input.gamepad.gamepads.length > 0 ? this.input.gamepad.gamepads[0].buttons[0].pressed : undefined )
     ) {
       //stops the current track for the next to come in
       if (this.registry.list.musicControll) {

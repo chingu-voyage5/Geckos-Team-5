@@ -1,4 +1,5 @@
 import Bullet from './Bullet';
+import { DefaultPad } from '../../util/defaultGamePad'
 
 export default class Player extends Phaser.GameObjects.Sprite {
   constructor(config) {
@@ -31,7 +32,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   update(keys, time, delta) {
-    let pad = this.scene.input.gamepad.gamepads[0];
+    let pad = this.scene.input.gamepad.gamepads.length > 0 
+            ? this.scene.input.gamepad.gamepads[0]
+            : DefaultPad;
     let input = {
       left:
         keys.left.isDown || pad.buttons[14].pressed || pad.axes[0].value < 0,
