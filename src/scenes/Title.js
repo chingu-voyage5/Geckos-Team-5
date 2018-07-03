@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 import { WIDTH, HEIGHT, UIFONT } from '../util/constants';
 import { musicStart, musicStop } from '../components/objects/Music';
-import { DefaultPad } from '../util/defaultGamePad'
+import { DEFAULT_PAD } from '../util/constants';
 
 export class Title extends Scene {
   constructor() {
@@ -46,13 +46,12 @@ export class Title extends Scene {
     this.musicText = this.add
       .text(WIDTH / 2, HEIGHT - 110, 'M: MUSIC', UIFONT)
       .setOrigin(0.5);
-      console.log(DefaultPad)
   }
 
   update() {
     let pad = this.input.gamepad.gamepads.length > 0 
             ? this.input.gamepad.gamepads[0]
-            : DefaultPad;
+            : DEFAULT_PAD;
 
     if (
       Phaser.Input.Keyboard.JustDown(this.keys.start) ||
