@@ -1,6 +1,6 @@
-const keyButtons = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ];
-
-
+// ===== Array of 15 numbers from 0 to 15 ===== //
+// === I like this better than writing [ 0, 1, 2, 3, 4, ..... ] === //
+const keyButtons = Array.from( { length: 16 }, ( _, i ) => i );
 
 /**
  * If no gamepad connected, import this 
