@@ -32,8 +32,8 @@ export class Preloader extends phaser.Scene {
       './assets/spritesheets/brick.json'
     );
     this.load.spritesheet('ball', './assets/spritesheets/ball.png', {
-      frameWidth: 25,
-      frameHeight: 25,
+      frameWidth: 26,
+      frameHeight: 26,
       endFrame: 3
     });
 
