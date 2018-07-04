@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { WIDTH, HEIGHT, BRICKS, checkGamepad } from '../util/constants';
+import { WIDTH, HEIGHT, BRICKS, checkGamepad, makeKeys } from '../util/constants';
 import Player from '../components/objects/Player';
 import Bullet from '../components/objects/Bullet';
 import Ball from '../components/objects/Ball';
@@ -85,17 +85,7 @@ export class Level_1 extends Scene {
     BRICKS.LEVEL_1.call(this);
 
     // ===== CUSTOM KEYS ===== //
-    this.keys = {
-      slide: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
-      attack: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-      fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-      left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
-      right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
-      down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
-      bomb: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C),
-      esc: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
-      music: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M)
-    };
+    this.keys = makeKeys.call(this);
 
     // Create Player
     this.player = new Player({

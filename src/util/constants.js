@@ -29,7 +29,27 @@ export const checkGamepad = function() {
     : DEFAULT_PAD;
 };
 
+<<<<<<< Updated upstream
 // Brick setup for each level
+=======
+export const makeKeys = function() {
+    return {
+        slide: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+        attack: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+        fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+        left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
+        right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
+        down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
+        bomb: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C),
+        esc: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
+        music: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M)
+          
+    }
+}
+
+
+// Brick setup for each level 
+>>>>>>> Stashed changes
 export const BRICKS = {
   LEVEL_1() {
     this.bricks[0] = this.physics.add.staticGroup({
