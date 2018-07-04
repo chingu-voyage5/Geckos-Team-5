@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { WIDTH, HEIGHT, BRICKS, checkGamepad, makeKeys } from '../util/constants';
+import { WIDTH, HEIGHT, BRICKS, checkGamepad } from '../util/constants';
 import Player from '../components/objects/Player';
 import Bullet from '../components/objects/Bullet';
 import Ball from '../components/objects/Ball';
@@ -10,6 +10,7 @@ import {
 } from '../components/objects/Music';
 
 import {
+    makeKeys,
     makeFullScreen,
     gameOver,
     restartGame,

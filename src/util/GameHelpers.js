@@ -7,6 +7,24 @@ import {
 
 
 // ===== GAME LOGIC STUFF  ===== //
+
+
+
+export const makeKeys = function() {
+    return {
+        slide : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+        attack: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+        fire  : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+        left  : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
+        right : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
+        down  : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
+        bomb  : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C),
+        esc   : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
+        music : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M)
+    }
+}
+
+
 export const makeFullScreen = function () {
     let fullscreenFunc = true;
 
