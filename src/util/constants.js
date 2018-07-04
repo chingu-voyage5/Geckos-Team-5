@@ -29,9 +29,7 @@ export const checkGamepad = function() {
     : DEFAULT_PAD;
 };
 
-<<<<<<< Updated upstream
-// Brick setup for each level
-=======
+
 export const makeKeys = function() {
     return {
         slide: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
@@ -49,7 +47,6 @@ export const makeKeys = function() {
 
 
 // Brick setup for each level 
->>>>>>> Stashed changes
 export const BRICKS = {
   LEVEL_1() {
     this.bricks[0] = this.physics.add.staticGroup({
