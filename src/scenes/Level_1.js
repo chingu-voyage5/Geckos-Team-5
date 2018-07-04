@@ -12,7 +12,8 @@ import {
 import {
     makeFullScreen,
     gameOver,
-    restartGame
+    restartGame,
+    newBackgroundArray
 } from '../util/GameHelpers'
 
 export class Level_1 extends Scene {
@@ -31,7 +32,7 @@ export class Level_1 extends Scene {
     //on background changes do not forget to change this.newbackgroundArray()
     this.backgroundArray = [];
     //spawns new background order
-    this.newBackgroundArray();
+    newBackgroundArray.call(this);
     //starts always at 1
     this.backgroundArrayIndex = 1;
   }
@@ -188,43 +189,4 @@ export class Level_1 extends Scene {
     }
   }
 
-  //cycles to the next background
-  nextBackground() {
-    this.backgroundArrayIndex++;
-
-    //if we had 5 backgrounds it makes a new order for the backgrounds and resets the backgroundArrayIndex
-    if (this.backgroundArrayIndex == this.backgroundArray.length) {
-      let oldBackgroundArray = this.backgroundArray;
-      this.backgroundArrayIndex = 1;
-
-      this.newBackgroundArray(this.backgroundArray);
-      //prevents the new order to start with the last background
-      while (oldBackgroundArray[5] == this.backgroundArray[1]) {
-        this.newBackgroundArray(this.backgroundArray);
-      }
-    }
-  }
-
-  //just use whoever backgrounds there are as numbers --> 3 background is [1,2,3] || 10 background is [1,2,3,4,5,6,7,8,9,10]
-  newBackgroundArray() {
-    //the shuffle function shuffles the array numbers randomly
-    this.backgroundArray = this.shuffle([1, 2, 3, 4, 5]);
-    //the zero does not represent a background but is to allow the backgroundArrayIndex to be easier to read and all following code to be understood easier
-    this.backgroundArray.unshift(0);
-  }
-
-  //shuffles an array randomly
-  shuffle(array) {
-    var tmp,
-      current,
-      top = array.length;
-    if (top)
-      while (--top) {
-        current = Math.floor(Math.random() * (top + 1));
-        tmp = array[current];
-        array[current] = array[top];
-        array[top] = tmp;
-      }
-    return array;
-  }
 }
