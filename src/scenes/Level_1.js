@@ -7,11 +7,12 @@ import EnemyBullet from '../components/enemy/EnemyBullet';
 import {
   musicStart,
   musicStop,
-  songDecider
 } from '../components/objects/Music';
 
 import {
-    gameOver
+    makeFullScreen,
+    gameOver,
+    restartGame
 } from '../util/GameHelpers'
 
 export class Level_1 extends Scene {
@@ -37,35 +38,7 @@ export class Level_1 extends Scene {
 
   create() {
     // Enables fullscreen on canvas click
-    let fullscreenFunc = true;
-
-    document.querySelector('#phaser').addEventListener('click', function() {
-      if (fullscreenFunc) {
-        fullscreenFunc();
-        fullscreenFunc = false;
-      } else {
-        document.querySelector('canvas').style.height = '';
-        document.querySelector('canvas').style.margin = '25vh auto';
-        fullscreenFunc = true;
-      }
-    });
-
-    this.input.on(
-      'pointerdown',
-      function(event) {
-        const canvas = this.sys.game.canvas;
-        const fullscreen = this.sys.game.device.fullscreen;
-        if (!fullscreen.available) {
-          return;
-        }
-        fullscreenFunc = function() {
-          canvas[fullscreen.request]();
-          document.querySelector('canvas').style.height = '80vh';
-          document.querySelector('canvas').style.margin = '0';
-        };
-      },
-      this
-    );
+    makeFullScreen.call(this);
 
     // ===== Level Variables ===== //
     this.gameStart = true;
@@ -148,17 +121,6 @@ export class Level_1 extends Scene {
 
   update(time, delta) {
     let pad = checkGamepad.call(this); 
-
-    // let pad = this.input.gamepad.gamepads[0];
-
-    // if (this.keys.slide.isDown || pad.buttons[0].pressed) {
-    //   console.log(pad);
-    // }
-
-    // let pad = pads[0];
-    // if (pad.left) {
-    //   console.log('button pressed');
-    // }
     if (
       (this.gameStart && Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
       pad.buttons[0].pressed
@@ -194,7 +156,7 @@ export class Level_1 extends Scene {
 
     if (!this.isPlayerAlive) {
       this.gameStart = true;
-      this.restartGame();
+      restartGame.call(this);
     }
     if (
       Phaser.Input.Keyboard.JustDown(this.keys.esc) ||
@@ -218,40 +180,6 @@ export class Level_1 extends Scene {
   }
 
  
-
-  restartGame() {
-    if (
-      this.keys.attack.isDown ||
-      this.keys.slide.isDown ||
-      ( this.input.gamepad.gamepads.length > 0 ? this.input.gamepad.gamepads[0].buttons[0].pressed : undefined )
-    ) {
-      //stops the current track for the next to come in
-      if (this.registry.list.musicControll) {
-        this.music.stop();
-      }
-      // fade camera
-      this.time.delayedCall(
-        250,
-        () => {
-          this.cameras.main.fade(250);
-        },
-        [],
-        this
-      );
-
-      // restart game
-      this.time.delayedCall(
-        500,
-        () => {
-          this.registry.set('TIMER', [0, 0, ':', 0, 0, 0]);
-          this.events.off();
-          this.scene.restart();
-        },
-        [],
-        this
-      );
-    }
-  }
 
   fireEnemyBullet(x, y) {
     let bullet = this.enemyBullets.get();
