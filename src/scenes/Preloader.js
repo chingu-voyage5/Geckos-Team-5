@@ -38,24 +38,19 @@ export class Preloader extends phaser.Scene {
     });
 
     this.load.audio('theme', [
-      './assets/audio/kickhat_success-menu.ogg',
       './assets/audio/kickhat_success-menu.mp3'
     ]);
 
     this.load.audio('song1', [
-      './assets/audio/Ouroboros.ogg',
       './assets/audio/Ouroboros.mp3'
     ]);
     this.load.audio('song2', [
-      './assets/audio/I Can Feel it Coming.ogg',
       './assets/audio/I Can Feel it Coming.mp3'
     ]);
     this.load.audio('song3', [
-      './assets/audio/Corruption.ogg',
       './assets/audio/Corruption.mp3'
     ]);
     this.load.audio('song4', [
-      './assets/audio/Undaunted.ogg',
       './assets/audio/Undaunted.mp3'
     ]);
 
