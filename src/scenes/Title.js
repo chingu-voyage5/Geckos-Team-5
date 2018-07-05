@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
 import { WIDTH, HEIGHT, UIFONT } from '../util/constants';
-import { musicStart, musicStop } from '../components/objects/Music';
+import { musicStart, musicStop, musicStopScene } from '../components/objects/Music';
 import { checkGamepad } from '../util/constants';
 
 export class Title extends Scene {
@@ -57,13 +57,13 @@ export class Title extends Scene {
     ) {
       this.scene.start('Level_1');
       //transition to next scene and music
-      if (this.registry.list.musicControll) {
-        this.music.stop();
-      }
+      musicStopScene(this);
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.help)) {
       this.scene.start('Help');
+      musicStopScene(this);
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.credits)) {
       this.scene.start('Credits');
+      musicStopScene(this);
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.music)) { //music start stop
       if (!this.registry.list.musicControll) {
         musicStart('theme', this);

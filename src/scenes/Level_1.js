@@ -7,6 +7,7 @@ import EnemyBullet from '../components/enemy/EnemyBullet';
 import {
   musicStart,
   musicStop,
+  musicStopScene
 } from '../components/objects/Music';
 
 import {
@@ -167,6 +168,7 @@ export class Level_1 extends Scene {
       // this.registry.destroy();
       // this.events.off();
       this.scene.start('Title');
+      musicStopScene(this);
       this.scene.stop('Level_1');
       this.scene.stop('UIScene');
     }
