@@ -1,5 +1,5 @@
 import Bullet from './Bullet';
-import { checkGamepad } from '../../util/constants'
+import { checkGamepad } from '../../util/constants';
 
 export default class Player extends Phaser.GameObjects.Sprite {
   constructor(config) {
@@ -17,7 +17,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.slideTimer = 100;
     this.slideDistance = 250;
     this.jumpDistance = -330;
-    this.bulletsOnCooldown = false;
+    this.fireButtonDown = false;
+    this.attackButtonDown = false;
     this.isInvincible = false;
   }
 
@@ -46,14 +47,25 @@ export default class Player extends Phaser.GameObjects.Sprite {
         keys.attack.isDown || pad.buttons[2].pressed || pad.buttons[6].pressed,
       fire: keys.fire.isDown || pad.buttons[1].pressed,
       bomb: keys.bomb.isDown || pad.buttons[3].pressed,
-      esc: keys.esc.isDown || pad.buttons[9].pressed
+      esc: keys.esc.isDown || pad.buttons[9].pressed,
+      attackIsUp: keys.attack.isUp,
+      fireIsUp: keys.fire.isUp
     };
 
     // ===== Attack Up if no arrow keys are pressed while attacking ===== //
-    if (!input.left && !input.right && input.attack) {
+    if (!input.left && !input.right && input.attack && !this.attackButtonDown) {
       this.anims.play('sword', true);
       this.isAttackingUp = true;
       this.on('animationcomplete', () => (this.isAttackingUp = false), this);
+      this.attackButtonDown = true;
+    }
+
+    if (input.attackIsUp) {
+      this.attackButtonDown = false;
+    }
+
+    if (input.fireIsUp) {
+      this.fireButtonDown = false;
     }
 
     // ===== Move left ===== //

@@ -31,11 +31,11 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
   }
 
   fire(x, y) {
-    if (!this.player.bulletsOnCooldown) {
+    if (!this.player.fireButtonDown) {
       this.setPosition(x, y);
       this.setActive(true);
       this.setVisible(true);
-      this.player.triggerBulletCooldown();
+      this.player.fireButtonDown = true;
     }
   }
 
