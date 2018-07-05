@@ -17,7 +17,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.slideTimer = 100;
     this.slideDistance = 250;
     this.jumpDistance = -330;
-    this.bulletsOnCooldown = false;
+    this.fireButtonDown = false;
     this.attackButtonDown = false;
     this.isInvincible = false;
   }
@@ -48,7 +48,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
       fire: keys.fire.isDown || pad.buttons[1].pressed,
       bomb: keys.bomb.isDown || pad.buttons[3].pressed,
       esc: keys.esc.isDown || pad.buttons[9].pressed,
-      attackIsUp: keys.attack.isUp
+      attackIsUp: keys.attack.isUp,
+      fireIsUp: keys.fire.isUp
     };
 
     // ===== Attack Up if no arrow keys are pressed while attacking ===== //
@@ -61,6 +62,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     if (input.attackIsUp) {
       this.attackButtonDown = false;
+    }
+
+    if (input.fireIsUp) {
+      this.fireButtonDown = false;
     }
 
     // ===== Move left ===== //
