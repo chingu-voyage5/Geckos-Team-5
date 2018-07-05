@@ -47,6 +47,7 @@ export class UIScene extends Scene {
 
     //currently the timer start now as the scene loads in
     this.startGameClock();
+    this.pauseGameClock();
 
     // Check the registry and hit the updateData function every time the data is changed.
     // this includes the TIMER and SCORE
@@ -86,12 +87,22 @@ export class UIScene extends Scene {
         this
       );
 
-      //adds events for all level scenes and enables them to stop the timer
+      //adds events for all level scenes and enables them to pause the timer
       sceneGets[i].events.on(
-        'stopTimer',
+        'pauseTimer',
         function() {
           //starts the function to stop the timer loop
-          this.stopGameClock();
+          this.pauseGameClock();
+        },
+        this
+      );
+
+      //adds events for all level scenes and enables them to resume the timer
+      sceneGets[i].events.on(
+        'resumeTimer',
+        function () {
+          //starts the function to stop the timer loop
+          this.resumeGameClock();
         },
         this
       );
@@ -178,9 +189,14 @@ export class UIScene extends Scene {
     this.registry.set('TIMER', this.timerValue);
   }
 
-  stopGameClock() {
+  pauseGameClock() {
     //stops the time event named timerEvent
-    this.timerEvent.remove(false);
+    this.timerEvent.paused = true;
+  }
+
+  resumeGameClock() {
+    //stops the time event named timerEvent
+    this.timerEvent.paused = false;
   }
 
   startGameClock() {

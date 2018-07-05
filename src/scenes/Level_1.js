@@ -131,6 +131,7 @@ export class Level_1 extends Scene {
       this.startText.visible = false;
       this.gameStart = false;
       this.physics.world.resume();
+      this.events.emit('resumeTimer'); 
     }
     // ===== BULLET ===== //
     if (
@@ -154,6 +155,7 @@ export class Level_1 extends Scene {
       (this.amountBricks === 0 && this.isPlayerAlive)
     ) {
       this.gameStart = true;
+      this.events.emit('pauseTimer'); 
       gameOver.call(this);
     }
 
