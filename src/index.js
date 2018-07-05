@@ -29,7 +29,7 @@ const config = {
   },
   scene: [Preloader, Title, Credits, Help, Level_1, UIScene],
   audio: {
-    disableWebAudio: true
+    // disableWebAudio: true
   }
 };
 
