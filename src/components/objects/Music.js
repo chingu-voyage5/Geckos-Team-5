@@ -23,4 +23,10 @@ function songDecider(song) {
       return returnSong;
 }
 
-export {musicStart, musicStop,songDecider};
+function musicStopScene(scene) {
+      if (scene.registry.list.musicControll) {
+            scene.music.stop();
+      }
+}
+
+export {musicStart, musicStop, musicStopScene, songDecider};

@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
 import { WIDTH, HEIGHT, UIFONT } from '../util/constants';
-import { musicStart, musicStop } from '../components/objects/Music';
+import { musicStart, musicStop, musicStopScene } from '../components/objects/Music';
 
 export class Help extends Scene {
   constructor() {
@@ -47,6 +47,7 @@ export class Help extends Scene {
       Phaser.Input.Keyboard.JustDown(this.keys.space)
     ) {
       this.scene.start('Title');
+      musicStopScene(this);
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.music)) {//music start stop
       if (!this.registry.list.musicControll) {
         musicStart('theme', this);
