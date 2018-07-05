@@ -1,10 +1,19 @@
+let firstDelay = 0.4;
+
 function musicStart(songname, scene) {
       scene.registry.list.musicControll = true;
       
       scene.music = scene.sound.add(songname);
-      scene.music.play({
-            loop: true
-      });  
+      if (scene.registry.list.currentSongNumber == 1) {
+            scene.music.play({
+                  loop: true,
+                  delay: firstDelay
+            });  
+      }  else {
+            scene.music.play({
+                  loop: true
+            });
+      }
 }
 
 function musicStop(scene) {
