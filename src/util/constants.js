@@ -29,7 +29,8 @@ export const checkGamepad = function() {
     : DEFAULT_PAD;
 };
 
-// Brick setup for each level
+
+// Brick setup for each level 
 export const BRICKS = {
   LEVEL_1() {
     this.bricks[0] = this.physics.add.staticGroup({
