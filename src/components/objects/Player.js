@@ -1,5 +1,6 @@
 import Bullet from './Bullet';
 import { checkGamepad } from '../../util/constants';
+import { soundPlay } from './Sound';
 
 export default class Player extends Phaser.GameObjects.Sprite {
   constructor(config) {
@@ -55,6 +56,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // ===== Attack Up if no arrow keys are pressed while attacking ===== //
     if (!input.left && !input.right && input.attack && !this.attackButtonDown) {
       this.anims.play('sword', true);
+      //makes a sound on sword draw
+      soundPlay('sound_sword', this.scene);
       this.isAttackingUp = true;
       this.on('animationcomplete', () => (this.isAttackingUp = false), this);
       this.attackButtonDown = true;
@@ -113,6 +116,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
           animation: 'sword',
           setVelocityX: velocityX
         });
+        //makes a sound on sword draw
+        soundPlay('sound_sword',this.scene);
         this.scene.time.delayedCall(
           this.slideTimer,
           () => (this.isAttacking = true)

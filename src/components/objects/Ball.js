@@ -1,3 +1,8 @@
+import {
+  soundAdder,
+  soundPlay
+} from '../objects/Sound';
+
 export default class Ball extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
     //takes in the scene the x position, the y pposition, the key of the picture and and an object to set the velocity, {x:2,y:3}
@@ -45,13 +50,20 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   update() {
     //necessary variable to override the strange collider velocity behavior
     this.currentVelocY = this.body.velocity.y;
+
+    //makes a sound on ball hitting the wall
+    if (this.body.checkWorldBounds() == true) {
+      soundPlay('sound_ballwalls', this.scene)
+    }
   }
 
   animComplete(animation, frame) {
     this.anims.play('ballAnim');
   }
 
-  hitBrick(ball, brick) {
+  hitBrick(ball, brick) {  
+    //makes a sound on ball hitting a brick
+    soundPlay('sound_brick', brick.scene);
     //hides the brick
     brick.disableBody(true, true);
     //tracks the progress of the brick destroying
@@ -63,6 +75,8 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   }
 
   hitPlayer(ball, player) {
+    //makes a sound on ball hitting the player
+    soundPlay('sound_ballplayer', player.scene);
     //accounting for the collider setting the y velocity to 0
     this.body.setVelocityY(this.currentVelocY * -1);
 
@@ -78,6 +92,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     //the velocity changes for hitting the player
     else {
       if (!player.isInvincible) {
+        soundPlay('sound_life', player.scene);
         player.setTemporaryInvincibility();
 
         //takes away a life since the player was hit

@@ -12,18 +12,28 @@ export class Title extends Scene {
 
   create() {
     //either creates the registry entries for music or if it is opened from other scenes, playes music if music is activated
-    if (this.registry.list.musicControll) {
+    if (this.registry.list.musicControl) {
       musicStart('theme', this);
-    } else {
-      this.registry.set('musicControll', false);
+    } 
+    else {
+      this.registry.set('musicControl', false);
       this.registry.set('currentSongNumber', 1);
     }
+
+    //checks if the soundControl exists upon the start of the scene, if not creats it
+    if (this.registry.list.soundControl) {
+      this.registry.set('soundControl', true);
+    } 
+    else {
+      this.registry.set('soundControl', false);
+    }
     
-    this.keys = {
+     this.keys = {
       start: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
       credits: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C),
       help: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H),
-      music: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M)
+      music: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M),
+      sound: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P)
     };
 
     // document.body.style.backgroundColor = '#000';
@@ -65,10 +75,16 @@ export class Title extends Scene {
       this.scene.start('Credits');
       musicStopScene(this);
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.music)) { //music start stop
-      if (!this.registry.list.musicControll) {
+      if (!this.registry.list.musicControl) {
         musicStart('theme', this);
       } else {
         musicStop(this);
+      }
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) { //sound start stop
+      if (!this.registry.list.soundControl) {
+        this.registry.set('soundControl', true);
+      } else {
+        this.registry.set('soundControl', false);
       }
     }
   }
