@@ -58,6 +58,13 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.scene.amountBricks--;
     //setting the new score as the old score plus 100
     this.scene.registry.set('SCORE', this.scene.registry.list.SCORE + 100);
+
+    if (this.scene.registry.list.SCORE % 800 === 0) {
+      this.config.scene.registry.set(
+        'lives',
+        this.config.scene.registry.list.lives + 1
+      );
+    }
     //firing homing bullets onto the player
     this.scene.fireEnemyBullet(brick.x, brick.y);
   }
