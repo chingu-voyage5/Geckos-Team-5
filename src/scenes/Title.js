@@ -44,15 +44,17 @@ export class Title extends Scene {
 
     // document.body.style.backgroundColor = '#000';
     this.titleText = this.add
-      .bitmapText(20, HEIGHT - 290, FONT, '      THE LAST \nCHINGU WARRIOR', FONTSIZE * 1.5);
+      .bitmapText(20, HEIGHT - 290, FONT, '    THE LAST \nCHINGU WARRIOR', FONTSIZE * 1.5);
     this.playText = this.add
-      .bitmapText(50, HEIGHT - 200, FONT, 'SPACE: PLAY', FONTSIZE);
+      .bitmapText(50, HEIGHT - 210, FONT, 'SPACE: PLAY', FONTSIZE);
     this.helpText = this.add
-      .bitmapText(50, HEIGHT - 160, FONT, 'H: HOW TO PLAY', FONTSIZE);
+      .bitmapText(50, HEIGHT - 170, FONT, 'H: HOW TO PLAY', FONTSIZE);
     this.creditsText = this.add
-      .bitmapText(50, HEIGHT - 80, FONT, 'C: CREDITS', FONTSIZE);
+      .bitmapText(50, HEIGHT - 50, FONT, 'C: CREDITS', FONTSIZE);
     this.musicText = this.add
-      .bitmapText(50, HEIGHT - 120, FONT, 'M: MUSIC', FONTSIZE);
+      .bitmapText(50, HEIGHT - 130, FONT, 'M: MUSIC', FONTSIZE);
+    this.soundText = this.add
+      .bitmapText(50, HEIGHT - 90, FONT, 'P: SOUND', FONTSIZE);
   }
 
   update() {
