@@ -1,4 +1,4 @@
-import { WIDTH, HEIGHT } from '../util/constants';
+import { WIDTH, HEIGHT, FONT, FONTSIZE } from '../util/constants';
 
 import {
     songDecider
@@ -77,16 +77,16 @@ export const gameOver = function () {
     this.scene.stop('UIScene');
 
     if (this.registry.list.lives === 0) {
-        this.add.text(
+        this.add.bitmapText(
             (WIDTH / 2) * 0.5,
-            HEIGHT / 2,
-            'Game Over! \n Press any key to try again!'
+            HEIGHT - 80, FONT,
+            'Game Over! Score: ' + this.registry.list.SCORE + '\nPress any key to try again!', FONTSIZE
         );
     } else {
-        this.add.text(
+        this.add.bitmapText(
             (WIDTH / 2) * 0.5,
-            HEIGHT / 2,
-            'You won!! \n Press any key to play again!'
+            HEIGHT - 80, FONT,
+            'You won!! Score: ' + this.registry.list.SCORE + '\nPress any key to play again!', FONTSIZE
         );
     }
 }

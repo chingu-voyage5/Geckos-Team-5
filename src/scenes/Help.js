@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { WIDTH, HEIGHT, UIFONT } from '../util/constants';
+import { WIDTH, HEIGHT, FONT, FONTSIZE } from '../util/constants';
 import { musicStart, musicStop, musicStopScene } from '../components/objects/Music';
 
 export class Help extends Scene {
@@ -10,11 +10,16 @@ export class Help extends Scene {
   }
 
   create() {
+    this.image = this.add.sprite(
+      240,
+      160,
+      'title'
+    );
+
     // const text = this.add.bitmapText(0, 0, UIFONT, this.text(), 8);
     const text = this.add
-      .text(WIDTH / 2, HEIGHT - 160, this.text(), UIFONT)
-      .setOrigin(0.5)
-      .setScale(1);
+      .bitmapText(WIDTH / 4 + 10, HEIGHT - 200, FONT, this.text(), FONTSIZE)
+      .setOrigin(0.5);
 
     this.keys = {
       space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
@@ -32,9 +37,9 @@ export class Help extends Scene {
     return `\n
     CONTROLS\n\n
     ARROW KEYS: MOVE\n
-    A: SWORD ATTACK \n
+    A: SWORD ATTACK\n
     S: THROW CARD\n
-    C: BOMB \n
+    C: BOMB\n
     SPACE: SLIDE\n
     -OR USE JOYPADS- \n
     [esc] to title

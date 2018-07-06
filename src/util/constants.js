@@ -3,7 +3,8 @@ export const WIDTH = 480;
 export const HEIGHT = 320;
 
 //the general variable for the style of all ui texts
-export const UIFONT = { font: '12px Arial', fill: '#fff' };
+export const FONT = 'pokemon_classic';
+export const FONTSIZE = 18;
 
 // ===== Array of 15 numbers from 0 to 15 ===== //
 // === I like this better than writing [ 0, 1, 2, 3, 4, ..... ] === //
@@ -42,7 +43,7 @@ export const BRICKS = {
         height: 1,
         cellWidth: 33,
         cellHeight: 33,
-        x: 100,
+        x: 110,
         y: 50
       }
     });
@@ -55,7 +56,7 @@ export const BRICKS = {
         height: 1,
         cellWidth: 33,
         cellHeight: 33,
-        x: 298,
+        x: 308,
         y: 50
       }
     });
@@ -68,7 +69,7 @@ export const BRICKS = {
         height: 1,
         cellWidth: 33,
         cellHeight: 33,
-        x: 100,
+        x: 110,
         y: 83
       }
     });
@@ -81,7 +82,7 @@ export const BRICKS = {
         height: 1,
         cellWidth: 33,
         cellHeight: 33,
-        x: 265,
+        x: 275,
         y: 83
       }
     });
@@ -94,7 +95,7 @@ export const BRICKS = {
         height: 1,
         cellWidth: 33,
         cellHeight: 33,
-        x: 100,
+        x: 110,
         y: 116
       }
     });
@@ -107,7 +108,7 @@ export const BRICKS = {
         height: 1,
         cellWidth: 33,
         cellHeight: 33,
-        x: 133,
+        x: 143,
         y: 149
       }
     });
@@ -120,7 +121,7 @@ export const BRICKS = {
         height: 1,
         cellWidth: 33,
         cellHeight: 33,
-        x: 166,
+        x: 176,
         y: 182
       }
     });
@@ -133,7 +134,7 @@ export const BRICKS = {
         height: 1,
         cellWidth: 33,
         cellHeight: 33,
-        x: 199,
+        x: 209,
         y: 215
       }
     });
