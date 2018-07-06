@@ -12,6 +12,7 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
     this.startingY = 0;
     this.scene = config.scene.scene;
     this.player = this.scene.player;
+    this.speed = Phaser.Math.GetSpeed(HEIGHT, 1.5);
 
     this.scene.physics.add.collider(
       this,
@@ -30,18 +31,15 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
     this.startingY = startingY;
     const distanceY = HEIGHT - startingY;
     const distanceX = this.targetX - this.startingX;
-    this.speedY = Phaser.Math.GetSpeed(distanceY, 1);
-    this.speedX = Phaser.Math.GetSpeed(distanceX, 1);
-
     let targetAngle = Phaser.Math.Angle.Between(
       this.startingX,
       this.startingY,
       this.targetX,
       HEIGHT
     );
-    targetAngle = Math.PI - targetAngle;
 
-    this.rotation = targetAngle;
+    this.speedY = this.speed * Math.sin(targetAngle);
+    this.speedX = this.speed * Math.cos(targetAngle);
 
     this.setActive(true);
     this.setVisible(true);
