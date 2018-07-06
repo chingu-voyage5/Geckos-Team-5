@@ -1,4 +1,4 @@
-import { WIDTH, HEIGHT } from '../util/constants';
+import { WIDTH, HEIGHT, FONT, FONTSIZE } from '../util/constants';
 
 import {
     songDecider, musicStopScene
@@ -86,18 +86,18 @@ export const gameOver = function () {
     if (this.registry.list.lives === 0) {
         //game over sound
         soundPlay('sound_gameover', this);
-        this.add.text(
+        this.add.bitmapText(
             (WIDTH / 2) * 0.5,
-            HEIGHT / 2,
-            'Game Over! \n Press any key to try again!'
+            HEIGHT - 80, FONT,
+            'Game Over! Score: ' + this.registry.list.SCORE + '\nPress any key to try again!', FONTSIZE
         );
     } else {
         //game win sound
         soundPlay('sound_gamewin', this);
-        this.add.text(
+        this.add.bitmapText(
             (WIDTH / 2) * 0.5,
-            HEIGHT / 2,
-            'You won!! \n Press any key to play again!'
+            HEIGHT - 80, FONT,
+            'You won!! Score: ' + this.registry.list.SCORE + '\nPress any key to play again!', FONTSIZE
         );
     }
 }

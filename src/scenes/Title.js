@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { WIDTH, HEIGHT, UIFONT } from '../util/constants';
+import { WIDTH, HEIGHT, FONT, FONTSIZE } from '../util/constants';
 import { musicStart, musicStop, musicStopScene } from '../components/objects/Music';
 import { checkGamepad } from '../util/constants';
 
@@ -11,6 +11,12 @@ export class Title extends Scene {
   }
 
   create() {
+    this.image = this.add.sprite(
+      240,
+      160,
+      'title'
+    );
+
     //either creates the registry entries for music or if it is opened from other scenes, playes music if music is activated
     if (this.registry.list.musicControl) {
       musicStart('theme', this);
@@ -38,24 +44,15 @@ export class Title extends Scene {
 
     // document.body.style.backgroundColor = '#000';
     this.titleText = this.add
-      .text(WIDTH / 2, HEIGHT - 230, 'THE LAST CHINGU WARRIOR', UIFONT)
-      .setOrigin(0.5)
-      .setScale(2);
+      .bitmapText(20, HEIGHT - 290, FONT, '      THE LAST \nCHINGU WARRIOR', FONTSIZE * 1.5);
     this.playText = this.add
-      .text(WIDTH / 2, HEIGHT - 190, 'SPACE: PLAY', UIFONT)
-      .setOrigin(0.5);
-
+      .bitmapText(50, HEIGHT - 200, FONT, 'SPACE: PLAY', FONTSIZE);
     this.helpText = this.add
-      .text(WIDTH / 2, HEIGHT - 150, 'H: HOW TO PLAY', UIFONT)
-      .setOrigin(0.5);
-
+      .bitmapText(50, HEIGHT - 160, FONT, 'H: HOW TO PLAY', FONTSIZE);
     this.creditsText = this.add
-      .text(WIDTH / 2, HEIGHT - 70, 'C: CREDITS', UIFONT)
-      .setOrigin(0.5);
-
+      .bitmapText(50, HEIGHT - 80, FONT, 'C: CREDITS', FONTSIZE);
     this.musicText = this.add
-      .text(WIDTH / 2, HEIGHT - 110, 'M: MUSIC', UIFONT)
-      .setOrigin(0.5);
+      .bitmapText(50, HEIGHT - 120, FONT, 'M: MUSIC', FONTSIZE);
   }
 
   update() {

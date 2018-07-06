@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { WIDTH, HEIGHT, BRICKS, checkGamepad } from '../util/constants';
+import { WIDTH, HEIGHT, BRICKS, checkGamepad, FONT, FONTSIZE } from '../util/constants';
 import Player from '../components/objects/Player';
 import Bullet from '../components/objects/Bullet';
 import {
@@ -110,10 +110,10 @@ export class Level_1 extends Scene {
       runChildUpdate: true
     });
 
-    this.startText = this.add.text(
-      (WIDTH / 2) * 0.5,
-      HEIGHT / 2,
-      'Press space to start game!'
+    this.startText = this.add.bitmapText(
+      (WIDTH / 2) * 0.45,
+      HEIGHT - 80, FONT,
+      'Press space to start game!', FONTSIZE
     );
 
     // pause and start game on player input

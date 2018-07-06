@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { WIDTH, HEIGHT, UIFONT } from '../util/constants';
+import { WIDTH, HEIGHT, FONT, FONTSIZE } from '../util/constants';
 
 export class UIScene extends Scene {
   constructor() {
@@ -54,16 +54,16 @@ export class UIScene extends Scene {
     this.registry.events.on('changedata', this.updateData, this);
 
     //initial display of the level
-    this.levelText = this.add.text(5, 0, 'Stage 1-1', UIFONT);
+    // this.levelText = this.add.bitmapText(5, 0, FONT, 'Stage 1-1', FONTSIZE);
 
     //initial display of the score
-    this.scoreText = this.add.text(67, 0, 'Score: ' + this.score, UIFONT);
+    this.scoreText = this.add.bitmapText(5, 0, FONT, 'Score: ' + this.score, FONTSIZE);
 
     //initial display of the life text
-    this.livesText = this.add.text(161, 0, 'Lives: ', UIFONT);
+    this.livesText = this.add.bitmapText(180, 0, FONT, 'Lives: ', FONTSIZE);
 
     //adds the initial timer text
-    this.timerText = this.add.text(446, 0, '00:00', UIFONT);
+    this.timerText = this.add.bitmapText(420, 0, FONT, '00:00', FONTSIZE);
 
     // this gets the array with all the scenes names in it like in the config
     this.Scenes = this.scene.manager.scenes;
@@ -251,11 +251,11 @@ export class UIScene extends Scene {
   //function to make heart objects
   writeLives(numberHearts) {
     for (let i = 0; i < numberHearts; i++) {
-      if (i > 12) {
+      if (i > 8) {
         break;
       }
       //space out each heart by 17.5 pixels
-      this.add.heart(200 + 17.5 * i, 8);
+      this.add.heart(250 + 17.5 * i, 12);
     }
   }
 }

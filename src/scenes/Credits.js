@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { WIDTH, HEIGHT, UIFONT } from '../util/constants';
+import { WIDTH, HEIGHT, FONT, FONTSIZE } from '../util/constants';
 import { musicStart, musicStop, musicStopScene } from '../components/objects/Music';
 
 export class Credits extends Scene {
@@ -9,10 +9,16 @@ export class Credits extends Scene {
     });
   }
   create() {
-    // const text = this.add.bitmapText(0, 0, UIFONT, this.text(), 8);
+    this.image = this.add.sprite(
+      240,
+      160,
+      'title'
+    );
+  
     const text = this.add
-      .text(WIDTH / 2, HEIGHT - 160, this.text(), UIFONT)
-      .setOrigin(0.5);
+
+      .bitmapText(WIDTH / 2, HEIGHT - 200, FONT, this.text(), FONTSIZE).setOrigin(0.5);
+
 
     this.keys = {
       space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
@@ -29,7 +35,7 @@ export class Credits extends Scene {
 
   text() {
     return `\n
-    DEVELOPED BY GECKO #5\n\n
+    DEVELOPED BY GECKO #5 AT CHINGU.IO\n\n
     FANCYACTION\n\n
     ALEXEVER17 \n\n
     SPARTA\n\n
