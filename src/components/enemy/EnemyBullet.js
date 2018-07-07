@@ -14,6 +14,8 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
     this.scene = config.scene.scene;
     this.player = this.scene.player;
     this.speed = Phaser.Math.GetSpeed(HEIGHT, 1.5);
+    this.particles = this.scene.add.particles('bullet');
+    this.setTint(0x50f200);
 
     this.scene.physics.add.collider(
       this,
@@ -38,6 +40,22 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
       this.targetX,
       HEIGHT
     );
+    let emitter = this.particles.createEmitter({
+      speed: 100,
+      lifespan: 200,
+      scale: { start: 1, end: 0 },
+      tint: 0x50f200,
+      blendMode: 'ADD'
+    });
+    this.scene.enemyBullets
+      .getChildren()
+      .forEach(bullet => emitter.startFollow(bullet));
+
+    this.scene.time.delayedCall(600, function() {
+      emitter.visible = false;
+      emitter.pause();
+      emitter.killAll();
+    });
 
     this.speedY = this.speed * Math.sin(targetAngle);
     this.speedX = this.speed * Math.cos(targetAngle);
