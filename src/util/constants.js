@@ -34,7 +34,7 @@ export const checkGamepad = function() {
 // Brick setup for each level 
 export const BRICKS = {
   LEVEL_1() {
-    this.bricks[0] = this.physics.add.staticGroup({
+    this.bricks.push(this.physics.add.staticGroup({
       key: 'bricks',
       frame: ['brick4'],
       frameQuantity: 3,
@@ -46,8 +46,8 @@ export const BRICKS = {
         x: 110,
         y: 50
       }
-    });
-    this.bricks[1] = this.physics.add.staticGroup({
+    }));
+    this.bricks.push(this.physics.add.staticGroup({
       key: 'bricks',
       frame: ['brick4'],
       frameQuantity: 3,
@@ -59,8 +59,8 @@ export const BRICKS = {
         x: 308,
         y: 50
       }
-    });
-    this.bricks[2] = this.physics.add.staticGroup({
+    }));
+    this.bricks.push(this.physics.add.staticGroup({
       key: 'bricks',
       frame: ['brick5'],
       frameQuantity: 4,
@@ -72,8 +72,8 @@ export const BRICKS = {
         x: 110,
         y: 83
       }
-    });
-    this.bricks[3] = this.physics.add.staticGroup({
+    }));
+    this.bricks.push(this.physics.add.staticGroup({
       key: 'bricks',
       frame: ['brick5'],
       frameQuantity: 4,
@@ -85,8 +85,8 @@ export const BRICKS = {
         x: 275,
         y: 83
       }
-    });
-    this.bricks[5] = this.physics.add.staticGroup({
+    }));
+    this.bricks.push(this.physics.add.staticGroup({
       key: 'bricks',
       frame: ['brick7'],
       frameQuantity: 9,
@@ -98,8 +98,8 @@ export const BRICKS = {
         x: 110,
         y: 116
       }
-    });
-    this.bricks[6] = this.physics.add.staticGroup({
+    }));
+    this.bricks.push(this.physics.add.staticGroup({
       key: 'bricks',
       frame: ['brick8'],
       frameQuantity: 7,
@@ -111,8 +111,8 @@ export const BRICKS = {
         x: 143,
         y: 149
       }
-    });
-    this.bricks[7] = this.physics.add.staticGroup({
+    }));
+    this.bricks.push(this.physics.add.staticGroup({
       key: 'bricks',
       frame: ['brick1'],
       frameQuantity: 5,
@@ -124,8 +124,8 @@ export const BRICKS = {
         x: 176,
         y: 182
       }
-    });
-    this.bricks[8] = this.physics.add.staticGroup({
+    }));
+    this.bricks.push(this.physics.add.staticGroup({
       key: 'bricks',
       frame: ['brick2'],
       frameQuantity: 3,
@@ -137,7 +137,7 @@ export const BRICKS = {
         x: 209,
         y: 215
       }
-    });
+    }));
   },
   LEVEL_2() {
     this.bricks.push(this.physics.add.staticGroup({
