@@ -40,11 +40,13 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
       speed: 100,
       lifespan: 200,
       scale: { start: 1, end: 0 },
+      tint: 0xf44253,
       blendMode: 'ADD'
     });
     emitter.startFollow(this.scene.bullets.getChildren()[0]);
     this.scene.time.delayedCall(300, function() {
-      emitter.destory();
+      emitter.visible = false;
+      emitter.killAll();
     });
     console.log(this.particles);
     console.log(emitter);
