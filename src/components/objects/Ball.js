@@ -62,20 +62,17 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     //makes a sound on ball hitting a brick
     soundPlay('sound_brick', brick.scene);
 
-    console.log(brick);
     this.scene.tweens.add({
       targets: brick,
       alpha: 0,
       duration: 300,
-      onComplete: function() {
-        brick.disableBody(true, true);
+      onStart: () => {
+        brick.disableBody(true, false);
+        //tracks the progress of the brick destroying
+        this.scene.amountBricks--;
       }
     });
 
-    //hides the brick
-    // brick.disableBody(true, true);
-    //tracks the progress of the brick destroying
-    this.scene.amountBricks--;
     //setting the new score as the old score plus 100
     this.scene.registry.set('SCORE', this.scene.registry.list.SCORE + 100);
 
