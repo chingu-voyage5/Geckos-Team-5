@@ -27,9 +27,7 @@ import {
 
 export class Level_1 extends Scene {
   constructor() {
-    super({
-      key: 'Level_1'
-    });
+    super({ key: 'Level_1' });
 
     // ===== Global Definitions For This FILE ===== //
 
@@ -44,6 +42,10 @@ export class Level_1 extends Scene {
     newBackgroundArray.call(this);
     //starts always at 1
     this.backgroundArrayIndex = 1;
+
+    this.bulletShowerTriggered = false;
+    this.bulletShowerCycle = 0;
+    this.bulletShowerTimer;
   }
 
   create() {
@@ -203,6 +205,13 @@ export class Level_1 extends Scene {
         this.registry.set('soundControl', false);
       }
     }
+
+    if (
+      this.registry.list.TIME_ELAPSED % 60 === 0 &&
+      !this.bulletShowerTriggered
+    ) {
+      this.triggerBulletShower();
+    }
   }
 
   fireEnemyBullet(x, y, targetX) {
@@ -210,5 +219,37 @@ export class Level_1 extends Scene {
     if (bullet) {
       bullet.fire(x, y, targetX);
     }
+  }
+
+  createBulletShower() {
+    const section = WIDTH / 2 / 3;
+    for (let i = 0; i < 3; i++) {
+      const startX_left = section * i;
+      const targetX_left = startX_left + section;
+
+      const startX_right = WIDTH - section * i;
+      const targetX_right = startX_right - section;
+
+      this.fireEnemyBullet(startX_left, 0, targetX_left);
+      this.fireEnemyBullet(startX_right, 0, targetX_right);
+    }
+    this.bulletShowerCycle++;
+    if (this.bulletShowerCycle === 4) {
+      this.bulletShowerCycle = 0;
+      this.bulletShowerTimer.paused = true;
+    }
+  }
+
+  triggerBulletShower() {
+    this.bulletShowerTriggered = true;
+
+    this.bulletShowerTimer = this.time.addEvent({
+      delay: 500,
+      callback: this.createBulletShower,
+      callbackScope: this,
+      loop: true
+    });
+
+    setTimeout(() => (this.bulletShowerTriggered = false), 1000);
   }
 }
