@@ -1,5 +1,3 @@
-import { HEIGHT } from '../../util/constants';
-
 export default class Bullet extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
     super(config, 0, 0, 'bullet');

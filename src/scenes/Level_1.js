@@ -2,6 +2,10 @@ import { Scene } from 'phaser';
 import { WIDTH, HEIGHT, BRICKS, checkGamepad, FONT, FONTSIZE } from '../util/constants';
 import Player from '../components/objects/Player';
 import Bullet from '../components/objects/Bullet';
+import {
+  soundAdder,
+  soundPlay
+} from '../components/objects/Sound';
 import Ball from '../components/objects/Ball';
 import EnemyBullet from '../components/enemy/EnemyBullet';
 import {
@@ -9,7 +13,6 @@ import {
   musicStop,
   musicStopScene
 } from '../components/objects/Music';
-
 import {
     makeKeys,
     makeFullScreen,
@@ -40,6 +43,9 @@ export class Level_1 extends Scene {
   }
 
   create() {
+    //loading the sounds into the scene look into sound.js
+    soundAdder(this);
+    
     // Enables fullscreen on canvas click
     makeFullScreen.call(this);
 
@@ -117,7 +123,7 @@ export class Level_1 extends Scene {
     this.currentSong = 'song' + Number(this.registry.list.currentSongNumber);
 
     //if the scene is restarted and music is activated, it will start the new track
-    if (this.registry.list.musicControll) {
+    if (this.registry.list.musicControl) {
       musicStart(this.currentSong, this);
     }
   }
@@ -135,10 +141,13 @@ export class Level_1 extends Scene {
     }
     // ===== BULLET ===== //
     if (
-      this.keys.fire.isDown ||
+      //changed to justdown to prevent sound spam
+      Phaser.Input.Keyboard.JustDown(this.keys.fire) ||
       pad.buttons[1].pressed ||
       pad.buttons[7].pressed
     ) {
+      //makes the sound of the bullet
+      soundPlay('sound_bullet', this);
       let bullet = this.bullets.get();
       if (bullet) {
         bullet.fire(this.player.x, this.player.y - 30);
@@ -167,8 +176,6 @@ export class Level_1 extends Scene {
       Phaser.Input.Keyboard.JustDown(this.keys.esc) ||
       pad.buttons[9].pressed
     ) {
-      // this.registry.destroy();
-      // this.events.off();
       this.scene.start('Title');
       musicStopScene(this);
       this.scene.stop('Level_1');
@@ -177,10 +184,16 @@ export class Level_1 extends Scene {
 
     //music start stop
     if (Phaser.Input.Keyboard.JustDown(this.keys.music)) {
-      if (!this.registry.list.musicControll) {
+      if (!this.registry.list.musicControl) {
         musicStart(this.currentSong, this);
       } else {
         musicStop(this);
+      }
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) { //sound start stop
+      if (!this.registry.list.soundControl) {
+        this.registry.set('soundControl', true);
+      } else {
+        this.registry.set('soundControl', false);
       }
     }
   }

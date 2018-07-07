@@ -56,6 +56,33 @@ export class Preloader extends phaser.Scene {
       './assets/audio/Undaunted.mp3'
     ]);
 
+    this.load.audio('gameover', [
+      './assets/sounds/thezero-game-over.mp3'
+    ]);
+    this.load.audio('bullet', [
+      './assets/sounds/sharesynth_laser04.mp3'
+    ]);
+    this.load.audio('brick', [
+      './assets/sounds/brick.mp3'
+    ]);
+    this.load.audio('ballplayer', [
+      './assets/sounds/click4.wav'
+    ]);
+    this.load.audio('ballwalls', [
+      './assets/sounds/click5.wav'
+    ]); 
+    this.load.audio('gamewin', [
+      './assets/sounds/littlerobotsoundfactory_jingle-win-00.mp3'
+    ]); 
+    this.load.audio('sword', [
+      './assets/sounds/cheeseman32__sworddraw01.mp3'
+    ]);
+    this.load.audio('life', [
+      './assets/sounds/suntemple_retro-you-lose-sfx.mp3'
+    ]);
+    
+
+
     const progress = this.add.graphics();
 
     // Register a load progress event to show a load bar

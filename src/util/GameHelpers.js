@@ -1,8 +1,11 @@
 import { WIDTH, HEIGHT, FONT, FONTSIZE } from '../util/constants';
 
 import {
-    songDecider
+    songDecider, musicStopScene
 } from '../components/objects/Music'
+import {
+    soundPlay
+} from '../components/objects/Sound'
 
 
 
@@ -20,7 +23,8 @@ export const makeKeys = function() {
         down  : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
         bomb  : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C),
         esc   : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
-        music : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M)
+        music : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M),
+        sound: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P)
     }
 }
 
@@ -76,13 +80,20 @@ export const gameOver = function () {
     );
     this.scene.stop('UIScene');
 
+    //stops the normal music upon game over because it collides with the sounds
+    musicStopScene(this);
+    
     if (this.registry.list.lives === 0) {
+        //game over sound
+        soundPlay('sound_gameover', this);
         this.add.bitmapText(
             (WIDTH / 2) * 0.5,
             HEIGHT - 80, FONT,
             'Game Over! Score: ' + this.registry.list.SCORE + '\nPress any key to try again!', FONTSIZE
         );
     } else {
+        //game win sound
+        soundPlay('sound_gamewin', this);
         this.add.bitmapText(
             (WIDTH / 2) * 0.5,
             HEIGHT - 80, FONT,
@@ -99,7 +110,7 @@ export const restartGame = function () {
         (this.input.gamepad.gamepads.length > 0 ? this.input.gamepad.gamepads[ 0 ].buttons[ 0 ].pressed : undefined)
     ) {
         //stops the current track for the next to come in
-        if (this.registry.list.musicControll) {
+        if (this.registry.list.musicControl) {
             this.music.stop();
         }
         // fade camera

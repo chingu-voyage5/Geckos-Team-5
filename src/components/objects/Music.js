@@ -1,7 +1,7 @@
 let firstDelay = 0.4;
 
 function musicStart(songname, scene) {
-      scene.registry.list.musicControll = true;
+      scene.registry.list.musicControl = true;
       
       scene.music = scene.sound.add(songname);
       if (scene.registry.list.currentSongNumber == 1) {
@@ -17,7 +17,7 @@ function musicStart(songname, scene) {
 }
 
 function musicStop(scene) {
-      scene.registry.list.musicControll = false;
+      scene.registry.list.musicControl = false;
       scene.music.stop();
 }
 
@@ -33,7 +33,7 @@ function songDecider(song) {
 }
 
 function musicStopScene(scene) {
-      if (scene.registry.list.musicControll) {
+      if (scene.registry.list.musicControl) {
             scene.music.stop();
       }
 }

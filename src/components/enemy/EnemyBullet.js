@@ -1,4 +1,5 @@
 import { HEIGHT } from '../../util/constants';
+import { soundPlay } from '../objects/Sound';
 
 export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
@@ -64,6 +65,8 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
         this.player.isInvincible
       )
     ) {
+      //makes the sound of player loosing a life
+      soundPlay('sound_life', this.scene);
       this.scene.registry.set('lives', this.scene.registry.list.lives - 1);
       this.player.setTemporaryInvincibility();
     }

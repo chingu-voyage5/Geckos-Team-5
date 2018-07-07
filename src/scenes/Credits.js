@@ -16,16 +16,19 @@ export class Credits extends Scene {
     );
   
     const text = this.add
+
       .bitmapText(WIDTH / 2, HEIGHT - 200, FONT, this.text(), FONTSIZE).setOrigin(0.5);
+
 
     this.keys = {
       space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
       esc: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
-      music: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M)
+      music: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M),
+      sound: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P)
     };
 
     //if the scene starts while music is activated, run music
-    if (this.registry.list.musicControll) {
+    if (this.registry.list.musicControl) {
       musicStart('theme', this);
     }
   }
@@ -49,10 +52,16 @@ export class Credits extends Scene {
       this.scene.start('Title');
       musicStopScene(this);
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.music)) {      //music start stop
-      if (!this.registry.list.musicControll) {
+      if (!this.registry.list.musicControl) {
         musicStart('theme', this);
       } else {
         musicStop(this);
+      }
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) { //sound start stop
+      if (!this.registry.list.soundControl) {
+        this.registry.set('soundControl', true);
+      } else {
+        this.registry.set('soundControl', false);
       }
     }
   }
