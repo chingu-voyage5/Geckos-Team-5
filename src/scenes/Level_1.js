@@ -68,7 +68,8 @@ export class Level_1 extends Scene {
 
     // ===== BRIIIIIICKS HEART ===== //
 
-    BRICKS.LEVEL_1.call(this);
+    let floor = Math.floor(Math.random() * 6) + 1;
+    BRICKS['LEVEL_'+ floor].call(this);
 
     // ===== CUSTOM KEYS ===== //
     this.keys = makeKeys.call(this);
