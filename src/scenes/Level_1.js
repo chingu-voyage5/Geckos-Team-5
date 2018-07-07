@@ -1,11 +1,15 @@
 import { Scene } from 'phaser';
-import { WIDTH, HEIGHT, BRICKS, checkGamepad, FONT, FONTSIZE } from '../util/constants';
+import {
+  WIDTH,
+  HEIGHT,
+  BRICKS,
+  checkGamepad,
+  FONT,
+  FONTSIZE
+} from '../util/constants';
 import Player from '../components/objects/Player';
 import Bullet from '../components/objects/Bullet';
-import {
-  soundAdder,
-  soundPlay
-} from '../components/objects/Sound';
+import { soundAdder, soundPlay } from '../components/objects/Sound';
 import Ball from '../components/objects/Ball';
 import EnemyBullet from '../components/enemy/EnemyBullet';
 import {
@@ -14,12 +18,12 @@ import {
   musicStopScene
 } from '../components/objects/Music';
 import {
-    makeKeys,
-    makeFullScreen,
-    gameOver,
-    restartGame,
-    newBackgroundArray
-} from '../util/GameHelpers'
+  makeKeys,
+  makeFullScreen,
+  gameOver,
+  restartGame,
+  newBackgroundArray
+} from '../util/GameHelpers';
 
 export class Level_1 extends Scene {
   constructor() {
@@ -45,7 +49,7 @@ export class Level_1 extends Scene {
   create() {
     //loading the sounds into the scene look into sound.js
     soundAdder(this);
-    
+
     // Enables fullscreen on canvas click
     makeFullScreen.call(this);
 
@@ -112,8 +116,10 @@ export class Level_1 extends Scene {
 
     this.startText = this.add.bitmapText(
       (WIDTH / 2) * 0.45,
-      HEIGHT - 80, FONT,
-      'Press space to start game!', FONTSIZE
+      HEIGHT - 80,
+      FONT,
+      'Press space to start game!',
+      FONTSIZE
     );
 
     // pause and start game on player input
@@ -129,7 +135,7 @@ export class Level_1 extends Scene {
   }
 
   update(time, delta) {
-    let pad = checkGamepad.call(this); 
+    let pad = checkGamepad.call(this);
     if (
       (this.gameStart && Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
       pad.buttons[0].pressed
@@ -137,7 +143,7 @@ export class Level_1 extends Scene {
       this.startText.visible = false;
       this.gameStart = false;
       this.physics.world.resume();
-      this.events.emit('resumeTimer'); 
+      this.events.emit('resumeTimer');
     }
     // ===== BULLET ===== //
     if (
@@ -164,7 +170,7 @@ export class Level_1 extends Scene {
       (this.amountBricks === 0 && this.isPlayerAlive)
     ) {
       this.gameStart = true;
-      this.events.emit('pauseTimer'); 
+      this.events.emit('pauseTimer');
       gameOver.call(this);
     }
 
@@ -189,7 +195,8 @@ export class Level_1 extends Scene {
       } else {
         musicStop(this);
       }
-    } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) { //sound start stop
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) {
+      //sound start stop
       if (!this.registry.list.soundControl) {
         this.registry.set('soundControl', true);
       } else {
@@ -198,13 +205,10 @@ export class Level_1 extends Scene {
     }
   }
 
- 
-
-  fireEnemyBullet(x, y) {
+  fireEnemyBullet(x, y, playerX, playerY) {
     let bullet = this.enemyBullets.get();
     if (bullet) {
-      bullet.fire(x, y, this.player.x, this.player.y);
+      bullet.fire(x, y, playerX, playerY);
     }
   }
-
 }
