@@ -27,6 +27,14 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
     this.setAccelerationY(-300);
     this.particles = this.scene.add.particles('bullet');
+    this.setTint(0xf44253);
+
+    // make bullet collision box bigger
+    this.setSize(14, 10, true);
+
+    // make bullet display art bigger
+    this.scaleX = 2;
+    this.scaleY = 2;
   }
 
   fire(x, y) {
@@ -43,13 +51,16 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
       tint: 0xf44253,
       blendMode: 'ADD'
     });
-    emitter.startFollow(this.scene.bullets.getChildren()[0]);
+
+    this.scene.bullets
+      .getChildren()
+      .forEach(bullet => emitter.startFollow(bullet));
+
     this.scene.time.delayedCall(300, function() {
       emitter.visible = false;
+      emitter.pause();
       emitter.killAll();
     });
-    console.log(this.particles);
-    console.log(emitter);
   }
 
   update(time, delta) {
