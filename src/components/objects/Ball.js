@@ -76,7 +76,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     //setting the new score as the old score plus 100
     this.scene.registry.set('SCORE', this.scene.registry.list.SCORE + 100);
 
-    if (this.scene.registry.list.SCORE % 800 === 0) {
+    if (this.scene.registry.list.SCORE % 16000 === 0) {
       this.config.scene.registry.set(
         'lives',
         this.config.scene.registry.list.lives + 1
