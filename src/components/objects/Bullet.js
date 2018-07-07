@@ -26,6 +26,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     );
 
     this.setAccelerationY(-300);
+    this.particles = this.scene.add.particles('bullet');
   }
 
   fire(x, y) {
@@ -35,6 +36,15 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
       this.setVisible(true);
       this.player.fireButtonDown = true;
     }
+    let emitter = this.particles.createEmitter({
+      speed: 100,
+      scale: { start: 1, end: 0 },
+      blendMode: 'ADD'
+    });
+    emitter.startFollow(this.scene.bullets.getChildren()[0]);
+
+    console.log(this.scene);
+    console.log(this.scene.bullets.getChildren());
   }
 
   update(time, delta) {
