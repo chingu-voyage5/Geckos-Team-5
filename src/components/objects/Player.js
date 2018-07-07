@@ -117,7 +117,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
           setVelocityX: velocityX
         });
         //makes a sound on sword draw
-        soundPlay('sound_sword',this.scene);
+        soundPlay('sound_sword', this.scene);
         this.scene.time.delayedCall(
           this.slideTimer,
           () => (this.isAttacking = true)

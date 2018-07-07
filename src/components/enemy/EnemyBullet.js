@@ -24,14 +24,12 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
     );
   }
 
-  fire(startingX, startingY, targetX, targetY) {
+  fire(startingX, startingY, targetX) {
     this.setAccelerationY(-300);
     this.setPosition(startingX, startingY);
     this.targetX = targetX;
     this.startingX = startingX;
     this.startingY = startingY;
-    const distanceY = HEIGHT - startingY;
-    const distanceX = this.targetX - this.startingX;
     let targetAngle = Phaser.Math.Angle.Between(
       this.startingX,
       this.startingY,
