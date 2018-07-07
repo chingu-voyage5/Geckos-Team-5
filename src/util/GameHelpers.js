@@ -64,6 +64,12 @@ export const makeFullScreen = function () {
 //end the game
 export const gameOver = function () {
     nextBackground.call(this);
+    // selects new brick pattern
+    this.brickPatternNumber = patternNumber(this.brickPatternNumber);
+    // counts the new bricks
+    for (let i = 0; i < this.bricks.length; i++) {
+        this.amountBricks += this.bricks[i].children.entries.length;
+    } 
     //switches to the next track
     let songNumber = songDecider(this.registry.list.currentSongNumber);
     //saves the track number in the registry
@@ -137,6 +143,17 @@ export const restartGame = function () {
     }
 }
 
+//brick pattern numbers
+export const patternNumber = function (oldNumber) {
+    let number = Math.floor(Math.random() * 6) + 1;
+    if (number == oldNumber) {
+        number++;
+        if (number > 6) {
+            number = 1
+        }
+    }
+    return number;
+}
 
 
 // ===== BACKGROUND STUFF ===== //

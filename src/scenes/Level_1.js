@@ -18,7 +18,8 @@ import {
     makeFullScreen,
     gameOver,
     restartGame,
-    newBackgroundArray
+    newBackgroundArray,
+    patternNumber
 } from '../util/GameHelpers'
 
 export class Level_1 extends Scene {
@@ -30,6 +31,7 @@ export class Level_1 extends Scene {
     // ===== Global Definitions For This FILE ===== //
 
     this.bricks = []; //here the bricks will be stored
+    this.brickPatternNumber = patternNumber(0); //number of the brick pattern
     this.ball;
 
     // ===== Background ===== //
@@ -52,7 +54,7 @@ export class Level_1 extends Scene {
     // ===== Level Variables ===== //
     this.gameStart = true;
     this.lives = 5;
-    this.amountBricks = 38; //how many bricks are used on this map
+    this.amountBricks = 0; //will later contain the number of bricks
     this.isPlayerAlive = true;
 
     this.registry.set('lives', this.lives);
@@ -68,7 +70,13 @@ export class Level_1 extends Scene {
 
     // ===== BRIIIIIICKS HEART ===== //
 
-    BRICKS.LEVEL_1.call(this);
+    //selects the prick pattern
+    BRICKS['LEVEL_'+ this.brickPatternNumber].call(this);
+
+    //counts the amount of bricks in the scene
+    for (let i = 0; i < this.bricks.length; i++) {
+      this.amountBricks += this.bricks[i].children.entries.length;
+    } 
 
     // ===== CUSTOM KEYS ===== //
     this.keys = makeKeys.call(this);
