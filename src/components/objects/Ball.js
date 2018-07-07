@@ -1,7 +1,4 @@
-import {
-  soundAdder,
-  soundPlay
-} from '../objects/Sound';
+import { soundAdder, soundPlay } from '../objects/Sound';
 
 export default class Ball extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
@@ -53,7 +50,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
 
     //makes a sound on ball hitting the wall
     if (this.body.checkWorldBounds() == true) {
-      soundPlay('sound_ballwalls', this.scene)
+      soundPlay('sound_ballwalls', this.scene);
     }
   }
 
@@ -61,11 +58,22 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.anims.play('ballAnim');
   }
 
-  hitBrick(ball, brick) {  
+  hitBrick(ball, brick) {
     //makes a sound on ball hitting a brick
     soundPlay('sound_brick', brick.scene);
+
+    console.log(brick);
+    this.scene.tweens.add({
+      targets: brick,
+      alpha: 0,
+      duration: 300,
+      onComplete: function() {
+        brick.disableBody(true, true);
+      }
+    });
+
     //hides the brick
-    brick.disableBody(true, true);
+    // brick.disableBody(true, true);
     //tracks the progress of the brick destroying
     this.scene.amountBricks--;
     //setting the new score as the old score plus 100
