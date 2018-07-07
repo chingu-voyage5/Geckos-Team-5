@@ -51,7 +51,7 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
       .getChildren()
       .forEach(bullet => emitter.startFollow(bullet));
 
-    this.scene.time.delayedCall(600, function() {
+    this.scene.time.delayedCall(1000, function() {
       emitter.visible = false;
       emitter.pause();
       emitter.killAll();
@@ -65,8 +65,8 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
   }
 
   update(time, delta) {
-    this.y += this.speedY * 20;
-    this.x += this.speedX * 20;
+    this.y += this.speedY * 10;
+    this.x += this.speedX * 10;
 
     if (this.y > HEIGHT) {
       this.setActive(false);
