@@ -83,7 +83,12 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       );
     }
     //firing homing bullets onto the player
-    this.scene.fireEnemyBullet(brick.x, brick.y);
+    this.scene.fireEnemyBullet(
+      brick.x,
+      brick.y,
+      this.scene.player.x,
+      this.scene.player.y
+    );
   }
 
   hitPlayer(ball, player) {

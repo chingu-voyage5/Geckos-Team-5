@@ -26,6 +26,7 @@ export class UIScene extends Scene {
 
     //timer value in the form of 00 min, : string, 00 seconds and timerValue[5] for the amount of hours
     this.timerValue = [0, 0, ':', 0, 0, 0];
+    this.timeInSeconds = 0;
     this.timerValueFormatted = '';
 
     //the variables for the score and the text of the score
@@ -57,7 +58,13 @@ export class UIScene extends Scene {
     // this.levelText = this.add.bitmapText(5, 0, FONT, 'Stage 1-1', FONTSIZE);
 
     //initial display of the score
-    this.scoreText = this.add.bitmapText(5, 0, FONT, 'Score: ' + this.score, FONTSIZE);
+    this.scoreText = this.add.bitmapText(
+      5,
+      0,
+      FONT,
+      'Score: ' + this.score,
+      FONTSIZE
+    );
 
     //initial display of the life text
     this.livesText = this.add.bitmapText(180, 0, FONT, 'Lives: ', FONTSIZE);
@@ -100,7 +107,7 @@ export class UIScene extends Scene {
       //adds events for all level scenes and enables them to resume the timer
       sceneGets[i].events.on(
         'resumeTimer',
-        function () {
+        function() {
           //starts the function to stop the timer loop
           this.resumeGameClock();
         },
@@ -163,6 +170,7 @@ export class UIScene extends Scene {
   gameClock() {
     //pushes the second number of seconds one up  00:00 --> 00:01
     this.timerValue[4]++;
+    this.timeInSeconds++;
 
     //if 00:010 --> 00:10
     if (this.timerValue[4] > 9) {
@@ -187,6 +195,7 @@ export class UIScene extends Scene {
 
     //registering the current Timer Value to the registry across the scenes
     this.registry.set('TIMER', this.timerValue);
+    this.registry.set('TIME_ELAPSED', this.timeInSeconds);
   }
 
   pauseGameClock() {

@@ -1,11 +1,15 @@
 import { Scene } from 'phaser';
-import { WIDTH, HEIGHT, BRICKS, checkGamepad, FONT, FONTSIZE } from '../util/constants';
+import {
+  WIDTH,
+  HEIGHT,
+  BRICKS,
+  checkGamepad,
+  FONT,
+  FONTSIZE
+} from '../util/constants';
 import Player from '../components/objects/Player';
 import Bullet from '../components/objects/Bullet';
-import {
-  soundAdder,
-  soundPlay
-} from '../components/objects/Sound';
+import { soundAdder, soundPlay } from '../components/objects/Sound';
 import Ball from '../components/objects/Ball';
 import EnemyBullet from '../components/enemy/EnemyBullet';
 import {
@@ -24,9 +28,7 @@ import {
 
 export class Level_1 extends Scene {
   constructor() {
-    super({
-      key: 'Level_1'
-    });
+    super({ key: 'Level_1' });
 
     // ===== Global Definitions For This FILE ===== //
 
@@ -42,12 +44,16 @@ export class Level_1 extends Scene {
     newBackgroundArray.call(this);
     //starts always at 1
     this.backgroundArrayIndex = 1;
+
+    this.bulletShowerTriggered = false;
+    this.bulletShowerCycle = 0;
+    this.bulletShowerTimer;
   }
 
   create() {
     //loading the sounds into the scene look into sound.js
     soundAdder(this);
-    
+
     // Enables fullscreen on canvas click
     makeFullScreen.call(this);
 
@@ -120,8 +126,10 @@ export class Level_1 extends Scene {
 
     this.startText = this.add.bitmapText(
       (WIDTH / 2) * 0.45,
-      HEIGHT - 80, FONT,
-      'Press space to start game!', FONTSIZE
+      HEIGHT - 80,
+      FONT,
+      'Press space to start game!',
+      FONTSIZE
     );
 
     // pause and start game on player input
@@ -137,7 +145,7 @@ export class Level_1 extends Scene {
   }
 
   update(time, delta) {
-    let pad = checkGamepad.call(this); 
+    let pad = checkGamepad.call(this);
     if (
       (this.gameStart && Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
       pad.buttons[0].pressed
@@ -145,7 +153,7 @@ export class Level_1 extends Scene {
       this.startText.visible = false;
       this.gameStart = false;
       this.physics.world.resume();
-      this.events.emit('resumeTimer'); 
+      this.events.emit('resumeTimer');
     }
     // ===== BULLET ===== //
     if (
@@ -172,7 +180,7 @@ export class Level_1 extends Scene {
       (this.amountBricks === 0 && this.isPlayerAlive)
     ) {
       this.gameStart = true;
-      this.events.emit('pauseTimer'); 
+      this.events.emit('pauseTimer');
       gameOver.call(this);
     }
 
@@ -197,22 +205,59 @@ export class Level_1 extends Scene {
       } else {
         musicStop(this);
       }
-    } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) { //sound start stop
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) {
+      //sound start stop
       if (!this.registry.list.soundControl) {
         this.registry.set('soundControl', true);
       } else {
         this.registry.set('soundControl', false);
       }
     }
-  }
 
- 
-
-  fireEnemyBullet(x, y) {
-    let bullet = this.enemyBullets.get();
-    if (bullet) {
-      bullet.fire(x, y, this.player.x, this.player.y);
+    if (
+      this.registry.list.TIME_ELAPSED % 60 === 0 &&
+      !this.bulletShowerTriggered
+    ) {
+      this.triggerBulletShower();
     }
   }
 
+  fireEnemyBullet(x, y, targetX) {
+    let bullet = this.enemyBullets.get();
+    if (bullet) {
+      bullet.fire(x, y, targetX);
+    }
+  }
+
+  createBulletShower() {
+    const section = WIDTH / 2 / 3;
+    for (let i = 0; i < 3; i++) {
+      const startX_left = section * i;
+      const targetX_left = startX_left + section;
+
+      const startX_right = WIDTH - section * i;
+      const targetX_right = startX_right - section;
+
+      this.fireEnemyBullet(startX_left, 0, targetX_left);
+      this.fireEnemyBullet(startX_right, 0, targetX_right);
+    }
+    this.bulletShowerCycle++;
+    if (this.bulletShowerCycle === 4) {
+      this.bulletShowerCycle = 0;
+      this.bulletShowerTimer.paused = true;
+    }
+  }
+
+  triggerBulletShower() {
+    this.bulletShowerTriggered = true;
+
+    this.bulletShowerTimer = this.time.addEvent({
+      delay: 500,
+      callback: this.createBulletShower,
+      callbackScope: this,
+      loop: true
+    });
+
+    setTimeout(() => (this.bulletShowerTriggered = false), 1000);
+  }
 }
