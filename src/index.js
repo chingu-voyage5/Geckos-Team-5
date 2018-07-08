@@ -24,7 +24,7 @@ const config = {
     default: 'arcade',
     arcade: {
       gravity: { y: 300 },
-      debug: true
+      debug: false
     }
   },
   scene: [Preloader, Title, Credits, Help, Level_1, UIScene],

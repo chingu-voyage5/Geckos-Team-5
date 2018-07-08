@@ -3,22 +3,21 @@ let firstDelay = 0.4;
 function musicStart(songname, scene) {
       scene.registry.list.musicControl = true;
       
-      scene.music = scene.sound.add(songname);
       if (scene.registry.list.currentSongNumber == 1) {
-            scene.music.play({
+            scene['music_' + songname].play({
                   loop: true,
                   delay: firstDelay
             });  
       }  else {
-            scene.music.play({
+            scene['music_' + songname].play({
                   loop: true
             });
       }
 }
 
-function musicStop(scene) {
+function musicStop(songname,scene) {
       scene.registry.list.musicControl = false;
-      scene.music.stop();
+      scene['music_' + songname].stop();
 }
 
 //switches to the next number of songs upon call
@@ -32,10 +31,26 @@ function songDecider(song) {
       return returnSong;
 }
 
-function musicStopScene(scene) {
+//stops the music in the provided scene without stopping music in general
+function musicStopScene(songname, scene) {
       if (scene.registry.list.musicControl) {
-            scene.music.stop();
+            scene['music_' + songname].stop();
       }
 }
 
-export {musicStart, musicStop, musicStopScene, songDecider};
+//makes the music accessable from the called scene
+function musicAdder(scene) {
+      scene.music_theme = scene.sound.add('theme');
+      scene.music_song1 = scene.sound.add('song1');
+      scene.music_song2 = scene.sound.add('song2');
+      scene.music_song3 = scene.sound.add('song3');
+      scene.music_song4 = scene.sound.add('song4');
+
+      scene.music_theme.config.volume = 1.8;
+      scene.music_song1.config.volume = 0.8;
+      scene.music_song2.config.volume = 1;
+      scene.music_song3.config.volume = 1;
+      scene.music_song4.config.volume = 1.3;
+}
+
+export {musicStart, musicStop, musicStopScene, songDecider,musicAdder};

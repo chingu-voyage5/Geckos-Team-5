@@ -15,7 +15,8 @@ import EnemyBullet from '../components/enemy/EnemyBullet';
 import {
   musicStart,
   musicStop,
-  musicStopScene
+  musicStopScene,
+  musicAdder
 } from '../components/objects/Music';
 import {
     makeKeys,
@@ -53,6 +54,8 @@ export class Level_1 extends Scene {
   create() {
     //loading the sounds into the scene look into sound.js
     soundAdder(this);
+    //makes music accessible to the scene
+    musicAdder(this);
 
     // Enables fullscreen on canvas click
     makeFullScreen.call(this);
@@ -193,7 +196,7 @@ export class Level_1 extends Scene {
       pad.buttons[9].pressed
     ) {
       this.scene.start('Title');
-      musicStopScene(this);
+      musicStopScene(this.currentSong.toString(),this);
       this.scene.stop('Level_1');
       this.scene.stop('UIScene');
     }
@@ -203,7 +206,7 @@ export class Level_1 extends Scene {
       if (!this.registry.list.musicControl) {
         musicStart(this.currentSong, this);
       } else {
-        musicStop(this);
+        musicStop(this.currentSong.toString(),this);
       }
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) {
       //sound start stop
