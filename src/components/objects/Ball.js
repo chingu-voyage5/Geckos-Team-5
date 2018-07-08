@@ -61,16 +61,13 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   hitBrick(ball, brick) {
     //makes a sound on ball hitting a brick
     soundPlay('sound_brick', brick.scene);
+    this.scene.amountBricks--;
     brick.disableBody(true, false);
 
     this.scene.tweens.add({
       targets: brick,
       alpha: 0,
-      duration: 300,
-      onStart: () => {
-        //tracks the progress of the brick destroying
-        this.scene.amountBricks--;
-      }
+      duration: 300
     });
 
     //setting the new score as the old score plus 100
@@ -82,13 +79,18 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
         this.config.scene.registry.list.lives + 1
       );
     }
-    //firing homing bullets onto the player
-    this.scene.fireEnemyBullet(
-      brick.x,
-      brick.y,
-      this.scene.player.x,
-      this.scene.player.y
-    );
+
+    if (this.scene.amountBricks == 0) {
+      
+    } else {
+      //firing homing bullets onto the player
+      this.scene.fireEnemyBullet(
+        brick.x,
+        brick.y,
+        this.scene.player.x,
+        this.scene.player.y
+      );
+    }
   }
 
   hitPlayer(ball, player) {
