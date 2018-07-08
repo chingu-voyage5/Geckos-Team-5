@@ -21,6 +21,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.fireButtonDown = false;
     this.attackButtonDown = false;
     this.isInvincible = false;
+
+    this.emitter = this.scene.add.particles('bullet').createEmitter({
+      x: this.x,
+      y: this.y,
+      speed: { min: -800, max: 800 },
+      angle: { min: 180, max: 360 },
+      scale: { start: 0.5, end: 0 },
+      blendMode: 'SCREEN',
+      lifespan: 300,
+      active: false,
+      gravityY: 800
+    });
   }
 
   create() {
@@ -55,6 +67,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     // ===== Attack Up if no arrow keys are pressed while attacking ===== //
     if (!input.left && !input.right && input.attack && !this.attackButtonDown) {
+      this.emitter.active = true;
+      this.emitter.explode(5, this.x, this.y - 15);
       this.anims.play('sword', true);
       //makes a sound on sword draw
       soundPlay('sound_sword', this.scene);
@@ -116,6 +130,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
           animation: 'sword',
           setVelocityX: velocityX
         });
+        this.emitter.active = true;
+        this.emitter.explode(1, this.x, this.y - 15);
         //makes a sound on sword draw
         soundPlay('sound_sword', this.scene);
         this.scene.time.delayedCall(
