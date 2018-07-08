@@ -63,7 +63,7 @@ export class Preloader extends phaser.Scene {
       './assets/sounds/sharesynth_laser04.mp3'
     ]);
     this.load.audio('brick', [
-      './assets/sounds/brick.mp3'
+      './assets/sounds/ironlink15__collision-sound.wav'
     ]);
     this.load.audio('ballplayer', [
       './assets/sounds/click4.wav'
@@ -75,7 +75,7 @@ export class Preloader extends phaser.Scene {
       './assets/sounds/littlerobotsoundfactory_jingle-win-00.mp3'
     ]); 
     this.load.audio('sword', [
-      './assets/sounds/cheeseman32__sworddraw01.mp3'
+      './assets/sounds/black-snow__sword-slice-11.wav'
     ]);
     this.load.audio('life', [
       './assets/sounds/suntemple_retro-you-lose-sfx.mp3'
