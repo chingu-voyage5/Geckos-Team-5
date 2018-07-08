@@ -15,7 +15,7 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
     this.player = this.scene.player;
     this.speed = Phaser.Math.GetSpeed(HEIGHT, 1.5);
     this.particles = this.scene.add.particles('bullet');
-    this.setTint(0x50f200);
+    this.setTint(0xf44253);
 
     this.scene.physics.add.collider(
       this,
@@ -42,7 +42,7 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
       speed: 100,
       lifespan: 200,
       scale: { start: 1, end: 0 },
-      tint: 0x50f200,
+      tint: 0xf44253,
       blendMode: 'ADD'
     });
     this.scene.enemyBullets

@@ -27,7 +27,6 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
     this.setAccelerationY(-300);
     this.particles = this.scene.add.particles('bullet');
-    this.setTint(0xf44253);
 
     // make bullet collision box bigger
     this.setSize(14, 10, true);
@@ -48,7 +47,6 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
       speed: 100,
       lifespan: 200,
       scale: { start: 1, end: 0 },
-      tint: 0xf44253,
       blendMode: 'ADD'
     });
 
