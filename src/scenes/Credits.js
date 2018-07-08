@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
 import { WIDTH, HEIGHT, FONT, FONTSIZE } from '../util/constants';
-import { musicStart, musicStop, musicStopScene } from '../components/objects/Music';
+import { musicStart, musicStop, musicStopScene, musicAdder } from '../components/objects/Music';
 
 export class Credits extends Scene {
   constructor() {
@@ -9,6 +9,9 @@ export class Credits extends Scene {
     });
   }
   create() {
+    //makes music accessible to the scene
+    musicAdder(this);
+    
     this.image = this.add.sprite(
       240,
       160,
@@ -50,12 +53,12 @@ export class Credits extends Scene {
       Phaser.Input.Keyboard.JustDown(this.keys.space)
     ) {
       this.scene.start('Title');
-      musicStopScene(this);
+      musicStopScene('theme', this);
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.music)) {      //music start stop
       if (!this.registry.list.musicControl) {
         musicStart('theme', this);
       } else {
-        musicStop(this);
+        musicStop('theme',this);
       }
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) { //sound start stop
       if (!this.registry.list.soundControl) {

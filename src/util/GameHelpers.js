@@ -87,7 +87,7 @@ export const gameOver = function () {
     this.scene.stop('UIScene');
 
     //stops the normal music upon game over because it collides with the sounds
-    musicStopScene(this);
+    musicStopScene(this.currentSong.toString(),this);
     
     if (this.registry.list.lives === 0) {
         //game over sound
@@ -116,9 +116,8 @@ export const restartGame = function () {
         (this.input.gamepad.gamepads.length > 0 ? this.input.gamepad.gamepads[ 0 ].buttons[ 0 ].pressed : undefined)
     ) {
         //stops the current track for the next to come in
-        if (this.registry.list.musicControl) {
-            this.music.stop();
-        }
+        musicStopScene(this.currentSong.toString(), this);
+        
         // fade camera
         this.time.delayedCall(
             250,
