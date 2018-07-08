@@ -17,7 +17,7 @@ export default function makeAnimations(scene) {
       start: 14,
       end: 16
     }),
-    frameRate: 20
+    frameRate: 15
   };
   scene.anims.create(config);
 
