@@ -19,13 +19,13 @@ import {
   musicAdder
 } from '../components/objects/Music';
 import {
-    makeKeys,
-    makeFullScreen,
-    gameOver,
-    restartGame,
-    newBackgroundArray,
-    patternNumber
-} from '../util/GameHelpers'
+  makeKeys,
+  makeFullScreen,
+  gameOver,
+  restartGame,
+  newBackgroundArray,
+  patternNumber
+} from '../util/GameHelpers';
 
 export class Level_1 extends Scene {
   constructor() {
@@ -47,7 +47,6 @@ export class Level_1 extends Scene {
     this.backgroundArrayIndex = 1;
 
     this.bulletShowerTriggered = false;
-    this.bulletShowerCycle = 0;
     this.bulletShowerTimer;
   }
 
@@ -80,12 +79,12 @@ export class Level_1 extends Scene {
     // ===== BRIIIIIICKS HEART ===== //
 
     //selects the prick pattern
-    BRICKS['LEVEL_'+ this.brickPatternNumber].call(this);
+    BRICKS['LEVEL_' + this.brickPatternNumber].call(this);
 
     //counts the amount of bricks in the scene
     for (let i = 0; i < this.bricks.length; i++) {
       this.amountBricks += this.bricks[i].children.entries.length;
-    } 
+    }
 
     // ===== CUSTOM KEYS ===== //
     this.keys = makeKeys.call(this);
@@ -184,6 +183,9 @@ export class Level_1 extends Scene {
     ) {
       this.gameStart = true;
       this.events.emit('pauseTimer');
+      if (this.bulletShowerTimer) {
+        this.bulletShowerTimer.paused = true;
+      }
       gameOver.call(this);
     }
 
@@ -196,7 +198,7 @@ export class Level_1 extends Scene {
       pad.buttons[9].pressed
     ) {
       this.scene.start('Title');
-      musicStopScene(this.currentSong.toString(),this);
+      musicStopScene(this.currentSong.toString(), this);
       this.scene.stop('Level_1');
       this.scene.stop('UIScene');
     }
@@ -206,7 +208,7 @@ export class Level_1 extends Scene {
       if (!this.registry.list.musicControl) {
         musicStart(this.currentSong, this);
       } else {
-        musicStop(this.currentSong.toString(),this);
+        musicStop(this.currentSong.toString(), this);
       }
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) {
       //sound start stop
@@ -244,18 +246,13 @@ export class Level_1 extends Scene {
       this.fireEnemyBullet(startX_left, 0, targetX_left);
       this.fireEnemyBullet(startX_right, 0, targetX_right);
     }
-    this.bulletShowerCycle++;
-    if (this.bulletShowerCycle === 4) {
-      this.bulletShowerCycle = 0;
-      this.bulletShowerTimer.paused = true;
-    }
   }
 
   triggerBulletShower() {
     this.bulletShowerTriggered = true;
 
     this.bulletShowerTimer = this.time.addEvent({
-      delay: 500,
+      delay: 1000,
       callback: this.createBulletShower,
       callbackScope: this,
       loop: true
