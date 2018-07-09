@@ -126,7 +126,13 @@ export class UIScene extends Scene {
     }
 
     //setting the initial score
-    this.registry.set('SCORE', 0);
+    // if player is dead
+    // if player is alive
+    if (this.registry.list.sessionAlive) {
+      this.registry.set('SCORE', this.registry.list.SCORE);
+    } else {
+      this.registry.set('SCORE', 0);
+    }
   }
 
   updateLevel(uiScene) {
