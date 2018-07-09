@@ -61,9 +61,14 @@ export class Level_1 extends Scene {
 
     // ===== Level Variables ===== //
     this.gameStart = true;
-    this.lives = 5;
     this.amountBricks = 0; //will later contain the number of bricks
     this.isPlayerAlive = true;
+
+    if (this.registry.list.sessionAlive) {
+      this.lives = this.registry.list.lives;
+    } else {
+      this.lives = 5;
+    }
 
     this.registry.set('lives', this.lives);
 
