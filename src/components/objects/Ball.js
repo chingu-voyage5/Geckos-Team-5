@@ -42,6 +42,9 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.currentVelocY;
     //difference between the x coordinates of player and ball, it is used to set the velocity on sword strike and bounce
     this.difference;
+
+    //sets the maximum velocity for the ball
+    this.body.maxVelocity = { x: 200, y: 380}    
   }
 
   update() {
@@ -52,6 +55,8 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     if (this.body.checkWorldBounds() == true) {
       soundPlay('sound_ballwalls', this.scene);
     }
+
+    console.log(this.body.velocity)
   }
 
   animComplete(animation, frame) {
@@ -101,12 +106,11 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
 
     //the velocity changes for the swortd strike
     if (player.anims.currentAnim.key == 'sword') {
-      this.changeVelocity(300, 200, 10, ball, player);
+      this.changeVelocity(200, 10, ball, player);
     }
     //the velocity changes for the slide strike
     else if (player.anims.currentAnim.key == 'slide') {
-      // ---------------------------------------------------- VARIABLES NEEDS CHANGE -------------------------------------
-      this.changeVelocity(300, 300, 10, ball, player);
+      this.changeVelocity(300, 10, ball, player);
     }
     //the velocity changes for hitting the player
     else {
@@ -125,12 +129,8 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  changeVelocity(maxY, addY, multiplier, ball, player) {
-    //the ball should have some max velocity, so an if
-    if (this.body.velocity.y < maxY && this.body.velocity.y > maxY * -1) {
-      //adds upwards velocity to the ball
-      this.body.setVelocityY(this.body.velocity.y - addY);
-    }
+  changeVelocity(addY, multiplier, ball, player) {
+    this.body.setVelocityY(this.body.velocity.y - addY);
     this.changeVelocX(addY, multiplier, ball, player);
   }
 
@@ -139,14 +139,6 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.difference = this.calculateXDistance(ball, player);
     //uses the x difference to add velocity to ball
     this.body.setVelocityX(this.body.velocity.x + multiplier * this.difference);
-
-    //overrides too muich x velocity
-    if (this.body.velocity.x > addY) {
-      this.body.setVelocityX(addY);
-    }
-    if (this.body.velocity.x < addY * -1) {
-      this.body.setVelocityX(addY * -1);
-    }
   }
 
   //calculates the difference between the player and balls x coordinates
