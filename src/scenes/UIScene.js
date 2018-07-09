@@ -43,7 +43,6 @@ export class UIScene extends Scene {
 
   create() {
     this.registry.set('TIMER', [0, 0, ':', 0, 0, 0]);
-    this.registry.set('SESSIONTIMER', [0, 0, ':', 0, 0, 0]);
     // display hearts for each player life on level start
     this.setLives(this.registry.list.lives);
 
@@ -126,9 +125,7 @@ export class UIScene extends Scene {
       );
     }
 
-    //setting the initial score
-    // if player is dead
-    // if player is alive
+    //set score to previous stage, if new session set the initial score to 0
     if (this.registry.list.sessionAlive) {
       this.registry.set('SCORE', this.registry.list.SCORE);
     } else {
@@ -201,6 +198,7 @@ export class UIScene extends Scene {
 
     //registering the current Timer Value to the registry across the scenes
     this.registry.set('TIMER', this.timerValue);
+    this.registry.set('SESSIONTIMER', this.timerValue);
   }
 
   pauseGameClock() {

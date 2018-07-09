@@ -68,6 +68,7 @@ export class Level_1 extends Scene {
       this.lives = this.registry.list.lives;
     } else {
       this.lives = 5;
+      this.registry.set('SESSIONTIMER', [0, 0, ':', 0, 0, 0]);
     }
 
     this.registry.set('lives', this.lives);
@@ -169,6 +170,8 @@ export class Level_1 extends Scene {
       pad.buttons[1].pressed ||
       pad.buttons[7].pressed
     ) {
+      console.log(this.registry.list.SESSIONTIMER);
+
       //makes the sound of the bullet
       soundPlay('sound_bullet', this);
       let bullet = this.bullets.get();
