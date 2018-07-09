@@ -114,13 +114,14 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     }
 
     this.changeVelocity(this.additionY, this.multiplier, ball, player);
-    console.log(this.body.velocity);
-    
   }
 
   changeVelocity(addedVelocity, multiplier, ball, player) {
+    //enabling the bounce for the top of the player
     this.body.setVelocityY(this.currentVelocY * -1);
+    //adding the velocity as specified 
     this.body.setVelocityY(this.body.velocity.y - addedVelocity);
+    //changing the x velocity
     this.changeVelocX(multiplier, ball, player);
   }
 
