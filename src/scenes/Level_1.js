@@ -224,10 +224,7 @@ export class Level_1 extends Scene {
       }
     }
 
-    if (
-      this.registry.list.TIME_ELAPSED % 60 === 0 &&
-      !this.bulletShowerTriggered
-    ) {
+    if (this.registry.list.TIMER[1] === 1 && !this.bulletShowerTriggered) {
       this.triggerBulletShower();
     }
   }
