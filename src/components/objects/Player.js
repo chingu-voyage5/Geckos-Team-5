@@ -55,14 +55,20 @@ export default class Player extends Phaser.GameObjects.Sprite {
         keys.right.isDown || pad.buttons[15].pressed || pad.axes[0].value > 0.1,
       down:
         keys.down.isDown || pad.buttons[13].pressed || pad.axes[1].value > 0,
-      slide: keys.slide.isDown || pad.buttons[0].pressed,
+      slide: 
+        Phaser.Input.Keyboard.JustDown(keys.slide) || pad.buttons[0].pressed,
       attack:
-        keys.attack.isDown || pad.buttons[2].pressed || pad.buttons[6].pressed,
-      fire: keys.fire.isDown || pad.buttons[1].pressed,
-      bomb: keys.bomb.isDown || pad.buttons[3].pressed,
-      esc: keys.esc.isDown || pad.buttons[9].pressed,
-      attackIsUp: keys.attack.isUp,
-      fireIsUp: keys.fire.isUp
+        Phaser.Input.Keyboard.JustDown(keys.attack) || pad.buttons[2].pressed || pad.buttons[6].pressed,
+      fire: 
+        keys.fire.isDown || pad.buttons[1].pressed,
+      bomb: 
+        keys.bomb.isDown || pad.buttons[3].pressed,
+      esc: 
+        keys.esc.isDown || pad.buttons[9].pressed,
+      attackIsUp: 
+        keys.attack.isUp,
+      fireIsUp: 
+        keys.fire.isUp
     };
 
     // ===== Attack Up if no arrow keys are pressed while attacking ===== //

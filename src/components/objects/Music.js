@@ -40,17 +40,17 @@ function musicStopScene(songname, scene) {
 
 //makes the music accessable from the called scene
 function musicAdder(scene) {
-      scene.music_theme = scene.sound.add('theme');
-      scene.music_song1 = scene.sound.add('song1');
-      scene.music_song2 = scene.sound.add('song2');
-      scene.music_song3 = scene.sound.add('song3');
-      scene.music_song4 = scene.sound.add('song4');
+      // scene.music_theme = scene.sound.add('theme');
+      // scene.music_song1 = scene.sound.add('song1');
+      // scene.music_song2 = scene.sound.add('song2');
+      // scene.music_song3 = scene.sound.add('song3');
+      // scene.music_song4 = scene.sound.add('song4');
 
-      scene.music_theme.config.volume = 1.8;
-      scene.music_song1.config.volume = 0.8;
-      scene.music_song2.config.volume = 1;
-      scene.music_song3.config.volume = 1;
-      scene.music_song4.config.volume = 1.3;
+      // scene.music_theme.config.volume = 1.8;
+      // scene.music_song1.config.volume = 0.7;
+      // scene.music_song2.config.volume = 1;
+      // scene.music_song3.config.volume = 1;
+      // scene.music_song4.config.volume = 1.3;
 }
 
 export {musicStart, musicStop, musicStopScene, songDecider,musicAdder};

@@ -108,7 +108,7 @@ export const gameOver = function() {
     //game win sound
     soundPlay('sound_gamewin', this);
     this.add.bitmapText(
-      0,
+      WIDTH / 4,
       HEIGHT - 80,
       FONT,
       '\nPress C to start next stage!',

@@ -11,7 +11,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.config = config;
     //stting the bounce on walls
     this.body.setCollideWorldBounds(true).setBounce(1);
-    this.body.setGravityY(100);
+    this.body.setGravityY(150);
 
     //starts the animation for the ball
     this.anims.play('ballAnim');
@@ -51,6 +51,13 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.additionY = 200;
     //multiplier for the x velocity
     this.multiplier = 10;
+
+    this.balltimer = this.scene.time.addEvent({
+      delay: 30,
+      callback: () => { console.log(Math.floor(this.body.velocity.y))},
+      callbackScope: this,
+      loop: true
+    });
   }
 
   update() {
@@ -88,6 +95,9 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   }
 
   hitObject(ball, object) {
+    console.log("hit----------------------------------");
+    console.log("start",this.body.velocity.y);
+    
     if (object.texture.key == 'bullet') {
       this.multiplier = 10;
       this.additionY = 200;
@@ -103,7 +113,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       //the velocity changes for the slide strike
       else if (object.anims.currentAnim.key == 'slide') {
         this.multiplier = 10;
-        this.additionY = 300;
+        this.additionY = 250;
       }
       //the velocity changes for hitting the object
       else {
@@ -117,17 +127,27 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   }
 
   changeVelocity(addedVelocity, multiplier, ball, object) {
+    console.log("change velocity start", this.body.velocity.y);
     //enabling the bounce for the top of the object
     this.body.setVelocityY(this.currentVelocY * -1);
+    console.log("*-1", this.body.velocity.y);
+    //chages the direction of the y velocity if the ball is hit after a wall backbounce
+    this.bounceCheck();
+    console.log("*after bounce check", this.body.velocity.y);
+    //allow the ball to travel faster than the veloc y limit of 450
+    addedVelocity = this.velocityAdjusterY(addedVelocity);
     //adding the velocity as specified 
     this.body.setVelocityY(this.body.velocity.y - addedVelocity);
     //changing the x velocity
     this.changeVelocX(multiplier, ball, object);
+    console.log("end", this.body.velocity.y);
   }
 
   changeVelocX(multiplier, ball, object) {
     //calculates the x position difference
     this.difference = this.calculateXDistance(ball, object);
+    //allows the ball to travel faster if necessery than the max veloc of 150
+    this.velocityAdjusterX();
     //uses the x difference to add velocity to ball
     this.body.setVelocityX(this.body.velocity.x + multiplier * this.difference);
   }
@@ -174,11 +194,63 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  bounceCheck() {
+    if (this.body.velocity.y > 0) {
+      this.body.setVelocityY(this.body.velocity.y * -1);
+    }
+  }
+
   fireBullet(brick) {
     if (this.scene.amountBricks == 0) { }
     else {
       //firing homing bullets onto the player
       this.scene.fireEnemyBullet(brick.x, brick.y, this.scene.player.x, this.scene.player.y);
     }
+  }
+
+  velocityAdjusterX() {
+    this.body.maxVelocity.x = 450;
+    setTimeout(() => {
+      this.body.maxVelocity.x = 400;
+    }, 50);
+    setTimeout(() => {
+      this.body.maxVelocity.x = 330;
+    }, 70);
+    setTimeout(() => {
+      this.body.maxVelocity.x = 260;
+    }, 90);
+    setTimeout(() => {
+      this.body.maxVelocity.x = 200;
+    }, 100);
+    setTimeout(() => {
+      this.body.maxVelocity.x = 182;
+    }, 150);
+    setTimeout(() => {
+      this.body.maxVelocity.x = 164;
+    }, 200);
+    setTimeout(() => {
+      this.body.maxVelocity.x = 150;
+    }, 300);
+  }
+
+  velocityAdjusterY(addedVelocity) {
+    if (Math.abs(this.body.velocity.y) < 300 && this.y > 230) {
+      console.log("#######################################################");
+      
+      this.body.maxVelocity.y = 750;
+      setTimeout(() => {
+        this.body.maxVelocity.y = 450;
+      }, 110);
+
+      addedVelocity += 100;
+      console.log("added velocity if", addedVelocity);
+      return addedVelocity
+    }
+    else {
+      console.log("added velocity else", addedVelocity);
+      return addedVelocity
+    }
+    
+    
   }
 }
