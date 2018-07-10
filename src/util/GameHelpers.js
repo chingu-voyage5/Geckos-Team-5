@@ -99,7 +99,7 @@ export const gameOver = function() {
         this.registry.list.SCORE +
         ' and Playtime: ' +
         fancyTimeFormat(this.registry.list.SESSIONTIMER) +
-        '\nPress any key to try again!',
+        '\nPress C to try again!',
       FONTSIZE
     );
     this.registry.set('SESSIONTIMER', 0);
@@ -111,9 +111,7 @@ export const gameOver = function() {
       0,
       HEIGHT - 80,
       FONT,
-      'You won!! Score: ' +
-        this.registry.list.SCORE +
-        '\nPress any key to play again!',
+      '\nPress C to start next stage!',
       FONTSIZE
     );
   }
@@ -121,8 +119,7 @@ export const gameOver = function() {
 
 export const restartGame = function() {
   if (
-    this.keys.attack.isDown ||
-    this.keys.slide.isDown ||
+    this.keys.bomb.isDown ||
     (this.input.gamepad.gamepads.length > 0
       ? this.input.gamepad.gamepads[0].buttons[0].pressed
       : undefined)
