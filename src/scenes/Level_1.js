@@ -187,7 +187,6 @@ export class Level_1 extends Scene {
       (this.registry.list.lives < 1 && this.isPlayerAlive) ||
       (this.amountBricks === 0 && this.isPlayerAlive)
     ) {
-      this.gameStart = true;
       this.events.emit('pauseTimer');
       if (this.bulletShowerTimer) {
         this.bulletShowerTimer.paused = true;
@@ -196,7 +195,6 @@ export class Level_1 extends Scene {
     }
 
     if (!this.isPlayerAlive) {
-      this.gameStart = true;
       restartGame.call(this);
     }
     if (
