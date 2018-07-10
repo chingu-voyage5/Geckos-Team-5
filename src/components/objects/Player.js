@@ -204,9 +204,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.isInvincible = true;
 
     setTimeout(() => {
-      this.isInvincible = false;
       this.setTint(originalTint);
-    }, 3000);
+    }, 300);
+
+    setTimeout(() => {
+      this.isInvincible = false;
+    }, 900);
   }
 
   triggerBulletCooldown() {
