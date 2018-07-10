@@ -1,6 +1,7 @@
 import phaser from 'phaser';
 import { WIDTH, HEIGHT, BACKGROUND_AMOUNT } from '../util/constants';
 import makeAnimations from '../util/Animations';
+import { makeFullScreen } from '../util/GameHelpers';
 
 export class Preloader extends phaser.Scene {
   constructor() {
@@ -99,8 +100,13 @@ export class Preloader extends phaser.Scene {
 
     // Register a load complete event to launch the title screen when all files are loaded
     this.load.on('complete', () => {
+
       // prepare all animations, defined in a separate file
       makeAnimations(this);
+
+      // Enables fullscreen on canvas click
+      makeFullScreen.call(this);
+
       progress.destroy();
       this.scene.start('Title');
     });
