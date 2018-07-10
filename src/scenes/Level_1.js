@@ -68,7 +68,7 @@ export class Level_1 extends Scene {
       this.lives = this.registry.list.lives;
     } else {
       this.lives = 5;
-      this.registry.set('SESSIONTIMER', [0, 0, ':', 0, 0, 0]);
+      this.registry.set('SESSIONTIMER', 0);
     }
 
     this.registry.set('lives', this.lives);

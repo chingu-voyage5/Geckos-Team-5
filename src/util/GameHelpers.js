@@ -82,23 +82,26 @@ export const gameOver = function() {
 
   if (this.registry.list.lives === 0) {
     this.registry.set('sessionAlive', false);
+
     //game over sound
     soundPlay('sound_gameover', this);
     this.add.bitmapText(
-      (WIDTH / 2) * 0.5,
+      0,
       HEIGHT - 80,
       FONT,
       'Game Over! Score: ' +
-        this.registry.list.SCORE +
+        this.registry.list.SCORE + ' and Playtime: ' + fancyTimeFormat(this.registry.list.SESSIONTIMER) +
         '\nPress any key to try again!',
       FONTSIZE
     );
+    this.registry.set('SESSIONTIMER', 0);
+
   } else {
     this.registry.set('sessionAlive', true);
     //game win sound
     soundPlay('sound_gamewin', this);
     this.add.bitmapText(
-      (WIDTH / 2) * 0.5,
+      0,
       HEIGHT - 80,
       FONT,
       'You won!! Score: ' +
@@ -199,3 +202,8 @@ export const shuffle = function(array) {
     }
   return array;
 };
+
+//copied from : https://stackoverflow.com/questions/3733227/javascript-seconds-to-minutes-and-seconds
+function fancyTimeFormat(s) {
+  return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + s
+}

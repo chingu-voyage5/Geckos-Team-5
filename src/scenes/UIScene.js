@@ -198,7 +198,7 @@ export class UIScene extends Scene {
 
     //registering the current Timer Value to the registry across the scenes
     this.registry.set('TIMER', this.timerValue);
-    this.registry.set('SESSIONTIMER', this.timerValue);
+    this.registry.set('SESSIONTIMER', this.registry.list.SESSIONTIMER + 1);
   }
 
   pauseGameClock() {
