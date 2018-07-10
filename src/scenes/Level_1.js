@@ -61,9 +61,15 @@ export class Level_1 extends Scene {
 
     // ===== Level Variables ===== //
     this.gameStart = true;
-    this.lives = 5;
     this.amountBricks = 0; //will later contain the number of bricks
     this.isPlayerAlive = true;
+
+    if (this.registry.list.sessionAlive) {
+      this.lives = this.registry.list.lives;
+    } else {
+      this.lives = 5;
+      this.registry.set('SESSIONTIMER', 0);
+    }
 
     this.registry.set('lives', this.lives);
 
@@ -181,7 +187,6 @@ export class Level_1 extends Scene {
       (this.registry.list.lives < 1 && this.isPlayerAlive) ||
       (this.amountBricks === 0 && this.isPlayerAlive)
     ) {
-      this.gameStart = true;
       this.events.emit('pauseTimer');
       if (this.bulletShowerTimer) {
         this.bulletShowerTimer.paused = true;
@@ -190,7 +195,6 @@ export class Level_1 extends Scene {
     }
 
     if (!this.isPlayerAlive) {
-      this.gameStart = true;
       restartGame.call(this);
     }
     if (
@@ -219,10 +223,7 @@ export class Level_1 extends Scene {
       }
     }
 
-    if (
-      this.registry.list.TIME_ELAPSED % 60 === 0 &&
-      !this.bulletShowerTriggered
-    ) {
+    if (this.registry.list.TIMER[1] === 1 && !this.bulletShowerTriggered) {
       this.triggerBulletShower();
     }
   }

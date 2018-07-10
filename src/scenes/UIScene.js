@@ -26,7 +26,6 @@ export class UIScene extends Scene {
 
     //timer value in the form of 00 min, : string, 00 seconds and timerValue[5] for the amount of hours
     this.timerValue = [0, 0, ':', 0, 0, 0];
-    this.timeInSeconds = 0;
     this.timerValueFormatted = '';
 
     //the variables for the score and the text of the score
@@ -43,6 +42,7 @@ export class UIScene extends Scene {
   }
 
   create() {
+    this.registry.set('TIMER', [0, 0, ':', 0, 0, 0]);
     // display hearts for each player life on level start
     this.setLives(this.registry.list.lives);
 
@@ -125,8 +125,12 @@ export class UIScene extends Scene {
       );
     }
 
-    //setting the initial score
-    this.registry.set('SCORE', 0);
+    //set score to previous stage, if new session set the initial score to 0
+    if (this.registry.list.sessionAlive) {
+      this.registry.set('SCORE', this.registry.list.SCORE);
+    } else {
+      this.registry.set('SCORE', 0);
+    }
   }
 
   updateLevel(uiScene) {
@@ -170,7 +174,6 @@ export class UIScene extends Scene {
   gameClock() {
     //pushes the second number of seconds one up  00:00 --> 00:01
     this.timerValue[4]++;
-    this.timeInSeconds++;
 
     //if 00:010 --> 00:10
     if (this.timerValue[4] > 9) {
@@ -195,7 +198,7 @@ export class UIScene extends Scene {
 
     //registering the current Timer Value to the registry across the scenes
     this.registry.set('TIMER', this.timerValue);
-    this.registry.set('TIME_ELAPSED', this.timeInSeconds);
+    this.registry.set('SESSIONTIMER', this.registry.list.SESSIONTIMER + 1);
   }
 
   pauseGameClock() {
