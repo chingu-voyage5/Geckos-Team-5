@@ -225,7 +225,7 @@ export class Level_1 extends Scene {
       }
     }
 
-    if (this.registry.list.TIMER[3] === 1 && !this.bulletShowerTriggered) {
+    if (this.registry.list.TIMER[1] === 1 && !this.bulletShowerTriggered) {
       this.triggerBulletShower();
     }
   }
@@ -264,7 +264,7 @@ export class Level_1 extends Scene {
     this.bulletShowerTriggered = true;
 
     this.bulletShowerTimer = this.time.addEvent({
-      delay: 1000,
+      delay: 800,
       callback: this.createBulletShower,
       callbackScope: this,
       loop: true
