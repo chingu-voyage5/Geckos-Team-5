@@ -12,7 +12,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     //stting the bounce on walls
     this.body.setCollideWorldBounds(true).setBounce(1);
     //addition gravity for the ball
-    this.body.setGravityY(100);
+    this.body.setGravityY(150);
 
     //starts the animation for the ball
     this.anims.play('ballAnim');
@@ -46,7 +46,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.difference;
 
     //sets the maximum velocity for the ball
-    this.body.maxVelocity = { x: 150, y: 500}    
+    this.body.maxVelocity = { x: 150, y: 450}    
 
     //added y velocity on action
     this.additionY = 200;
@@ -54,7 +54,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.multiplier = 10;
   }
 
-  update() {
+  update() {    
     //necessary variable to override the strange collider velocity behavior
     this.currentVelocY = this.body.velocity.y;
 
@@ -102,19 +102,23 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       //the velocity changes for the swortd strike
       if (object.anims.currentAnim.key == 'sword') {
         this.multiplier = 10;
-        this.additionY = 300;
+        this.additionY = 200;
       }
       //the velocity changes for the slide strike
       else if (object.anims.currentAnim.key == 'slide') {
         this.multiplier = 10;
-        this.additionY = 350;
+        this.additionY = 250;
       }
       //the velocity changes for hitting the object
       else {
-        this.multiplier = 5;
+        this.multiplier = 7;
         this.additionY = 0;
         //takes away a life from the player, playes the sound and sets the invincibilty
         this.takeLife(object);
+
+        //allows the ball to travel faster if than the max veloc of 150
+        //fixes the bug where the ball is stuck on the player
+        this.velocityAdjusterX();
       }
     }
 
@@ -146,10 +150,6 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
 
     //calculates the x position difference
     this.difference = this.calculateXDistance(ball, object);
-
-    //allows the ball to travel faster if necessery than the max veloc of 150
-    //fixes the bug where the ball is stuck on the player
-    this.velocityAdjusterX();
 
     //uses the x difference to add velocity to ball
     this.body.setVelocityX(this.body.velocity.x + multiplier * this.difference);
@@ -235,7 +235,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   //if the conditions are met, it increases the addedVelocity which is later added to the ball
   velocityAdjusterY(addedVelocity) {
     //takes in the absolute value to be able to use it when the ball bounce from floor and is being hit
-    if (Math.abs(this.body.velocity.y) < 300 && this.y > 230) { 
+    if (Math.abs(this.body.velocity.y) < 200 && this.y > 230) { 
 
       //initial increase of the limiter      
       this.body.maxVelocity.y = 750;
@@ -245,7 +245,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       this.speedDecrease("y", 450, 1);
       
       //adding more velocity when low
-      addedVelocity += 200;
+      addedVelocity += 100;
 
       return addedVelocity
     }
@@ -255,9 +255,32 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   //a function to make a smoother speed decrease after the ball gained momentum to prevent it bouncing all over the place
   //otherwise it looks like the ball warped
   speedDecrease(velocityNAME, changedLimit, multiplicator) {
-    setTimeout(() => {
-      this.body.maxVelocity[velocityNAME] = changedLimit;
-    }, 100 * multiplicator);
-    // more adjustments necessary
+    if (velocityNAME == "x") {
+      setTimeout(() => {
+        this.body.maxVelocity.x = 400;
+      }, 50);
+      setTimeout(() => {
+        this.body.maxVelocity.x = 330;
+      }, 70);
+      setTimeout(() => {
+        this.body.maxVelocity.x = 260;
+      }, 90);
+      setTimeout(() => {
+        this.body.maxVelocity.x = 200;
+      }, 100);
+      setTimeout(() => {
+        this.body.maxVelocity.x = 182;
+      }, 150);
+      setTimeout(() => {
+        this.body.maxVelocity.x = 164;
+      }, 200);
+      setTimeout(() => {
+        this.body.maxVelocity.x = 150;
+      }, 300);
+    } else {
+      setTimeout(() => {
+        this.body.maxVelocity[velocityNAME] = changedLimit;
+      }, 100 * multiplicator);
+    }
   }
 }
