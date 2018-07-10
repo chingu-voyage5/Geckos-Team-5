@@ -170,8 +170,6 @@ export class Level_1 extends Scene {
       pad.buttons[1].pressed ||
       pad.buttons[7].pressed
     ) {
-      console.log(this.registry.list.SESSIONTIMER);
-
       //makes the sound of the bullet
       soundPlay('sound_bullet', this);
       let bullet = this.bullets.get();

@@ -1,4 +1,10 @@
-import { WIDTH, HEIGHT, FONT, FONTSIZE, BACKGROUND_AMOUNT } from '../util/constants';
+import {
+  WIDTH,
+  HEIGHT,
+  FONT,
+  FONTSIZE,
+  BACKGROUND_AMOUNT
+} from '../util/constants';
 
 import { songDecider, musicStopScene } from '../components/objects/Music';
 import { soundPlay } from '../components/objects/Sound';
@@ -90,12 +96,13 @@ export const gameOver = function() {
       HEIGHT - 80,
       FONT,
       'Game Over! Score: ' +
-        this.registry.list.SCORE + ' and Playtime: ' + fancyTimeFormat(this.registry.list.SESSIONTIMER) +
+        this.registry.list.SCORE +
+        ' and Playtime: ' +
+        fancyTimeFormat(this.registry.list.SESSIONTIMER) +
         '\nPress any key to try again!',
       FONTSIZE
     );
     this.registry.set('SESSIONTIMER', 0);
-
   } else {
     this.registry.set('sessionAlive', true);
     //game win sound
@@ -163,30 +170,29 @@ export const patternNumber = function(oldNumber) {
 
 //cycles to the next background
 
-export const nextBackground = function () {
-    this.backgroundArrayIndex++;
+export const nextBackground = function() {
+  this.backgroundArrayIndex++;
 
-    //if we had 5 backgrounds it makes a new order for the backgrounds and resets the backgroundArrayIndex
-    if (this.backgroundArrayIndex == this.backgroundArray.length) {
-        let oldBackgroundArray = this.backgroundArray;
-        this.backgroundArrayIndex = 1;
+  //if we had 5 backgrounds it makes a new order for the backgrounds and resets the backgroundArrayIndex
+  if (this.backgroundArrayIndex == this.backgroundArray.length) {
+    let oldBackgroundArray = this.backgroundArray;
+    this.backgroundArrayIndex = 1;
 
-        newBackgroundArray.call(this, this.backgroundArray);
-        //prevents the new order to start with the last background
-        while (oldBackgroundArray[ BACKGROUND_AMOUNT ] == this.backgroundArray[ 1 ]) {
-            newBackgroundArray.call(this, this.backgroundArray);
-        }
+    newBackgroundArray.call(this, this.backgroundArray);
+    //prevents the new order to start with the last background
+    while (oldBackgroundArray[BACKGROUND_AMOUNT] == this.backgroundArray[1]) {
+      newBackgroundArray.call(this, this.backgroundArray);
     }
   }
 };
 
 //just use whoever backgrounds there are as numbers --> 3 background is [1,2,3] || 10 background is [1,2,3,4,5,6,7,8,9,10]
-export const newBackgroundArray = function () {
-    //the shuffle function shuffles the array numbers randomly
-    this.backgroundArray = shuffle([ 1, 2, 3, 4, 5, 6 ]);
-    //the zero does not represent a background but is to allow the backgroundArrayIndex to be easier to read and all following code to be understood easier
-    this.backgroundArray.unshift(0);
-}
+export const newBackgroundArray = function() {
+  //the shuffle function shuffles the array numbers randomly
+  this.backgroundArray = shuffle([1, 2, 3, 4, 5, 6]);
+  //the zero does not represent a background but is to allow the backgroundArrayIndex to be easier to read and all following code to be understood easier
+  this.backgroundArray.unshift(0);
+};
 
 // ===== OTHER GENERAL HELPER FUNCTIONS ===== //
 
@@ -207,5 +213,5 @@ export const shuffle = function(array) {
 
 //copied from : https://stackoverflow.com/questions/3733227/javascript-seconds-to-minutes-and-seconds
 function fancyTimeFormat(s) {
-  return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + s
+  return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + s;
 }
