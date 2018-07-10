@@ -31,7 +31,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     config.scene.physics.add.collider(
       this,
       config.scene.player,
-      this.hitPlayer,
+      this.hitObject,
       null,
       this
     );
@@ -84,63 +84,63 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       duration: 300
     });
 
-    if (this.scene.amountBricks == 0) {}
-    else {
-      //firing homing bullets onto the player
-      this.scene.fireEnemyBullet(brick.x, brick.y, this.scene.player.x, this.scene.player.y);
-    }
+    this.fireBullet(brick);
   }
 
-  hitPlayer(ball, player) {
-    //makes a sound on ball hitting the player
-    soundPlay('sound_ballplayer', player.scene);
-    //accounting for the collider setting the y velocity to 0
-
-    //the velocity changes for the swortd strike
-    if (player.anims.currentAnim.key == 'sword') {
+  hitObject(ball, object) {
+    if (object.texture.key == 'bullet') {
       this.multiplier = 10;
       this.additionY = 200;
-    }
-    //the velocity changes for the slide strike
-    else if (player.anims.currentAnim.key == 'slide') {
-      this.multiplier = 10;
-      this.additionY = 300;
-    }
-    //the velocity changes for hitting the player
-    else {
-      this.multiplier = 5;
-      this.additionY = 0;
-      this.takeLife(player);
-    }
+    } else {
+      //makes a sound on ball hitting the object
+      soundPlay('sound_ballplayer', object.scene);
 
-    this.changeVelocity(this.additionY, this.multiplier, ball, player);
+      //the velocity changes for the swortd strike
+      if (object.anims.currentAnim.key == 'sword') {
+        this.multiplier = 10;
+        this.additionY = 200;
+      }
+      //the velocity changes for the slide strike
+      else if (object.anims.currentAnim.key == 'slide') {
+        this.multiplier = 10;
+        this.additionY = 300;
+      }
+      //the velocity changes for hitting the object
+      else {
+        this.multiplier = 5;
+        this.additionY = 0;
+        this.takeLife(object);
+      }
+    }
+    
+    this.changeVelocity(this.additionY, this.multiplier, ball, object);
   }
 
-  changeVelocity(addedVelocity, multiplier, ball, player) {
-    //enabling the bounce for the top of the player
+  changeVelocity(addedVelocity, multiplier, ball, object) {
+    //enabling the bounce for the top of the object
     this.body.setVelocityY(this.currentVelocY * -1);
     //adding the velocity as specified 
     this.body.setVelocityY(this.body.velocity.y - addedVelocity);
     //changing the x velocity
-    this.changeVelocX(multiplier, ball, player);
+    this.changeVelocX(multiplier, ball, object);
   }
 
-  changeVelocX(multiplier, ball, player) {
+  changeVelocX(multiplier, ball, object) {
     //calculates the x position difference
-    this.difference = this.calculateXDistance(ball, player);
+    this.difference = this.calculateXDistance(ball, object);
     //uses the x difference to add velocity to ball
     this.body.setVelocityX(this.body.velocity.x + multiplier * this.difference);
   }
 
-  //calculates the difference between the player and balls x coordinates
-  calculateXDistance(ball, player) {
-    //  Ball is on the left-hand side of the player
-    if (this.x < player.x) {
-      return (player.x - this.x) * -1;
+  //calculates the difference between the object and balls x coordinates
+  calculateXDistance(ball, object) {
+    //  Ball is on the left-hand side of the object
+    if (this.x < object.x) {
+      return (object.x - this.x) * -1;
     }
-    //  Ball is on the right-hand side of the player
-    else if (this.x > player.x) {
-      return this.x - player.x;
+    //  Ball is on the right-hand side of the object
+    else if (this.x > object.x) {
+      return this.x - object.x;
     }
     //  Ball is perfectly in the middle
     else {
@@ -171,6 +171,14 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
         'lives',
         this.config.scene.registry.list.lives + 1
       );
+    }
+  }
+
+  fireBullet(brick) {
+    if (this.scene.amountBricks == 0) { }
+    else {
+      //firing homing bullets onto the player
+      this.scene.fireEnemyBullet(brick.x, brick.y, this.scene.player.x, this.scene.player.y);
     }
   }
 }
