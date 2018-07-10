@@ -73,7 +73,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
   hitBall(bullet, ball) {
     this.destroy();
-    ball.hitObject(ball, undefined, bullet);
+    ball.hitObject(ball, bullet);
   }
 
   hitBullets(bullet, enemyBullet) {
