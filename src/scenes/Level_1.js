@@ -69,7 +69,7 @@ export class Level_1 extends Scene {
     if (this.registry.list.sessionAlive) {
       this.lives = this.registry.list.lives;
     } else {
-      this.lives = 99;
+      this.lives = 50;
       this.registry.set('SESSIONTIMER', 0);
     }
 

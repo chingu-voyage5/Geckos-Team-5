@@ -39,47 +39,47 @@ export class Preloader extends phaser.Scene {
       endFrame: 3
     });
 
-    // this.load.audio('theme', [
-    //   './assets/audio/kickhat_success-menu.mp3'
-    // ]);
+    this.load.audio('theme', [
+      './assets/audio/kickhat_success-menu.mp3'
+    ]);
 
-    // this.load.audio('song1', [
-    //   './assets/audio/Ouroboros.mp3'
-    // ]);
-    // this.load.audio('song2', [
-    //   './assets/audio/I Can Feel it Coming.mp3'
-    // ]);
-    // this.load.audio('song3', [
-    //   './assets/audio/Corruption.mp3'
-    // ]);
-    // this.load.audio('song4', [
-    //   './assets/audio/Undaunted.mp3'
-    // ]);
+    this.load.audio('song1', [
+      './assets/audio/Ouroboros.mp3'
+    ]);
+    this.load.audio('song2', [
+      './assets/audio/I Can Feel it Coming.mp3'
+    ]);
+    this.load.audio('song3', [
+      './assets/audio/Corruption.mp3'
+    ]);
+    this.load.audio('song4', [
+      './assets/audio/Undaunted.mp3'
+    ]);
 
-    // this.load.audio('gameover', [
-    //   './assets/sounds/thezero-game-over.mp3'
-    // ]);
-    // this.load.audio('bullet', [
-    //   './assets/sounds/sharesynth_laser04.mp3'
-    // ]);
-    // this.load.audio('brick', [
-    //   './assets/sounds/ironlink15__collision-sound.wav'
-    // ]);
-    // this.load.audio('ballplayer', [
-    //   './assets/sounds/click4.wav'
-    // ]);
-    // this.load.audio('ballwalls', [
-    //   './assets/sounds/click5.wav'
-    // ]); 
-    // this.load.audio('gamewin', [
-    //   './assets/sounds/mativve__electro-win-sound.wav'
-    // ]); 
-    // this.load.audio('sword', [
-    //   './assets/sounds/32cheeseman32__sworddraw01.wav'
-    // ]);
-    // this.load.audio('life', [
-    //   './assets/sounds/suntemple_retro-you-lose-sfx.mp3'
-    // ]);
+    this.load.audio('gameover', [
+      './assets/sounds/thezero-game-over.mp3'
+    ]);
+    this.load.audio('bullet', [
+      './assets/sounds/sharesynth_laser04.mp3'
+    ]);
+    this.load.audio('brick', [
+      './assets/sounds/ironlink15__collision-sound.wav'
+    ]);
+    this.load.audio('ballplayer', [
+      './assets/sounds/click4.wav'
+    ]);
+    this.load.audio('ballwalls', [
+      './assets/sounds/click5.wav'
+    ]); 
+    this.load.audio('gamewin', [
+      './assets/sounds/mativve__electro-win-sound.wav'
+    ]); 
+    this.load.audio('sword', [
+      './assets/sounds/32cheeseman32__sworddraw01.wav'
+    ]);
+    this.load.audio('life', [
+      './assets/sounds/suntemple_retro-you-lose-sfx.mp3'
+    ]);
     
 
 

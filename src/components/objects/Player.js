@@ -56,9 +56,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
       down:
         keys.down.isDown || pad.buttons[13].pressed || pad.axes[1].value > 0,
       slide: 
-        Phaser.Input.Keyboard.JustDown(keys.slide) || pad.buttons[0].pressed,
+        Phaser.Input.Keyboard.JustDown(keys.slide) || pad.buttons[0].pressed, 
+        //changed to justdown to prevent key spam
       attack:
-        Phaser.Input.Keyboard.JustDown(keys.attack) || pad.buttons[2].pressed || pad.buttons[6].pressed,
+        Phaser.Input.Keyboard.JustDown(keys.attack) || pad.buttons[2].pressed || pad.buttons[6].pressed, 
+        //changed to justdown to prevent key spam
       fire: 
         keys.fire.isDown || pad.buttons[1].pressed,
       bomb: 

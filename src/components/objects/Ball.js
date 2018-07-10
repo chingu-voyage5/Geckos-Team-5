@@ -11,7 +11,8 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.config = config;
     //stting the bounce on walls
     this.body.setCollideWorldBounds(true).setBounce(1);
-    this.body.setGravityY(150);
+    //addition gravity for the ball
+    this.body.setGravityY(100);
 
     //starts the animation for the ball
     this.anims.play('ballAnim');
@@ -45,19 +46,12 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.difference;
 
     //sets the maximum velocity for the ball
-    this.body.maxVelocity = { x: 150, y: 450}    
+    this.body.maxVelocity = { x: 150, y: 500}    
 
     //added y velocity on action
     this.additionY = 200;
     //multiplier for the x velocity
     this.multiplier = 10;
-
-    this.balltimer = this.scene.time.addEvent({
-      delay: 30,
-      callback: () => { console.log(Math.floor(this.body.velocity.y))},
-      callbackScope: this,
-      loop: true
-    });
   }
 
   update() {
@@ -91,63 +85,72 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       duration: 300
     });
 
+    //fires a homing bullet at the player, takes in the current hit brick
     this.fireBullet(brick);
   }
 
   hitObject(ball, object) {
-    console.log("hit----------------------------------");
-    console.log("start",this.body.velocity.y);
-    
+
     if (object.texture.key == 'bullet') {
       this.multiplier = 10;
       this.additionY = 200;
-    } else {
+    } else { //everything happening with the player
+
       //makes a sound on ball hitting the object
       soundPlay('sound_ballplayer', object.scene);
 
       //the velocity changes for the swortd strike
       if (object.anims.currentAnim.key == 'sword') {
         this.multiplier = 10;
-        this.additionY = 200;
+        this.additionY = 300;
       }
       //the velocity changes for the slide strike
       else if (object.anims.currentAnim.key == 'slide') {
         this.multiplier = 10;
-        this.additionY = 250;
+        this.additionY = 350;
       }
       //the velocity changes for hitting the object
       else {
         this.multiplier = 5;
         this.additionY = 0;
+        //takes away a life from the player, playes the sound and sets the invincibilty
         this.takeLife(object);
       }
     }
-    
+
+    //starts the process of calculating the new velocity for the ball after being hit
+    //depending on the condition of the hit, the if tree before it sends different variables
     this.changeVelocity(this.additionY, this.multiplier, ball, object);
   }
 
   changeVelocity(addedVelocity, multiplier, ball, object) {
-    console.log("change velocity start", this.body.velocity.y);
+
     //enabling the bounce for the top of the object
     this.body.setVelocityY(this.currentVelocY * -1);
-    console.log("*-1", this.body.velocity.y);
-    //chages the direction of the y velocity if the ball is hit after a wall backbounce
+
+    //sometimes the ball is being hit after it bounces on the floor, this changes the velocity if so
     this.bounceCheck();
-    console.log("*after bounce check", this.body.velocity.y);
-    //allow the ball to travel faster than the veloc y limit of 450
+
+    //allows the ball to travel faster than the veloc y limit of 450 if its slow and near the bottom
+    //if the conditions are met, it increases the addedVelocity which is later added to the ball
     addedVelocity = this.velocityAdjusterY(addedVelocity);
-    //adding the velocity as specified 
+
+    //adding the additional velocity to the current velocity (which had the polarity changed in the lines before)
     this.body.setVelocityY(this.body.velocity.y - addedVelocity);
-    //changing the x velocity
+
+    //the function to change the X velocity
     this.changeVelocX(multiplier, ball, object);
-    console.log("end", this.body.velocity.y);
   }
 
   changeVelocX(multiplier, ball, object) {
+
     //calculates the x position difference
     this.difference = this.calculateXDistance(ball, object);
+
     //allows the ball to travel faster if necessery than the max veloc of 150
+    //fixes the bug where the ball is stuck on the player
     this.velocityAdjusterX();
+
     //uses the x difference to add velocity to ball
     this.body.setVelocityX(this.body.velocity.x + multiplier * this.difference);
   }
@@ -168,6 +171,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  //detracts the life from the player, sets invincibility and plays sound if switched on
   takeLife(player) {
     if (!player.isInvincible) {
       soundPlay('sound_life', player.scene);
@@ -179,6 +183,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  //tracks the bricks and sets the score on brick hit
   addScore() {
     //tracking the amount of bricks
     this.scene.amountBricks--;
@@ -186,6 +191,12 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     //setting the new score as the old score plus 100
     this.scene.registry.set('SCORE', this.scene.registry.list.SCORE + 100);
 
+    //adds a life if the score conditions are met
+    this.lifeGain();
+  }
+
+  //adds a life if the score conditions are met 
+  lifeGain() {
     if (this.scene.registry.list.SCORE % 16000 === 0) {
       this.config.scene.registry.set(
         'lives',
@@ -194,12 +205,14 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  //sometimes the ball is being hit after it bounces on the floor, this changes the velocity if so
   bounceCheck() {
     if (this.body.velocity.y > 0) {
       this.body.setVelocityY(this.body.velocity.y * -1);
     }
   }
 
+  //fires a homing bullet from the destroyed brick
   fireBullet(brick) {
     if (this.scene.amountBricks == 0) { }
     else {
@@ -208,49 +221,43 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  //allows the ball to travel faster if necessery than the max veloc of 150
+  //fixes the bug where the ball is stuck on the player
   velocityAdjusterX() {
+    //initial increasing of the limit to let the ball have more velocity
     this.body.maxVelocity.x = 450;
-    setTimeout(() => {
-      this.body.maxVelocity.x = 400;
-    }, 50);
-    setTimeout(() => {
-      this.body.maxVelocity.x = 330;
-    }, 70);
-    setTimeout(() => {
-      this.body.maxVelocity.x = 260;
-    }, 90);
-    setTimeout(() => {
-      this.body.maxVelocity.x = 200;
-    }, 100);
-    setTimeout(() => {
-      this.body.maxVelocity.x = 182;
-    }, 150);
-    setTimeout(() => {
-      this.body.maxVelocity.x = 164;
-    }, 200);
-    setTimeout(() => {
-      this.body.maxVelocity.x = 150;
-    }, 300);
+
+    //making a smoother speed decrease after it gained momentum to prevent it bouncing all over the place
+    this.speedDecrease("x", 150, 1);
   }
 
+  //allows the ball to travel faster than the veloc y limit of 450 if its slow and near the bottom
+  //if the conditions are met, it increases the addedVelocity which is later added to the ball
   velocityAdjusterY(addedVelocity) {
-    if (Math.abs(this.body.velocity.y) < 300 && this.y > 230) {
-      console.log("#######################################################");
-      
-      this.body.maxVelocity.y = 750;
-      setTimeout(() => {
-        this.body.maxVelocity.y = 450;
-      }, 110);
+    //takes in the absolute value to be able to use it when the ball bounce from floor and is being hit
+    if (Math.abs(this.body.velocity.y) < 300 && this.y > 230) { 
 
-      addedVelocity += 100;
-      console.log("added velocity if", addedVelocity);
+      //initial increase of the limiter      
+      this.body.maxVelocity.y = 750;
+ 
+      //a function to make a smoother speed decrease after the ball gained momentum to prevent it bouncing all over the place
+      //otherwise it looks like the ball warped
+      this.speedDecrease("y", 450, 1);
+      
+      //adding more velocity when low
+      addedVelocity += 200;
+
       return addedVelocity
     }
-    else {
-      console.log("added velocity else", addedVelocity);
-      return addedVelocity
-    }
-    
-    
+    else {return addedVelocity}
+  }
+
+  //a function to make a smoother speed decrease after the ball gained momentum to prevent it bouncing all over the place
+  //otherwise it looks like the ball warped
+  speedDecrease(velocityNAME, changedLimit, multiplicator) {
+    setTimeout(() => {
+      this.body.maxVelocity[velocityNAME] = changedLimit;
+    }, 100 * multiplicator);
+    // more adjustments necessary
   }
 }
