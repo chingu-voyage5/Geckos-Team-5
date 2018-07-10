@@ -6,6 +6,8 @@ export const HEIGHT = 320;
 export const FONT = 'pokemon_classic';
 export const FONTSIZE = 18;
 
+export const BACKGROUND_AMOUNT = 6;
+
 // ===== Array of 15 numbers from 0 to 15 ===== //
 // === I like this better than writing [ 0, 1, 2, 3, 4, ..... ] === //
 const keyButtons = Array.from({ length: 16 }, (_, i) => i);

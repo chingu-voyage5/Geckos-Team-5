@@ -1,5 +1,5 @@
 import phaser from 'phaser';
-import { WIDTH, HEIGHT } from '../util/constants';
+import { WIDTH, HEIGHT, BACKGROUND_AMOUNT } from '../util/constants';
 import makeAnimations from '../util/Animations';
 
 export class Preloader extends phaser.Scene {
@@ -10,7 +10,7 @@ export class Preloader extends phaser.Scene {
   }
   preload() {
     //loading however there are backgrounds  currently there are 5, names start from background1
-    for (let i = 1; i < 6; i++) {
+    for (let i = 1; i < BACKGROUND_AMOUNT+1; i++) {
       this.load.image(
         'background' + i,
         './assets/images/background' + i + '.png'
