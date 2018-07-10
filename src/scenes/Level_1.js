@@ -20,7 +20,6 @@ import {
 } from '../components/objects/Music';
 import {
   makeKeys,
-  makeFullScreen,
   gameOver,
   restartGame,
   newBackgroundArray,
@@ -57,9 +56,6 @@ export class Level_1 extends Scene {
     soundAdder(this);
     //makes music accessible to the scene
     musicAdder(this);
-
-    // Enables fullscreen on canvas click
-    makeFullScreen.call(this);
 
     // ===== Level Variables ===== //
     this.gameStart = true;
