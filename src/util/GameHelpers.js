@@ -9,6 +9,8 @@ import {
 import { songDecider, musicStopScene } from '../components/objects/Music';
 import { soundPlay } from '../components/objects/Sound';
 
+
+
 // ===== GAME LOGIC STUFF  ===== //
 
 export const makeKeys = function() {
@@ -27,36 +29,50 @@ export const makeKeys = function() {
 };
 
 export const makeFullScreen = function() {
-  let fullscreenFunc = true;
 
-  document.querySelector('#phaser').addEventListener('click', function() {
-    if (fullscreenFunc) {
-      fullscreenFunc();
-      fullscreenFunc = false;
+  const canvasEl        = document.querySelector('canvas');
+  const phaserContainer = document.querySelector('#phaser');
+  let isFullScreen      = false;
+
+  const fullscreenFunc = () => {
+    const { canvas, device: { fullscreen } } = this.sys.game;
+    canvas[fullscreen.request]();
+  };
+
+  const onFullScreenChange = () =>  {
+    const fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
+    if( !fullscreenElement ) {
+      cancelFullScreen()
     } else {
-      document.querySelector('canvas').style.height = '';
-      document.querySelector('canvas').style.margin = '25vh auto';
-      fullscreenFunc = true;
+      canvasEl.style.height = '80vh';
+      canvasEl.style.margin = '0';
     }
+  };
+
+  const cancelFullScreen = () => {
+    canvasEl.style.height = '';
+    isFullScreen = false;
+    canvasEl.style.margin = '25vh auto';
+  }
+
+
+  phaserContainer.addEventListener('click', () => {
+    if (!isFullScreen) {
+      fullscreenFunc();
+    } 
   });
 
-  this.input.on(
-    'pointerdown',
-    function(event) {
-      const canvas = this.sys.game.canvas;
-      const fullscreen = this.sys.game.device.fullscreen;
-      if (!fullscreen.available) {
-        return;
-      }
-      fullscreenFunc = function() {
-        canvas[fullscreen.request]();
-        document.querySelector('canvas').style.height = '80vh';
-        document.querySelector('canvas').style.margin = '0';
-      };
-    },
-    this
-  );
+  // === These are necessary cause JS doesn't detect fullscreen stuff normally === //
+  // === Plus all the different browsers have their own APIs for that ........ === //
+  if( document.addEventListener ) {
+    document.addEventListener("webkitfullscreenchange", () => onFullScreenChange(), false);
+    document.addEventListener("mozfullscreenchange", () => onFullScreenChange(), false);
+    document.addEventListener('MSFullscreenChange', () => onFullScreenChange(), false);
+    document.addEventListener("fullscreenchange", () => onFullScreenChange(), false);
+  }
+
 };
+
 
 //end the game
 export const gameOver = function() {
