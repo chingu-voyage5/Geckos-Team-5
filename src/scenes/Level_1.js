@@ -69,7 +69,7 @@ export class Level_1 extends Scene {
     if (this.registry.list.sessionAlive) {
       this.lives = this.registry.list.lives;
     } else {
-      this.lives = 5;
+      this.lives = 99;
       this.registry.set('SESSIONTIMER', 0);
     }
 
@@ -256,7 +256,7 @@ export class Level_1 extends Scene {
       this.bulletShowerCycle = 0;
       setTimeout(() => {
         this.resumeBulletShower();
-      }, 2500);
+      }, 5000);
     }
   }
 
