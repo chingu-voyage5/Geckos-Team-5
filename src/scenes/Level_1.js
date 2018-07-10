@@ -48,6 +48,8 @@ export class Level_1 extends Scene {
 
     this.bulletShowerTriggered = false;
     this.bulletShowerTimer;
+    this.bulletShowerCooldownTimer;
+    this.bulletShowerCycle = 0;
   }
 
   create() {
@@ -223,7 +225,7 @@ export class Level_1 extends Scene {
       }
     }
 
-    if (this.registry.list.TIMER[1] === 1 && !this.bulletShowerTriggered) {
+    if (this.registry.list.TIMER[3] === 1 && !this.bulletShowerTriggered) {
       this.triggerBulletShower();
     }
   }
@@ -247,6 +249,15 @@ export class Level_1 extends Scene {
       this.fireEnemyBullet(startX_left, 0, targetX_left);
       this.fireEnemyBullet(startX_right, 0, targetX_right);
     }
+
+    this.bulletShowerCycle++;
+    if (this.bulletShowerCycle === 4) {
+      this.pauseBulletShower();
+      this.bulletShowerCycle = 0;
+      setTimeout(() => {
+        this.resumeBulletShower();
+      }, 2500);
+    }
   }
 
   triggerBulletShower() {
@@ -258,7 +269,13 @@ export class Level_1 extends Scene {
       callbackScope: this,
       loop: true
     });
+  }
 
-    setTimeout(() => (this.bulletShowerTriggered = false), 1000);
+  pauseBulletShower() {
+    this.bulletShowerTimer.paused = true;
+  }
+
+  resumeBulletShower() {
+    this.bulletShowerTimer.paused = false;
   }
 }
