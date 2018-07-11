@@ -21,6 +21,7 @@ export class Preloader extends phaser.Scene {
     this.load.image('bullet', './assets/images/bullet.png');
     this.load.image('title', './assets/images/title.png');
     this.load.image('enemy-bullet', './assets/images/enemy-bullet.png');
+    this.load.image('pointdrop', './assets/images/pointdrop.png');
     this.load.image('platform', './assets/images/platform.png');
     this.load.image('heart', './assets/images/heart.png');
 

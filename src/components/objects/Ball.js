@@ -1,4 +1,5 @@
 import { soundAdder, soundPlay } from '../objects/Sound';
+import Pointdrop from '../objects/Pointdrop';
 
 export default class Ball extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
@@ -52,6 +53,11 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.additionY = 200;
     //multiplier for the x velocity
     this.multiplier = 10;
+
+    this.scene.points = this.scene.physics.add.group({
+      classType: Pointdrop,
+      runChildUpdate: true
+    });
   }
 
   update() {    
@@ -73,7 +79,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     soundPlay('sound_brick', brick.scene);
 
     //ads score and tracks bricks
-    this.addScore();
+    this.addScore(true);
 
     //disable the brick
     brick.disableBody(true, false);
@@ -84,6 +90,9 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       alpha: 0,
       duration: 300
     });
+
+    //drops the point with a probability of 25%
+    this.pointDropFunc(brick);
 
     //fires a homing bullet at the player, takes in the current hit brick
     this.fireBullet(brick);
@@ -187,10 +196,25 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  //drops the point with a probability of 25%
+  pointDropFunc(brick) {
+    //sets the probability of the point drop
+    let number = Math.floor(Math.random() * 8) + 1;
+    //fires the pointdrop
+    if (number == 8) {
+      let point = this.scene.points.get();
+      if (point) {
+        point.fire(brick.x, brick.y);
+      }
+    }
+  }
+
   //tracks the bricks and sets the score on brick hit
-  addScore() {
+  addScore(boolean) {
     //tracking the amount of bricks
-    this.scene.amountBricks--;
+    if (boolean == true) {
+      this.scene.amountBricks--;
+    }
 
     //setting the new score as the old score plus 100
     this.scene.registry.set('SCORE', this.scene.registry.list.SCORE + 100);
