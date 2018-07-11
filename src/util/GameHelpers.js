@@ -9,8 +9,6 @@ import {
 import { songDecider, musicStopScene } from '../components/objects/Music';
 import { soundPlay } from '../components/objects/Sound';
 
-
-
 // ===== GAME LOGIC STUFF  ===== //
 
 export const makeKeys = function() {
@@ -29,20 +27,25 @@ export const makeKeys = function() {
 };
 
 export const makeFullScreen = function() {
-
-  const canvasEl        = document.querySelector('canvas');
+  const canvasEl = document.querySelector('canvas');
   const phaserContainer = document.querySelector('#phaser');
-  let isFullScreen      = false;
+  let isFullScreen = false;
 
   const fullscreenFunc = () => {
-    const { canvas, device: { fullscreen } } = this.sys.game;
+    const {
+      canvas,
+      device: { fullscreen }
+    } = this.sys.game;
     canvas[fullscreen.request]();
   };
 
-  const onFullScreenChange = () =>  {
-    const fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
-    if( !fullscreenElement ) {
-      cancelFullScreen()
+  const onFullScreenChange = () => {
+    const fullscreenElement =
+      document.fullscreenElement ||
+      document.mozFullScreenElement ||
+      document.webkitFullscreenElement;
+    if (!fullscreenElement) {
+      cancelFullScreen();
     } else {
       canvasEl.style.height = '80vh';
       canvasEl.style.margin = '0';
@@ -53,26 +56,39 @@ export const makeFullScreen = function() {
     canvasEl.style.height = '';
     isFullScreen = false;
     canvasEl.style.margin = '25vh auto';
-  }
-
+  };
 
   phaserContainer.addEventListener('click', () => {
     if (!isFullScreen) {
       fullscreenFunc();
-    } 
+    }
   });
 
   // === These are necessary cause JS doesn't detect fullscreen stuff normally === //
   // === Plus all the different browsers have their own APIs for that ........ === //
-  if( document.addEventListener ) {
-    document.addEventListener("webkitfullscreenchange", () => onFullScreenChange(), false);
-    document.addEventListener("mozfullscreenchange", () => onFullScreenChange(), false);
-    document.addEventListener('MSFullscreenChange', () => onFullScreenChange(), false);
-    document.addEventListener("fullscreenchange", () => onFullScreenChange(), false);
+  if (document.addEventListener) {
+    document.addEventListener(
+      'webkitfullscreenchange',
+      () => onFullScreenChange(),
+      false
+    );
+    document.addEventListener(
+      'mozfullscreenchange',
+      () => onFullScreenChange(),
+      false
+    );
+    document.addEventListener(
+      'MSFullscreenChange',
+      () => onFullScreenChange(),
+      false
+    );
+    document.addEventListener(
+      'fullscreenchange',
+      () => onFullScreenChange(),
+      false
+    );
   }
-
 };
-
 
 //end the game
 export const gameOver = function() {
@@ -121,7 +137,7 @@ export const gameOver = function() {
     this.registry.set('SESSIONTIMER', 0);
   } else {
     this.registry.set('sessionAlive', true);
-    //add time bonus, set to 1200 - 100 points every 10 seconds
+    //add time bonus
     let timeBonus = 1200 - this.registry.list.TIMER[3] * 100;
     this.registry.set('SCORE', this.registry.list.SCORE + timeBonus);
 
@@ -130,7 +146,8 @@ export const gameOver = function() {
       WIDTH / 4,
       HEIGHT - 80,
       FONT,
-      '\nPress C to start next stage!',
+      `Stage Clear Bonus: ${timeBonus} 
+      Press C to start next stage!`,
       FONTSIZE
     );
   }
