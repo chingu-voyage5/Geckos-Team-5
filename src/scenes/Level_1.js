@@ -49,6 +49,7 @@ export class Level_1 extends Scene {
     this.bulletShowerTimer;
     this.bulletShowerCooldownTimer;
     this.bulletShowerCycle = 0;
+    this.isGameOver = false;
   }
 
   create() {
