@@ -76,7 +76,7 @@ export const makeFullScreen = function() {
 
 //end the game
 export const gameOver = function() {
-  this.isGameOver = true;
+  this.gameStart = true;
   nextBackground.call(this);
   // selects new brick pattern
   this.brickPatternNumber = patternNumber(this.brickPatternNumber);
@@ -161,7 +161,6 @@ export const restartGame = function() {
         this.registry.set('TIMER', [0, 0, ':', 0, 0, 0]);
         this.events.off();
         this.scene.restart();
-        this.isGameOver = false;
       },
       [],
       this

@@ -49,7 +49,6 @@ export class Level_1 extends Scene {
     this.bulletShowerTimer;
     this.bulletShowerCooldownTimer;
     this.bulletShowerCycle = 0;
-    this.isGameOver = false;
   }
 
   create() {
@@ -161,6 +160,7 @@ export class Level_1 extends Scene {
       this.gameStart = false;
       this.physics.world.resume();
       this.events.emit('resumeTimer');
+      this.ball.anims.resume();
     }
     // ===== BULLET ===== //
     if (
@@ -170,6 +170,7 @@ export class Level_1 extends Scene {
       pad.buttons[7].pressed
     ) {
       //makes the sound of the bullet
+      if( this.gameStart ) return;
       soundPlay('sound_bullet', this);
       let bullet = this.bullets.get();
       if (bullet) {
