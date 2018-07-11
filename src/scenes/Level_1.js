@@ -197,7 +197,9 @@ export class Level_1 extends Scene {
     ) {
       this.events.emit('pauseTimer');
       this.bulletShowerTriggered = false;
-      this.bulletShowerTimer.destroy();
+      if (this.bulletShowerTimer) {
+        this.bulletShowerTimer.destroy();
+      }
       gameOver.call(this);
     }
 
