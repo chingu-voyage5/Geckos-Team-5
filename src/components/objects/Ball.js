@@ -228,7 +228,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
 
   //adds a life if the score conditions are met 
   lifeGain() {
-    if (this.scene.registry.list.SCORE % 16000 === 0) {
+    if (this.scene.registry.list.SCORE % 8000 === 0) {
       this.config.scene.registry.set(
         'lives',
         this.config.scene.registry.list.lives + 1
