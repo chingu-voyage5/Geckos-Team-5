@@ -45,10 +45,12 @@ export class Level_1 extends Scene {
     //starts always at 1
     this.backgroundArrayIndex = 1;
 
+    // Define variables for controlling the bullet shower
     this.bulletShowerTriggered = false;
     this.bulletShowerTimer;
     this.bulletShowerCooldownTimer;
     this.bulletShowerCycle = 0;
+    this.bulletShowerAngle;
   }
 
   create() {
@@ -221,7 +223,7 @@ export class Level_1 extends Scene {
       }
     }
 
-    if (this.registry.list.TIMER[1] === 1 && !this.bulletShowerTriggered) {
+    if (this.registry.list.TIMER[3] === 1 && !this.bulletShowerTriggered) {
       this.triggerBulletShower();
     }
   }
@@ -234,16 +236,23 @@ export class Level_1 extends Scene {
   }
 
   createBulletShower() {
-    const section = WIDTH / 2 / 3;
-    for (let i = 0; i < 3; i++) {
-      const startX_left = section * i;
-      const targetX_left = startX_left + section;
+    // Set the spacing for each row of the bullet shower
+    const section = WIDTH / 10;
 
-      const startX_right = WIDTH - section * i;
-      const targetX_right = startX_right - section;
+    /* 
+      Set the number of rows for the bullet shower.
+      Showers fired straight down require an extra row or
+      they become to easier to dodge on the left side of the 
+      screen
+    */
+    const numRows = this.bulletShowerAngle === 1 ? 11 : 10;
+    for (let i = 0; i < numRows; i++) {
+      const startX = section * i + (this.bulletShowerAngle === 0 ? 0 : this.bulletShowerAngle === 1 ? section / 2 : section);
 
-      this.fireEnemyBullet(startX_left, 0, targetX_left);
-      this.fireEnemyBullet(startX_right, 0, targetX_right);
+      // Change the direction in which the bullet is fired based on the angle.
+      const targetX = startX + section * (this.bulletShowerAngle === 2 ? -1 : this.bulletShowerAngle === 0 ? 1 : 0);
+
+      this.fireEnemyBullet(startX, 0, targetX);
     }
 
     this.bulletShowerCycle++;
@@ -256,8 +265,12 @@ export class Level_1 extends Scene {
     }
   }
 
+  /* 
+    Create the time event for the bullet shower and 
+  */
   triggerBulletShower() {
     this.bulletShowerTriggered = true;
+    this.setWaveAngle();
 
     this.bulletShowerTimer = this.time.addEvent({
       delay: 800,
@@ -272,6 +285,19 @@ export class Level_1 extends Scene {
   }
 
   resumeBulletShower() {
+    this.setWaveAngle();
     this.bulletShowerTimer.paused = false;
+  }
+
+  setWaveAngle() {
+    /* 
+      Set angle of bullet shower to one of three options:
+       - 0: Left-to-right
+       - 1: No angle (straight down)
+       - 2: Right-to-left
+    */
+
+    this.bulletShowerAngle = Math.floor(Math.random() * 3);
+    console.log(this.bulletShowerAngle);
   }
 }
