@@ -45,9 +45,8 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
       tint: 0xf44253,
       blendMode: 'ADD'
     });
-    this.scene.enemyBullets
-      .getChildren()
-      .forEach(bullet => emitter.startFollow(bullet));
+
+    emitter.startFollow(this);
 
     this.scene.time.delayedCall(1000, function() {
       emitter.visible = false;
