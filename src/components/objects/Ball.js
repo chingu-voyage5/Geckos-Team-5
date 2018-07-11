@@ -61,7 +61,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   }
 
   update() {    
-    if( this.config.scene.gameStart ) return this.anims.pause();
+    if( this.config.scene.isGameOver ) return this.anims.pause();
     //necessary variable to override the strange collider velocity behavior
     this.currentVelocY = this.body.velocity.y;
 

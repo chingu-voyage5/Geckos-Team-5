@@ -47,7 +47,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   update(keys, time, delta) {
-    if( this.scene.gameStart ) return this.anims.play('turn');
+    if( this.scene.isGameOver ) return this.anims.play('turn');
     let pad = checkGamepad.call(this.scene);
     let input = {
       left:

@@ -92,7 +92,7 @@ export const makeFullScreen = function() {
 
 //end the game
 export const gameOver = function() {
-  this.gameStart = true;
+  this.isGameOver = true;
   nextBackground.call(this);
   // selects new brick pattern
   this.brickPatternNumber = patternNumber(this.brickPatternNumber);
