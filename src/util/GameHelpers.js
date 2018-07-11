@@ -121,7 +121,10 @@ export const gameOver = function() {
     this.registry.set('SESSIONTIMER', 0);
   } else {
     this.registry.set('sessionAlive', true);
-    //game win sound
+    //add time bonus, set to 1200 - 100 points every 10 seconds
+    let timeBonus = 1200 - this.registry.list.TIMER[3] * 100;
+    this.registry.set('SCORE', this.registry.list.SCORE + timeBonus);
+
     soundPlay('sound_gamewin', this);
     this.add.bitmapText(
       WIDTH / 4,
