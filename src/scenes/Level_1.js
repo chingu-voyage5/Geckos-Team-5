@@ -51,6 +51,7 @@ export class Level_1 extends Scene {
     this.bulletShowerCooldownTimer;
     this.bulletShowerCycle = 0;
     this.bulletShowerAngle;
+    this.bulletShowerDelay;
   }
 
   create() {
@@ -59,12 +60,19 @@ export class Level_1 extends Scene {
     //makes music accessible to the scene
     musicAdder(this);
 
+    this.bulletShowerDelay = this.registry.list.bulletShowerDelay
+      ? this.registry.list.bulletShowerDelay
+      : 5000;
+
     // ===== Level Variables ===== //
     this.gameStart = true;
     this.amountBricks = 0; //will later contain the number of bricks
     this.isPlayerAlive = true;
 
     if (this.registry.list.sessionAlive) {
+      if (this.bulletShowerDelay > 1500) {
+        this.registry.set('bulletShowerDelay', this.bulletShowerDelay - 350);
+      }
       this.lives = this.registry.list.lives;
     } else {
       this.lives = 5;
@@ -188,9 +196,8 @@ export class Level_1 extends Scene {
       (this.amountBricks === 0 && this.isPlayerAlive)
     ) {
       this.events.emit('pauseTimer');
-      if (this.bulletShowerTimer) {
-        this.bulletShowerTimer.paused = true;
-      }
+      this.bulletShowerTriggered = false;
+      this.bulletShowerTimer.destroy();
       gameOver.call(this);
     }
 
@@ -223,7 +230,7 @@ export class Level_1 extends Scene {
       }
     }
 
-    if (this.registry.list.TIMER[3] === 1 && !this.bulletShowerTriggered) {
+    if (this.registry.list.TIMER[1] === 1 && !this.bulletShowerTriggered) {
       this.triggerBulletShower();
     }
   }
@@ -247,10 +254,23 @@ export class Level_1 extends Scene {
     */
     const numRows = this.bulletShowerAngle === 1 ? 11 : 10;
     for (let i = 0; i < numRows; i++) {
-      const startX = section * i + (this.bulletShowerAngle === 0 ? 0 : this.bulletShowerAngle === 1 ? section / 2 : section);
+      const startX =
+        section * i +
+        (this.bulletShowerAngle === 0
+          ? 0
+          : this.bulletShowerAngle === 1
+            ? section / 2
+            : section);
 
       // Change the direction in which the bullet is fired based on the angle.
-      const targetX = startX + section * (this.bulletShowerAngle === 2 ? -1 : this.bulletShowerAngle === 0 ? 1 : 0);
+      const targetX =
+        startX +
+        section *
+          (this.bulletShowerAngle === 2
+            ? -1
+            : this.bulletShowerAngle === 0
+              ? 1
+              : 0);
 
       this.fireEnemyBullet(startX, 0, targetX);
     }
@@ -261,7 +281,7 @@ export class Level_1 extends Scene {
       this.bulletShowerCycle = 0;
       setTimeout(() => {
         this.resumeBulletShower();
-      }, 5000);
+      }, this.bulletShowerDelay);
     }
   }
 
@@ -298,6 +318,5 @@ export class Level_1 extends Scene {
     */
 
     this.bulletShowerAngle = Math.floor(Math.random() * 3);
-    console.log(this.bulletShowerAngle);
   }
 }
