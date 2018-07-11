@@ -95,31 +95,35 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       this.multiplier = 10;
       this.additionY = 200;
     } else { //everything happening with the player
+      setTimeout(() => {
 
-      //makes a sound on ball hitting the object
-      soundPlay('sound_ballplayer', object.scene);
+        //makes a sound on ball hitting the object
+        soundPlay('sound_ballplayer', object.scene);
 
-      //the velocity changes for the swortd strike
-      if (object.anims.currentAnim.key == 'sword') {
-        this.multiplier = 10;
-        this.additionY = 200;
-      }
-      //the velocity changes for the slide strike
-      else if (object.anims.currentAnim.key == 'slide') {
-        this.multiplier = 10;
-        this.additionY = 250;
-      }
-      //the velocity changes for hitting the object
-      else {
-        this.multiplier = 7;
-        this.additionY = 0;
-        //takes away a life from the player, playes the sound and sets the invincibilty
-        this.takeLife(object);
+        //the velocity changes for the swortd strike
+        if (object.anims.currentAnim.key == 'sword') {
+          this.multiplier = 10;
+          this.additionY = 200;
+        }
+        //the velocity changes for the slide strike
+        else if (object.anims.currentAnim.key == 'slide') {
+          this.multiplier = 10;
+          this.additionY = 250;
+        }
+        //the velocity changes for hitting the object
+        else {
+          this.multiplier = 7;
+          this.additionY = 0;
+          //takes away a life from the player, playes the sound and sets the invincibilty
+          this.takeLife(object);
 
-        //allows the ball to travel faster if than the max veloc of 150
-        //fixes the bug where the ball is stuck on the player
-        this.velocityAdjusterX();
-      }
+          //allows the ball to travel faster if than the max veloc of 150
+          //fixes the bug where the ball is stuck on the player
+          this.velocityAdjusterX();
+        }
+
+      }, 70);
+      
     }
 
     //starts the process of calculating the new velocity for the ball after being hit
