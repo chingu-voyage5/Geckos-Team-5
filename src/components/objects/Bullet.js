@@ -50,9 +50,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
       blendMode: 'ADD'
     });
 
-    this.scene.bullets
-      .getChildren()
-      .forEach(bullet => emitter.startFollow(bullet));
+    emitter.startFollow(this);
 
     this.scene.time.delayedCall(300, function() {
       emitter.visible = false;
