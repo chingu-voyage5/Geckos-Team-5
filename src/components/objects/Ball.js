@@ -199,13 +199,16 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
 
   //drops the point with a probability of 25%
   pointDropFunc(brick) {
-    //sets the probability of the point drop
-    let number = Math.floor(Math.random() * 8) + 1;
-    //fires the pointdrop
-    if (number == 8) {
-      let point = this.scene.points.get();
-      if (point) {
-        point.fire(brick.x, brick.y);
+    if (this.scene.amountBricks == 0) { }
+    else {
+      //sets the probability of the point drop
+      let number = Math.floor(Math.random() * 8) + 1;
+      //fires the pointdrop
+      if (number == 8) {
+        let point = this.scene.points.get();
+        if (point) {
+          point.fire(brick.x, brick.y);
+        }
       }
     }
   }
@@ -226,7 +229,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
 
   //adds a life if the score conditions are met 
   lifeGain() {
-    if (this.scene.registry.list.SCORE % 16000 === 0) {
+    if (this.scene.registry.list.SCORE % 8000 === 0) {
       this.config.scene.registry.set(
         'lives',
         this.config.scene.registry.list.lives + 1

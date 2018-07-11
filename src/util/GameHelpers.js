@@ -144,10 +144,12 @@ export const gameOver = function() {
 
     soundPlay('sound_gamewin', this);
     this.add.bitmapText(
-      WIDTH / 4,
-      HEIGHT - 80,
+      50,
+      HEIGHT - 110,
       FONT,
-      `Stage Clear Bonus: ${timeBonus} 
+      `
+      Stage Clear Bonus: ${timeBonus}
+      Score until life increase: ${8000 - (this.registry.list.SCORE % 8000)}
       Press C to start next stage!`,
       FONTSIZE
     );
