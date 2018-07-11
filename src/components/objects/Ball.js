@@ -92,7 +92,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     });
 
     //drops the point with a probability of 25%
-    this.pointDropFunc();
+    this.pointDropFunc(brick);
 
     //fires a homing bullet at the player, takes in the current hit brick
     this.fireBullet(brick);
@@ -193,7 +193,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   }
 
   //drops the point with a probability of 25%
-  pointDropFunc() {
+  pointDropFunc(brick) {
     let number = Math.floor(Math.random() * 4) + 1;
     if (number == 4) {
       let point = this.scene.points.get();
