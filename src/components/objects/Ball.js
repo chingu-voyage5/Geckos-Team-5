@@ -195,9 +195,9 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   //drops the point with a probability of 25%
   pointDropFunc(brick) {
     //sets the probability of the point drop
-    let number = Math.floor(Math.random() * 4) + 1;
+    let number = Math.floor(Math.random() * 8) + 1;
     //fires the pointdrop
-    if (number == 4) {
+    if (number == 8) {
       let point = this.scene.points.get();
       if (point) {
         point.fire(brick.x, brick.y);
