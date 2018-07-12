@@ -45,8 +45,19 @@ export class Level_1 extends Scene {
     //starts always at 1
     this.backgroundArrayIndex = 1;
 
+    /* 
+      Define variables for controlling the bullet shower:
+       - `bulletShowerTriggered` for determining the current state of the bullet shower
+       - `bulletShowerTimer` for holding the `TimerEvent` that controls the bullet shower
+       - `bulletWaveCycle` for determining which wave cycle the bullet shower is currently on
+       - `bulletCycleDelay` for determining the delay between cycles
+       - `bulletShowerDelay` for determining the delay before the bullet shower is triggered
+    */
     this.bulletShowerTriggered = false;
     this.bulletShowerTimer;
+    this.bulletWaveCycle = 0;
+    this.bulletCycleDelay;
+    this.bulletShowerDelay;
     this.bulletShowerCooldownTimer;
     this.bulletShowerCycle = 0;
     this.isGameOver = false;
@@ -58,12 +69,25 @@ export class Level_1 extends Scene {
     //makes music accessible to the scene
     musicAdder(this);
 
+    this.bulletCycleDelay = this.registry.list.bulletCycleDelay
+      ? this.registry.list.bulletCycleDelay
+      : 5000;
+    this.bulletShowerDelay = this.registry.list.bulletShowerDelay
+      ? this.registry.list.bulletShowerDelay
+      : 60;
+
     // ===== Level Variables ===== //
     this.gameStart = true;
     this.amountBricks = 0; //will later contain the number of bricks
     this.isPlayerAlive = true;
 
     if (this.registry.list.sessionAlive) {
+      if (this.bulletCycleDelay > 1500) {
+        this.registry.set('bulletShowerDelay', this.bulletCycleDelay - 350);
+      }
+      if (this.bulletShowerDelay > 20) {
+        this.registry.set('bulletWaveDelay', this.bulletShowerDelay - 10);
+      }
       this.lives = this.registry.list.lives;
     } else {
       this.lives = 5;
@@ -190,8 +214,9 @@ export class Level_1 extends Scene {
       (this.amountBricks === 0 && this.isPlayerAlive)
     ) {
       this.events.emit('pauseTimer');
+      this.bulletShowerTriggered = false;
       if (this.bulletShowerTimer) {
-        this.bulletShowerTimer.paused = true;
+        this.bulletShowerTimer.destroy();
       }
       gameOver.call(this);
     }
@@ -225,7 +250,13 @@ export class Level_1 extends Scene {
       }
     }
 
-    if (this.registry.list.TIMER[1] === 1 && !this.bulletShowerTriggered) {
+    const showerFlag =
+      this.bulletShowerDelay === 60
+        ? this.registry.list.TIMER[1] === 1
+        : this.registry.list.TIMER[3] ===
+          parseInt(`${this.bulletShowerDelay}`.charAt(0));
+
+    if (showerFlag && !this.bulletShowerTriggered) {
       this.triggerBulletShower();
     }
   }
@@ -238,28 +269,84 @@ export class Level_1 extends Scene {
   }
 
   createBulletShower() {
-    const section = WIDTH / 2 / 3;
-    for (let i = 0; i < 3; i++) {
-      const startX_left = section * i;
-      const targetX_left = startX_left + section;
+    // Set the spacing for each row of the bullet shower
+    const section = WIDTH / 12;
 
-      const startX_right = WIDTH - section * i;
-      const targetX_right = startX_right - section;
+    for (let i = 0; i < 10; i++) {
+      // get the angle at which the bullet is fired
+      const angle = this.getBulletAngle();
 
-      this.fireEnemyBullet(startX_left, 0, targetX_left);
-      this.fireEnemyBullet(startX_right, 0, targetX_right);
+      // get the x-coordinate from which the bullet is fired
+      const startX = this.getStartingX(section, angle, i);
+
+      // get the x-coordinate to which the bullet will be fired
+      const targetX = this.getTargetX(startX, section, angle);
+      this.fireEnemyBullet(startX, 0, targetX);
     }
 
-    this.bulletShowerCycle++;
-    if (this.bulletShowerCycle === 4) {
+    this.bulletWaveCycle++;
+
+    /*
+      reset the wave cycle counter every 4 cycles to
+      indicate that the wave is complete, and put the
+      bullet shower on a cooldown of `this.bulletCycleDelay` seconds
+    */
+    if (this.bulletWaveCycle === 4) {
       this.pauseBulletShower();
-      this.bulletShowerCycle = 0;
+      this.bulletWaveCycle = 0;
       setTimeout(() => {
         this.resumeBulletShower();
-      }, 5000);
+      }, this.bulletCycleDelay);
     }
   }
 
+  getBulletAngle() {
+    /* 
+      Set angle of bullet to one of three options:
+       - 0: Left-to-right
+       - 1: No angle (straight down)
+       - 2: Right-to-left
+    */
+
+    return Math.floor(Math.random() * 3);
+  }
+
+  /* 
+    For the bullet shower, the screen is divided
+    into 12 segments (1.e. `section`)
+    of  `WITDH`/12 pixels wide. 
+    10 columns of bullets will be fired,
+    starting at `section pixels to the left of
+    the edge of the canvas to `WIDTH - section` pixels
+    from the right of the screen.
+    Each bullet will have it's origin at `section * column` pixels
+    from the left of the screen, from which it will either 
+    be shifted to the left or to the right
+  */
+
+  getStartingX(section, angle, column) {
+    // Set the range of possible values for the x-shift of the bullet
+    const range = section / 2;
+
+    // Generate a number between `-1 * range / 2` to `range / 2`
+    const shift = Math.random() * range - range / 2;
+    return (
+      section +
+      section * column +
+      (angle === 0 ? 0 : angle === 1 ? section / 2 : section) +
+      shift
+    );
+  }
+
+  getTargetX(startX, section, angle) {
+    const range = section / 2;
+    const shift = Math.random() * range - range / 2;
+    return startX + section * (angle === 2 ? -1 : angle === 0 ? 1 : 0) + shift;
+  }
+
+  /* 
+    Create the time event for the bullet shower and 
+  */
   triggerBulletShower() {
     this.bulletShowerTriggered = true;
 
