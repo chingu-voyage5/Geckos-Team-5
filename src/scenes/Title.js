@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import { WIDTH, HEIGHT, FONT, FONTSIZE } from '../util/constants';
 import { musicStart, musicStop, musicStopScene, musicAdder } from '../components/objects/Music';
+import { lightAdder } from '../components/objects/Light';
 import { checkGamepad } from '../util/constants';
 
 export class Title extends Scene {
@@ -11,6 +12,7 @@ export class Title extends Scene {
   }
 
   create() {
+    
     //makes music accessible to the scene
     musicAdder(this);
 
@@ -19,6 +21,7 @@ export class Title extends Scene {
       160,
       'title'
     );
+    lightAdder(this.image, this);
 
     //either creates the registry entries for music or if it is opened from other scenes, playes music if music is activated
     if (this.registry.list.musicControl) {
