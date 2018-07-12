@@ -21,7 +21,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.fireButtonDown = false;
     this.attackButtonDown = false;
     this.isInvincible = false;
-    this.gameStart = true;
 
     this.emitter = this.scene.add.particles('bullet').createEmitter({
       x: this.x,
@@ -110,7 +109,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
     // Do nothing, 0 frame sprite ===== //
     else {
-      if (!this.isAttackingUp && !this.isAttacking) {
+      if (!this.isAttackingUp) {
         this.body.setVelocityX(0);
         this.anims.play('turn');
       }
@@ -125,8 +124,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
    */
   playAnimationDirection(input, flipX, velocityX) {
     this.body.setVelocityX(velocityX);
-    if (!this.anims.currentAnim.key == 'sword') {
-    }
     this.flipX = flipX;
 
     // ===== Check to see if we should swing sword ===== //
