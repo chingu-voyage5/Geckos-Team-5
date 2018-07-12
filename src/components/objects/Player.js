@@ -47,6 +47,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   update(keys, time, delta) {
+    if( this.scene.isGameOver ) return this.anims.play('turn');
     let pad = checkGamepad.call(this.scene);
     let input = {
       left:
@@ -55,26 +56,23 @@ export default class Player extends Phaser.GameObjects.Sprite {
         keys.right.isDown || pad.buttons[15].pressed || pad.axes[0].value > 0.1,
       down:
         keys.down.isDown || pad.buttons[13].pressed || pad.axes[1].value > 0,
-      slide: 
-        Phaser.Input.Keyboard.JustDown(keys.slide) || pad.buttons[0].pressed, 
-        //changed to justdown to prevent key spam
+      slide:
+        Phaser.Input.Keyboard.JustDown(keys.slide) || pad.buttons[0].pressed,
+      //changed to justdown to prevent key spam
       attack:
-        Phaser.Input.Keyboard.JustDown(keys.attack) || pad.buttons[2].pressed || pad.buttons[6].pressed, 
-        //changed to justdown to prevent key spam
-      fire: 
-        keys.fire.isDown || pad.buttons[1].pressed,
-      bomb: 
-        keys.bomb.isDown || pad.buttons[3].pressed,
-      esc: 
-        keys.esc.isDown || pad.buttons[9].pressed,
-      attackIsUp: 
-        keys.attack.isUp,
-      fireIsUp: 
-        keys.fire.isUp
+        Phaser.Input.Keyboard.JustDown(keys.attack) ||
+        pad.buttons[2].pressed ||
+        pad.buttons[6].pressed,
+      //changed to justdown to prevent key spam
+      fire: keys.fire.isDown || pad.buttons[1].pressed,
+      bomb: keys.bomb.isDown || pad.buttons[3].pressed,
+      esc: keys.esc.isDown || pad.buttons[9].pressed,
+      attackIsUp: keys.attack.isUp,
+      fireIsUp: keys.fire.isUp
     };
 
     // ===== Attack Up if no arrow keys are pressed while attacking ===== //
-    if (!input.left && !input.right && input.attack && !this.attackButtonDown) {
+    if (input.attack && !this.attackButtonDown) {
       this.emitter.active = true;
       this.emitter.explode(5, this.x, this.y - 15);
       this.anims.play('sword', true);
@@ -94,14 +92,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     // ===== Move left ===== //
-    if (input.left) {
+    if (input.left && !this.attackButtonDown) {
       this.playAnimationDirection.call(this, input, false, -160);
     }
 
     // ===== Move right ===== //
     // ===== Need to flip frames on x axis. Sprites dont have moving to the right frames ===== //
     // ===== All same logic as above, but backwards ===== //
-    else if (input.right) {
+    else if (input.right && !this.attackButtonDown) {
       this.playAnimationDirection.call(this, input, true, 160);
     }
     // ===== Jump ===== //

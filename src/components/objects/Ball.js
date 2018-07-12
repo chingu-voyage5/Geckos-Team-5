@@ -1,4 +1,5 @@
 import { soundAdder, soundPlay } from '../objects/Sound';
+import Pointdrop from '../objects/Pointdrop';
 
 export default class Ball extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
@@ -52,9 +53,15 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.additionY = 200;
     //multiplier for the x velocity
     this.multiplier = 10;
+
+    this.scene.points = this.scene.physics.add.group({
+      classType: Pointdrop,
+      runChildUpdate: true
+    });
   }
 
   update() {    
+    if( this.config.scene.isGameOver ) return this.anims.pause();
     //necessary variable to override the strange collider velocity behavior
     this.currentVelocY = this.body.velocity.y;
 
@@ -73,7 +80,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     soundPlay('sound_brick', brick.scene);
 
     //ads score and tracks bricks
-    this.addScore();
+    this.addScore(true);
 
     //disable the brick
     brick.disableBody(true, false);
@@ -85,6 +92,9 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       duration: 300
     });
 
+    //drops the point with a probability of 25%
+    this.pointDropFunc(brick);
+
     //fires a homing bullet at the player, takes in the current hit brick
     this.fireBullet(brick);
   }
@@ -95,31 +105,35 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       this.multiplier = 10;
       this.additionY = 200;
     } else { //everything happening with the player
+      setTimeout(() => {
 
-      //makes a sound on ball hitting the object
-      soundPlay('sound_ballplayer', object.scene);
+        //makes a sound on ball hitting the object
+        soundPlay('sound_ballplayer', object.scene);
 
-      //the velocity changes for the swortd strike
-      if (object.anims.currentAnim.key == 'sword') {
-        this.multiplier = 10;
-        this.additionY = 200;
-      }
-      //the velocity changes for the slide strike
-      else if (object.anims.currentAnim.key == 'slide') {
-        this.multiplier = 10;
-        this.additionY = 250;
-      }
-      //the velocity changes for hitting the object
-      else {
-        this.multiplier = 7;
-        this.additionY = 0;
-        //takes away a life from the player, playes the sound and sets the invincibilty
-        this.takeLife(object);
+        //the velocity changes for the swortd strike
+        if (object.anims.currentAnim.key == 'sword') {
+          this.multiplier = 10;
+          this.additionY = 200;
+        }
+        //the velocity changes for the slide strike
+        else if (object.anims.currentAnim.key == 'slide') {
+          this.multiplier = 10;
+          this.additionY = 250;
+        }
+        //the velocity changes for hitting the object
+        else {
+          this.multiplier = 7;
+          this.additionY = 0;
+          //takes away a life from the player, playes the sound and sets the invincibilty
+          this.takeLife(object);
 
-        //allows the ball to travel faster if than the max veloc of 150
-        //fixes the bug where the ball is stuck on the player
-        this.velocityAdjusterX();
-      }
+          //allows the ball to travel faster if than the max veloc of 150
+          //fixes the bug where the ball is stuck on the player
+          this.velocityAdjusterX();
+        }
+
+      }, 70);
+      
     }
 
     //starts the process of calculating the new velocity for the ball after being hit
@@ -183,10 +197,28 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  //drops the point with a probability of 25%
+  pointDropFunc(brick) {
+    if (this.scene.amountBricks == 0) { }
+    else {
+      //sets the probability of the point drop
+      let number = Math.floor(Math.random() * 8) + 1;
+      //fires the pointdrop
+      if (number == 8) {
+        let point = this.scene.points.get();
+        if (point) {
+          point.fire(brick.x, brick.y);
+        }
+      }
+    }
+  }
+
   //tracks the bricks and sets the score on brick hit
-  addScore() {
+  addScore(boolean) {
     //tracking the amount of bricks
-    this.scene.amountBricks--;
+    if (boolean == true) {
+      this.scene.amountBricks--;
+    }
 
     //setting the new score as the old score plus 100
     this.scene.registry.set('SCORE', this.scene.registry.list.SCORE + 100);
@@ -197,7 +229,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
 
   //adds a life if the score conditions are met 
   lifeGain() {
-    if (this.scene.registry.list.SCORE % 16000 === 0) {
+    if (this.scene.registry.list.SCORE % 8000 === 0) {
       this.config.scene.registry.set(
         'lives',
         this.config.scene.registry.list.lives + 1
