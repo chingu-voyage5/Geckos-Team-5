@@ -45,12 +45,18 @@ export class Level_1 extends Scene {
     //starts always at 1
     this.backgroundArrayIndex = 1;
 
-    // Define variables for controlling the bullet shower
+    /* 
+      Define variables for controlling the bullet shower:
+       - `bulletShowerTriggered` for determining the current state of the bullet shower
+       - `bulletShowerTimer` for holding the `TimerEvent` that controls the bullet shower
+       - `bulletWaveCycle` for determining which wave cycle the bullet shower is currently on
+       - `bulletCycleDelay` for determining the delay between cycles
+       - `bulletShowerDelay` for determining the delay before the bullet shower is triggered
+    */
     this.bulletShowerTriggered = false;
     this.bulletShowerTimer;
-    this.bulletShowerCooldownTimer;
-    this.bulletShowerCycle = 0;
-    this.bulletShowerAngle;
+    this.bulletWaveCycle = 0;
+    this.bulletCycleDelay;
     this.bulletShowerDelay;
   }
 
@@ -60,9 +66,12 @@ export class Level_1 extends Scene {
     //makes music accessible to the scene
     musicAdder(this);
 
+    this.bulletCycleDelay = this.registry.list.bulletCycleDelay
+      ? this.registry.list.bulletCycleDelay
+      : 5000;
     this.bulletShowerDelay = this.registry.list.bulletShowerDelay
       ? this.registry.list.bulletShowerDelay
-      : 5000;
+      : 60;
 
     // ===== Level Variables ===== //
     this.gameStart = true;
@@ -70,8 +79,11 @@ export class Level_1 extends Scene {
     this.isPlayerAlive = true;
 
     if (this.registry.list.sessionAlive) {
-      if (this.bulletShowerDelay > 1500) {
-        this.registry.set('bulletShowerDelay', this.bulletShowerDelay - 350);
+      if (this.bulletCycleDelay > 1500) {
+        this.registry.set('bulletShowerDelay', this.bulletCycleDelay - 350);
+      }
+      if (this.bulletShowerDelay > 20) {
+        this.registry.set('bulletWaveDelay', this.bulletShowerDelay - 10);
       }
       this.lives = this.registry.list.lives;
     } else {
@@ -277,10 +289,10 @@ export class Level_1 extends Scene {
       this.fireEnemyBullet(startX, 0, targetX);
     }
 
-    this.bulletShowerCycle++;
-    if (this.bulletShowerCycle === 4) {
+    this.bulletWaveCycle++;
+    if (this.bulletWaveCycle === 4) {
       this.pauseBulletShower();
-      this.bulletShowerCycle = 0;
+      this.bulletWaveCycle = 0;
       setTimeout(() => {
         this.resumeBulletShower();
       }, this.bulletShowerDelay);
