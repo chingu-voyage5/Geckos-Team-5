@@ -92,7 +92,6 @@ export const makeFullScreen = function() {
 
 //end the game
 export const gameOver = function() {
-  this.isGameOver = true;
   nextBackground.call(this);
   // selects new brick pattern
   this.brickPatternNumber = patternNumber(this.brickPatternNumber);
@@ -109,7 +108,7 @@ export const gameOver = function() {
   this.time.delayedCall(
     250,
     () => {
-      this.physics.world.pause();
+      pauseGame.call(this, [ this.ball, this.player ])
     },
     [],
     this
