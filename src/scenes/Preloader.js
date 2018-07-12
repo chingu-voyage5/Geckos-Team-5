@@ -19,7 +19,7 @@ export class Preloader extends phaser.Scene {
     }
     this.load.bitmapFont('pokemon_classic', './assets/bitmap_fonts/pokemon_classic.png', './assets/bitmap_fonts/pokemon_classic.xml');
     this.load.image('bullet', './assets/images/bullet.png');
-    this.load.image('title', './assets/images/title.png');
+    this.load.image('title', ['./assets/images/title.png', './assets/images/title_n.png']);
     this.load.image('enemy-bullet', './assets/images/enemy-bullet.png');
     this.load.image('pointdrop', './assets/images/pointdrop.png');
     this.load.image('platform', './assets/images/platform.png');
