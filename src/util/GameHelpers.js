@@ -190,6 +190,12 @@ export const restartGame = function() {
   }
 };
 
+
+export const pauseGame = function( args ) {
+    [ ...args ].forEach( arg => args.anims.pause() )
+    this.physics.world.pause();
+}
+
 //brick pattern numbers
 export const patternNumber = function(oldNumber) {
   let number = Math.floor(Math.random() * 6) + 1;

@@ -22,6 +22,7 @@ import {
   makeKeys,
   gameOver,
   restartGame,
+  pauseGame,
   newBackgroundArray,
   patternNumber
 } from '../util/GameHelpers';
@@ -224,14 +225,32 @@ export class Level_1 extends Scene {
     if (!this.isPlayerAlive) {
       restartGame.call(this);
     }
+
+    // === Pause game if player hits escape one time === //
     if (
       Phaser.Input.Keyboard.JustDown(this.keys.esc) ||
       pad.buttons[9].pressed
     ) {
-      this.scene.start('Title');
-      musicStopScene(this.currentSong.toString(), this);
-      this.scene.stop('Level_1');
-      this.scene.stop('UIScene');
+
+      if( !this.isPaused ) {
+
+        this.isPaused = true;
+        pauseGame.call(this, [ this.ball, this.player ])
+        this.add.bitmapText(
+          50,
+          HEIGHT - 110,
+          FONT,
+          `
+          Score until life increase: ${8000 - (this.registry.list.SCORE % 8000)}
+          Press Escape to return to Title Screen`,
+          FONTSIZE
+        );
+      } else {
+        this.isPaused = false;
+        this.scene.start('Title');
+        this.scene.stop('Level_1');
+        musicStopScene(this.currentSong.toString(), this);
+      }
     }
 
     //music start stop
