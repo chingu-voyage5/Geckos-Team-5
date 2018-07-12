@@ -244,7 +244,13 @@ export class Level_1 extends Scene {
       }
     }
 
-    if (this.registry.list.TIMER[1] === 1 && !this.bulletShowerTriggered) {
+    const showerFlag =
+      this.bulletShowerDelay === 60
+        ? this.registry.list.TIMER[1] === 1
+        : this.registry.list.TIMER[3] ===
+          parseInt(`${this.bulletShowerDelay}`.charAt(0));
+
+    if (showerFlag && !this.bulletShowerTriggered) {
       this.triggerBulletShower();
     }
   }
@@ -258,45 +264,78 @@ export class Level_1 extends Scene {
 
   createBulletShower() {
     // Set the spacing for each row of the bullet shower
-    const section = WIDTH / 10;
+    const section = WIDTH / 12;
 
-    /* 
-      Set the number of rows for the bullet shower.
-      Showers fired straight down require an extra row or
-      they become to easier to dodge on the left side of the 
-      screen
-    */
-    const numRows = this.bulletShowerAngle === 1 ? 11 : 10;
-    for (let i = 0; i < numRows; i++) {
-      const startX =
-        section * i +
-        (this.bulletShowerAngle === 0
-          ? 0
-          : this.bulletShowerAngle === 1
-            ? section / 2
-            : section);
+    for (let i = 0; i < 10; i++) {
+      // get the angle at which the bullet is fired
+      const angle = this.getBulletAngle();
 
-      // Change the direction in which the bullet is fired based on the angle.
-      const targetX =
-        startX +
-        section *
-          (this.bulletShowerAngle === 2
-            ? -1
-            : this.bulletShowerAngle === 0
-              ? 1
-              : 0);
+      // get the x-coordinate from which the bullet is fired
+      const startX = this.getStartingX(section, angle, i);
 
+      // get the x-coordinate to which the bullet will be fired
+      const targetX = this.getTargetX(startX, section, angle);
       this.fireEnemyBullet(startX, 0, targetX);
     }
 
     this.bulletWaveCycle++;
+
+    /*
+      reset the wave cycle counter every 4 cycles to
+      indicate that the wave is complete, and put the
+      bullet shower on a cooldown of `this.bulletCycleDelay` seconds
+    */
     if (this.bulletWaveCycle === 4) {
       this.pauseBulletShower();
       this.bulletWaveCycle = 0;
       setTimeout(() => {
         this.resumeBulletShower();
-      }, this.bulletShowerDelay);
+      }, this.bulletCycleDelay);
     }
+  }
+
+  getBulletAngle() {
+    /* 
+      Set angle of bullet to one of three options:
+       - 0: Left-to-right
+       - 1: No angle (straight down)
+       - 2: Right-to-left
+    */
+
+    return Math.floor(Math.random() * 3);
+  }
+
+  /* 
+    For the bullet shower, the screen is divided
+    into 12 segments (1.e. `section`)
+    of  `WITDH`/12 pixels wide. 
+    10 columns of bullets will be fired,
+    starting at `section pixels to the left of
+    the edge of the canvas to `WIDTH - section` pixels
+    from the right of the screen.
+    Each bullet will have it's origin at `section * column` pixels
+    from the left of the screen, from which it will either 
+    be shifted to the left or to the right
+  */
+
+  getStartingX(section, angle, column) {
+    // Set the range of possible values for the x-shift of the bullet
+    const range = section / 2;
+
+    // Generate a number between `-1 * range / 2` to `range / 2`
+    const shift = Math.random() * range - range / 2;
+    return (
+      section +
+      section * column +
+      (angle === 0 ? 0 : angle === 1 ? section / 2 : section) +
+      shift
+    );
+  }
+
+  getTargetX(startX, section, angle) {
+    const range = section / 2;
+    const shift = Math.random() * range - range / 2;
+    return startX + section * (angle === 2 ? -1 : angle === 0 ? 1 : 0) + shift;
   }
 
   /* 
@@ -304,7 +343,6 @@ export class Level_1 extends Scene {
   */
   triggerBulletShower() {
     this.bulletShowerTriggered = true;
-    this.setWaveAngle();
 
     this.bulletShowerTimer = this.time.addEvent({
       delay: 800,
@@ -319,18 +357,6 @@ export class Level_1 extends Scene {
   }
 
   resumeBulletShower() {
-    this.setWaveAngle();
     this.bulletShowerTimer.paused = false;
-  }
-
-  setWaveAngle() {
-    /* 
-      Set angle of bullet shower to one of three options:
-       - 0: Left-to-right
-       - 1: No angle (straight down)
-       - 2: Right-to-left
-    */
-
-    this.bulletShowerAngle = Math.floor(Math.random() * 3);
   }
 }
