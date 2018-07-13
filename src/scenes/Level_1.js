@@ -23,6 +23,7 @@ import {
   gameOver,
   restartGame,
   pauseGame,
+  resumeGame,
   newBackgroundArray,
   patternNumber
 } from '../util/GameHelpers';
@@ -61,7 +62,7 @@ export class Level_1 extends Scene {
     this.bulletShowerDelay;
     this.bulletShowerCooldownTimer;
     this.bulletShowerCycle = 0;
-    this.isGameOver = false;
+    this.isGameOver = true;
   }
 
   create() {
@@ -177,17 +178,28 @@ export class Level_1 extends Scene {
   }
 
   update(time, delta) {
+
     let pad = checkGamepad.call(this);
     if (
-      (this.gameStart && Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
+      (Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
       pad.buttons[0].pressed
     ) {
-      this.startText.visible = false;
-      this.gameStart = false;
-      this.isGameOver = false;
-      this.physics.world.resume();
-      this.events.emit('resumeTimer');
-      this.ball.anims.resume();
+
+      if(this.gameStart) {
+        this.startText.visible = false;
+        this.gameStart = false;
+        this.isGameOver = false;
+        this.physics.world.resume();
+        this.events.emit('resumeTimer');
+        this.ball.anims.resume();
+      } else {
+        if( this.isPaused ) {
+          resumeGame.call(this, [ this.ball, this.player ]);
+          this.isPaused = false;
+          this.escapeTextTitle.visible = false;
+        }
+      }
+      
     }
     // ===== BULLET ===== //
     if (
@@ -233,19 +245,23 @@ export class Level_1 extends Scene {
     ) {
 
       if( !this.isPaused ) {
-
+        this.startText.visible = false;
         this.isPaused = true;
         pauseGame.call(this, [ this.ball, this.player ])
-        this.add.bitmapText(
-          50,
-          HEIGHT - 110,
+        this.escapeTextTitle = this.add.bitmapText(
+          10,
+          HEIGHT - 80,
           FONT,
           `
           Score until life increase: ${8000 - (this.registry.list.SCORE % 8000)}
-          Press Escape to return to Title Screen`,
+          Press Escape to return to Title Screen
+          Press Space to resume`,
           FONTSIZE
         );
+
+        
       } else {
+        this.isGameOver = true;
         this.isPaused = false;
         this.scene.start('Title');
         this.scene.stop('Level_1');
