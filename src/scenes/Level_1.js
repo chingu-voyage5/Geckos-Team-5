@@ -104,17 +104,17 @@ export class Level_1 extends Scene {
     this.image = this.add.sprite(
       240,
       160,
-      'background' + this.backgroundArray[this.backgroundArrayIndex]
+      'background' + this.backgroundArray[ this.backgroundArrayIndex ]
     );
 
     // ===== BRIIIIIICKS HEART ===== //
 
     //selects the prick pattern
-    BRICKS['LEVEL_' + this.brickPatternNumber].call(this);
+    BRICKS[ 'LEVEL_' + this.brickPatternNumber ].call(this);
 
     //counts the amount of bricks in the scene
     for (let i = 0; i < this.bricks.length; i++) {
-      this.amountBricks += this.bricks[i].children.entries.length;
+      this.amountBricks += this.bricks[ i ].children.entries.length;
     }
 
     // ===== CUSTOM KEYS ===== //
@@ -181,35 +181,35 @@ export class Level_1 extends Scene {
 
     let pad = checkGamepad.call(this);
     if (
-      (Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
-      pad.buttons[0].pressed
+      (this.gameStart && Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
+      pad.buttons[ 0 ].pressed
     ) {
 
-      if(this.gameStart) {
-        this.startText.visible = false;
-        this.gameStart = false;
-        this.isGameOver = false;
-        this.physics.world.resume();
-        this.events.emit('resumeTimer');
-        this.ball.anims.resume();
-      } else {
-        if( this.isPaused ) {
-          resumeGame.call(this, [ this.ball, this.player ]);
-          this.isPaused = false;
-          this.escapeTextTitle.visible = false;
-        }
-      }
-      
+      this.startText.visible = false;
+      this.gameStart = false;
+      this.isGameOver = false;
+      this.physics.world.resume();
+      this.events.emit('resumeTimer');
+      this.ball.anims.resume();
+
+    } else if (
+      (this.isPaused && Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
+      pad.buttons[ 0 ].pressed
+    ) {
+      resumeGame.call(this, [ this.ball, this.player ]);
+      this.isPaused = false;
+      this.escapeTextTitle.visible = false;
     }
+    
     // ===== BULLET ===== //
     if (
       //changed to justdown to prevent sound spam
       Phaser.Input.Keyboard.JustDown(this.keys.fire) ||
-      pad.buttons[1].pressed ||
-      pad.buttons[7].pressed
+      pad.buttons[ 1 ].pressed ||
+      pad.buttons[ 7 ].pressed
     ) {
       //makes the sound of the bullet
-      if( this.isGameOver ) return;
+      if (this.isGameOver) return;
       soundPlay('sound_bullet', this);
       let bullet = this.bullets.get();
       if (bullet) {
@@ -241,10 +241,10 @@ export class Level_1 extends Scene {
     // === Pause game if player hits escape one time === //
     if (
       Phaser.Input.Keyboard.JustDown(this.keys.esc) ||
-      pad.buttons[9].pressed
+      pad.buttons[ 9 ].pressed
     ) {
 
-      if( !this.isPaused ) {
+      if (!this.isPaused) {
         this.startText.visible = false;
         this.isPaused = true;
         pauseGame.call(this, [ this.ball, this.player ])
@@ -259,7 +259,7 @@ export class Level_1 extends Scene {
           FONTSIZE
         );
 
-        
+
       } else {
         this.isGameOver = true;
         this.isPaused = false;
@@ -287,9 +287,9 @@ export class Level_1 extends Scene {
 
     const showerFlag =
       this.bulletShowerDelay === 60
-        ? this.registry.list.TIMER[1] === 1
-        : this.registry.list.TIMER[3] ===
-          parseInt(`${this.bulletShowerDelay}`.charAt(0));
+        ? this.registry.list.TIMER[ 1 ] === 1
+        : this.registry.list.TIMER[ 3 ] ===
+        parseInt(`${this.bulletShowerDelay}`.charAt(0));
 
     if (showerFlag && !this.bulletShowerTriggered) {
       this.triggerBulletShower();
