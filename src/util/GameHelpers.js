@@ -191,8 +191,17 @@ export const restartGame = function() {
 
 
 export const pauseGame = function( args ) {
-    [ ...args ].forEach( arg => args.anims.pause() )
+    [ ...args ].forEach( arg => arg.anims.pause() )
+    this.events.emit('pauseTimer')
+    this.isGameOver = true;
     this.physics.world.pause();
+}
+
+export const resumeGame = function( args ) {
+    [ ...args ].forEach( arg => arg.anims.resume() )
+    this.events.emit('resumeTimer');
+    this.isGameOver = false;
+    this.physics.world.resume();
 }
 
 //brick pattern numbers
