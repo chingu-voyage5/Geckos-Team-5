@@ -92,7 +92,6 @@ export const makeFullScreen = function() {
 
 //end the game
 export const gameOver = function() {
-  this.isGameOver = true;
   nextBackground.call(this);
   // selects new brick pattern
   this.brickPatternNumber = patternNumber(this.brickPatternNumber);
@@ -109,7 +108,7 @@ export const gameOver = function() {
   this.time.delayedCall(
     250,
     () => {
-      this.physics.world.pause();
+      pauseGame.call(this, [ this.ball, this.player ])
     },
     [],
     this
@@ -125,7 +124,7 @@ export const gameOver = function() {
     //game over sound
     soundPlay('sound_gameover', this);
     this.add.bitmapText(
-      0,
+      50,
       HEIGHT - 80,
       FONT,
       'Game Over! Score: ' +
@@ -189,6 +188,21 @@ export const restartGame = function() {
     );
   }
 };
+
+
+export const pauseGame = function( args ) {
+    [ ...args ].forEach( arg => arg.anims.pause() )
+    this.events.emit('pauseTimer')
+    this.isGameOver = true;
+    this.physics.world.pause();
+}
+
+export const resumeGame = function( args ) {
+    [ ...args ].forEach( arg => arg.anims.resume() )
+    this.events.emit('resumeTimer');
+    this.isGameOver = false;
+    this.physics.world.resume();
+}
 
 //brick pattern numbers
 export const patternNumber = function(oldNumber) {

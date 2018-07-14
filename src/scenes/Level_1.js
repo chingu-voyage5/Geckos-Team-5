@@ -22,6 +22,8 @@ import {
   makeKeys,
   gameOver,
   restartGame,
+  pauseGame,
+  resumeGame,
   newBackgroundArray,
   patternNumber
 } from '../util/GameHelpers';
@@ -34,7 +36,6 @@ export class Level_1 extends Scene {
 
     this.bricks = []; //here the bricks will be stored
     this.brickPatternNumber = patternNumber(0); //number of the brick pattern
-    this.ball;
 
     // ===== Background ===== //
 
@@ -60,7 +61,6 @@ export class Level_1 extends Scene {
     this.bulletShowerDelay;
     this.bulletShowerCooldownTimer;
     this.bulletShowerCycle = 0;
-    this.isGameOver = false;
   }
 
   create() {
@@ -80,6 +80,8 @@ export class Level_1 extends Scene {
     this.gameStart = true;
     this.amountBricks = 0; //will later contain the number of bricks
     this.isPlayerAlive = true;
+    this.isGameOver = true;    
+    this.isPaused = false;
 
     if (this.registry.list.sessionAlive) {
       if (this.bulletCycleDelay > 1500) {
@@ -140,11 +142,6 @@ export class Level_1 extends Scene {
     });
 
     // ===== Set up a creation of bullets for the scene ===== //
-
-    this.player.create.call(this);
-
-    // ===== Can Probably move this to Player file for refactor ===== //
-
     this.bullets = this.add.group({
       classType: Bullet,
       runChildUpdate: true
@@ -176,18 +173,31 @@ export class Level_1 extends Scene {
   }
 
   update(time, delta) {
+
     let pad = checkGamepad.call(this);
     if (
       (this.gameStart && Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
       pad.buttons[0].pressed
     ) {
+
       this.startText.visible = false;
+      if( this.escapeTextTitle ) { this.escapeTextTitle.visible = false; }
       this.gameStart = false;
+      this.isPaused = false;
       this.isGameOver = false;
       this.physics.world.resume();
       this.events.emit('resumeTimer');
       this.ball.anims.resume();
+
+    } else if (
+      (this.isPaused && Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
+      pad.buttons[0].pressed
+    ) {
+      resumeGame.call(this, [ this.ball, this.player ]);
+      this.isPaused = false;
+      this.escapeTextTitle.visible = false;
     }
+    
     // ===== BULLET ===== //
     if (
       //changed to justdown to prevent sound spam
@@ -196,7 +206,7 @@ export class Level_1 extends Scene {
       pad.buttons[7].pressed
     ) {
       //makes the sound of the bullet
-      if( this.isGameOver ) return;
+      if (this.isGameOver) return;
       soundPlay('sound_bullet', this);
       let bullet = this.bullets.get();
       if (bullet) {
@@ -224,14 +234,38 @@ export class Level_1 extends Scene {
     if (!this.isPlayerAlive) {
       restartGame.call(this);
     }
+
+    // === Pause game if player hits escape one time === //
     if (
       Phaser.Input.Keyboard.JustDown(this.keys.esc) ||
       pad.buttons[9].pressed
     ) {
-      this.scene.start('Title');
-      musicStopScene(this.currentSong.toString(), this);
-      this.scene.stop('Level_1');
-      this.scene.stop('UIScene');
+
+      if (!this.isPaused) {
+        if(this.isGameOver) return;
+        this.startText.visible = false;
+        this.isPaused = true;
+        pauseGame.call(this, [ this.ball, this.player ])
+        this.escapeTextTitle = this.add.bitmapText(
+          20,
+          HEIGHT - 110,
+          FONT,
+          `
+          Score until life increase: ${8000 - (this.registry.list.SCORE % 8000)}
+          Press Escape to return to Title Screen
+          Press Space to ${this.gameStart ? 'start game' : 'resume game'}!`,
+          FONTSIZE
+        );
+
+
+      } else {
+        this.isGameOver = true;
+        this.isPaused = false;
+        musicStopScene(this.currentSong.toString(), this);
+        this.scene.stop('Level_1');
+        this.scene.stop('UIScene');
+        this.scene.start('Title');
+      }
     }
 
     //music start stop
