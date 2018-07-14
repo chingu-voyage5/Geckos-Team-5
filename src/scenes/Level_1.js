@@ -36,7 +36,6 @@ export class Level_1 extends Scene {
 
     this.bricks = []; //here the bricks will be stored
     this.brickPatternNumber = patternNumber(0); //number of the brick pattern
-    this.ball;
 
     // ===== Background ===== //
 
@@ -82,6 +81,7 @@ export class Level_1 extends Scene {
     this.amountBricks = 0; //will later contain the number of bricks
     this.isPlayerAlive = true;
     this.isGameOver = true;    
+    this.isPaused = false;
 
     if (this.registry.list.sessionAlive) {
       if (this.bulletCycleDelay > 1500) {
@@ -181,7 +181,9 @@ export class Level_1 extends Scene {
     ) {
 
       this.startText.visible = false;
+      if( this.escapeTextTitle ) { this.escapeTextTitle.visible = false; }
       this.gameStart = false;
+      this.isPaused = false;
       this.isGameOver = false;
       this.physics.world.resume();
       this.events.emit('resumeTimer');
@@ -240,17 +242,18 @@ export class Level_1 extends Scene {
     ) {
 
       if (!this.isPaused) {
+        if(this.isGameOver) return;
         this.startText.visible = false;
         this.isPaused = true;
         pauseGame.call(this, [ this.ball, this.player ])
         this.escapeTextTitle = this.add.bitmapText(
-          10,
-          HEIGHT - 80,
+          20,
+          HEIGHT - 110,
           FONT,
           `
           Score until life increase: ${8000 - (this.registry.list.SCORE % 8000)}
           Press Escape to return to Title Screen
-          Press Space to resume`,
+          Press Space to ${this.gameStart ? 'start game' : 'resume game'}!`,
           FONTSIZE
         );
 

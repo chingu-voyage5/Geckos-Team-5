@@ -124,7 +124,7 @@ export const gameOver = function() {
     //game over sound
     soundPlay('sound_gameover', this);
     this.add.bitmapText(
-      0,
+      50,
       HEIGHT - 80,
       FONT,
       'Game Over! Score: ' +
