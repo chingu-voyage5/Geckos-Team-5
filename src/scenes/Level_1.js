@@ -62,7 +62,6 @@ export class Level_1 extends Scene {
     this.bulletShowerDelay;
     this.bulletShowerCooldownTimer;
     this.bulletShowerCycle = 0;
-    this.isGameOver = true;
   }
 
   create() {
@@ -82,6 +81,7 @@ export class Level_1 extends Scene {
     this.gameStart = true;
     this.amountBricks = 0; //will later contain the number of bricks
     this.isPlayerAlive = true;
+    this.isGameOver = true;    
 
     if (this.registry.list.sessionAlive) {
       if (this.bulletCycleDelay > 1500) {
@@ -142,11 +142,6 @@ export class Level_1 extends Scene {
     });
 
     // ===== Set up a creation of bullets for the scene ===== //
-
-    this.player.create.call(this);
-
-    // ===== Can Probably move this to Player file for refactor ===== //
-
     this.bullets = this.add.group({
       classType: Bullet,
       runChildUpdate: true
@@ -263,9 +258,10 @@ export class Level_1 extends Scene {
       } else {
         this.isGameOver = true;
         this.isPaused = false;
-        this.scene.start('Title');
-        this.scene.stop('Level_1');
         musicStopScene(this.currentSong.toString(), this);
+        this.scene.stop('Level_1');
+        this.scene.stop('UIScene');
+        this.scene.start('Title');
       }
     }
 
