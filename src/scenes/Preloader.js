@@ -22,7 +22,6 @@ export class Preloader extends phaser.Scene {
     this.load.image('title', './assets/images/title.png');
     this.load.image('enemy-bullet', './assets/images/enemy-bullet.png');
     this.load.image('pointdrop', './assets/images/pointdrop.png');
-    this.load.image('platform', './assets/images/platform.png');
     this.load.image('heart', './assets/images/heart.png');
 
     this.load.atlas(
@@ -74,7 +73,7 @@ export class Preloader extends phaser.Scene {
       './assets/sounds/click5.wav'
     ]); 
     this.load.audio('gamewin', [
-      './assets/sounds/mativve__electro-win-sound.wav'
+      './assets/sounds/mativve_electro-win-sound.mp3'
     ]); 
     this.load.audio('sword', [
       './assets/sounds/32cheeseman32__sworddraw01.wav'
