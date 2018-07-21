@@ -7,11 +7,7 @@ import {
   FONT,
   FONTSIZE
 } from '../util/constants';
-import Player from '../components/objects/Player';
-import Bullet from '../components/objects/Bullet';
 import { soundAdder, soundPlay } from '../components/objects/Sound';
-import Ball from '../components/objects/Ball';
-import EnemyBullet from '../components/enemy/EnemyBullet';
 import {
   musicStart,
   musicStop,
@@ -20,6 +16,9 @@ import {
 } from '../components/objects/Music';
 import {
   makeKeys,
+  makePlayer,
+  makeBall,
+  makeBullets,
   gameOver,
   restartGame,
   pauseGame,
@@ -64,16 +63,19 @@ export class Level_1 extends Scene {
   }
 
   create() {
+
+    const { bulletCycleDelay, bulletShowerDelay, 
+            sessionAlive, lives } = this.registry.list;
     //loading the sounds into the scene look into sound.js
     soundAdder(this);
     //makes music accessible to the scene
     musicAdder(this);
 
-    this.bulletCycleDelay = this.registry.list.bulletCycleDelay
-      ? this.registry.list.bulletCycleDelay
+    this.bulletCycleDelay = bulletCycleDelay
+      ? bulletCycleDelay
       : 5000;
-    this.bulletShowerDelay = this.registry.list.bulletShowerDelay
-      ? this.registry.list.bulletShowerDelay
+    this.bulletShowerDelay = bulletShowerDelay
+      ? bulletShowerDelay
       : 60;
 
     // ===== Level Variables ===== //
@@ -83,14 +85,14 @@ export class Level_1 extends Scene {
     this.isGameOver = true;    
     this.isPaused = false;
 
-    if (this.registry.list.sessionAlive) {
+    if (sessionAlive) {
       if (this.bulletCycleDelay > 1500) {
         this.registry.set('bulletShowerDelay', this.bulletCycleDelay - 350);
       }
       if (this.bulletShowerDelay > 20) {
         this.registry.set('bulletWaveDelay', this.bulletShowerDelay - 10);
       }
-      this.lives = this.registry.list.lives;
+      this.lives = lives;
     } else {
       this.lives = 5;
       this.registry.set('SESSIONTIMER', 0);
@@ -107,9 +109,16 @@ export class Level_1 extends Scene {
       'background' + this.backgroundArray[this.backgroundArrayIndex]
     );
 
-    // ===== BRIIIIIICKS HEART ===== //
+    
 
-    //selects the prick pattern
+    // ===== CUSTOM KEYS ===== //
+    this.keys = makeKeys.call(this);
+
+    // ===== Object Creation ===== //
+    makePlayer.call(this);
+    makeBall.call(this);
+    makeBullets.call(this);    
+
     BRICKS['LEVEL_' + this.brickPatternNumber].call(this);
 
     //counts the amount of bricks in the scene
@@ -117,40 +126,6 @@ export class Level_1 extends Scene {
       this.amountBricks += this.bricks[i].children.entries.length;
     }
 
-    // ===== CUSTOM KEYS ===== //
-    this.keys = makeKeys.call(this);
-
-    // Create Player
-    this.player = new Player({
-      scene: this,
-      key: 'player',
-      x: 400,
-      y: HEIGHT - 30
-    });
-
-    // Create Ball
-    //veloc means velocity
-    this.ball = new Ball({
-      scene: this,
-      key: 'ball',
-      x: 0,
-      y: HEIGHT - 100,
-      veloc: {
-        x: 100,
-        y: -80
-      }
-    });
-
-    // ===== Set up a creation of bullets for the scene ===== //
-    this.bullets = this.add.group({
-      classType: Bullet,
-      runChildUpdate: true
-    });
-
-    this.enemyBullets = this.add.group({
-      classType: EnemyBullet,
-      runChildUpdate: true
-    });
 
     this.startText = this.add.bitmapText(
       (WIDTH / 2) * 0.45,
