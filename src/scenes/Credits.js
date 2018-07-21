@@ -23,6 +23,7 @@ export class Credits extends Scene {
     //sets the first page into view, the developer credits
     this.text = this.add.bitmapText(0, 0, FONT, this.text1(), FONTSIZE).setOrigin(0,0);
 
+    //keyboard controll for the scene
     this.keys = {
       space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
       esc: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),

@@ -32,6 +32,7 @@ export const makeKeys = function() {
   };
 };
 
+//when called puts the player into the scene
 export const makePlayer = function() {
   this.player = new Player({
     scene: this,
@@ -41,6 +42,7 @@ export const makePlayer = function() {
   });;
 };
 
+//when called puts the ball into the scene
 export const makeBall = function() {
   this.ball = new Ball({
   scene: this,
@@ -54,6 +56,7 @@ export const makeBall = function() {
   });
 };
 
+//when called, adds player and enemy bullet groups
 export const makeBullets = function() {
   this.bullets = this.add.group({
     classType: Bullet,
