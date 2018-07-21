@@ -20,6 +20,8 @@ import {
 } from '../components/objects/Music';
 import {
   makeKeys,
+  makePlayer,
+  makeBall,
   gameOver,
   restartGame,
   pauseGame,
@@ -64,16 +66,19 @@ export class Level_1 extends Scene {
   }
 
   create() {
+
+    const { bulletCycleDelay, bulletShowerDelay, 
+            sessionAlive, lives } = this.registry.list;
     //loading the sounds into the scene look into sound.js
     soundAdder(this);
     //makes music accessible to the scene
     musicAdder(this);
 
-    this.bulletCycleDelay = this.registry.list.bulletCycleDelay
-      ? this.registry.list.bulletCycleDelay
+    this.bulletCycleDelay = bulletCycleDelay
+      ? bulletCycleDelay
       : 5000;
-    this.bulletShowerDelay = this.registry.list.bulletShowerDelay
-      ? this.registry.list.bulletShowerDelay
+    this.bulletShowerDelay = bulletShowerDelay
+      ? bulletShowerDelay
       : 60;
 
     // ===== Level Variables ===== //
@@ -83,14 +88,14 @@ export class Level_1 extends Scene {
     this.isGameOver = true;    
     this.isPaused = false;
 
-    if (this.registry.list.sessionAlive) {
+    if (sessionAlive) {
       if (this.bulletCycleDelay > 1500) {
         this.registry.set('bulletShowerDelay', this.bulletCycleDelay - 350);
       }
       if (this.bulletShowerDelay > 20) {
         this.registry.set('bulletWaveDelay', this.bulletShowerDelay - 10);
       }
-      this.lives = this.registry.list.lives;
+      this.lives = lives;
     } else {
       this.lives = 5;
       this.registry.set('SESSIONTIMER', 0);
@@ -119,27 +124,8 @@ export class Level_1 extends Scene {
 
     // ===== CUSTOM KEYS ===== //
     this.keys = makeKeys.call(this);
-
-    // Create Player
-    this.player = new Player({
-      scene: this,
-      key: 'player',
-      x: 400,
-      y: HEIGHT - 30
-    });
-
-    // Create Ball
-    //veloc means velocity
-    this.ball = new Ball({
-      scene: this,
-      key: 'ball',
-      x: 0,
-      y: HEIGHT - 100,
-      veloc: {
-        x: 100,
-        y: -80
-      }
-    });
+    makePlayer.call(this);
+    makeBall.call(this);
 
     // ===== Set up a creation of bullets for the scene ===== //
     this.bullets = this.add.group({

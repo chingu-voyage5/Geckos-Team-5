@@ -26,6 +26,28 @@ export const makeKeys = function() {
   };
 };
 
+export const makePlayer = function() {
+  this.player = new Player({
+    scene: this,
+    key: 'player',
+    x: 400,
+    y: HEIGHT - 30
+  });;
+};
+
+export const makeBall = function() {
+  this.ball = new Ball({
+  scene: this,
+    key: 'ball',
+    x: 0,
+    y: HEIGHT - 100,
+    veloc: {
+      x: 100,
+      y: -80
+    }
+  });
+};
+
 export const makeFullScreen = function() {
   const canvasEl = document.querySelector('canvas');
   const phaserContainer = document.querySelector('#phaser');
