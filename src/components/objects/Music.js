@@ -1,5 +1,7 @@
+//we need a delay on the first song, because it starts playing too early after the theme song stops
 let firstDelay = 0.4;
 
+//starts playing music if musicControl is on. First song played with delay
 function musicStart(songname, scene) {
       scene.registry.list.musicControl = true;
       
@@ -38,7 +40,7 @@ function musicStopScene(songname, scene) {
       }
 }
 
-//makes the music accessable from the called scene
+//makes the music accessable from the called scene and provides with volume config
 function musicAdder(scene) {
       scene.music_theme = scene.sound.add('theme');
       scene.music_song1 = scene.sound.add('song1');
