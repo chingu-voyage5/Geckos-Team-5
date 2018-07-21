@@ -6,6 +6,7 @@ export const HEIGHT = 320;
 export const FONT = 'pokemon_classic';
 export const FONTSIZE = 18;
 
+//the amount of backgrounds in the assets. Needs change upon inclusion of new backgrounds
 export const BACKGROUND_AMOUNT = 6;
 
 // ===== Array of 15 numbers from 0 to 15 ===== //
@@ -34,6 +35,7 @@ export const checkGamepad = function() {
 
 
 // Brick setup for each level 
+//it consists of 6 patterns, named Level_1, Level_2 ...
 export const BRICKS = {
   LEVEL_1() {
     this.bricks.push(this.physics.add.staticGroup({
