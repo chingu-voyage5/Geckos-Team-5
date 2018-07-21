@@ -39,12 +39,13 @@ export class Help extends Scene {
 
   text() {
     return `\n
-    CONTROLS\n\n
+    CONTROLS\n
     ARROW KEYS: MOVE\n
-    A: SWORD ATTACK\n
-    S: THROW CARD\n
-    C: BOMB\n
-    SPACE: SLIDE\n
+    A: SWORD ATTACK
+    S: THROW CARD
+    M: MUSIC ON-OFF
+    P: SOUNDS ON-OFF
+    SPACE: SLIDE
     -OR USE JOYPADS- \n
     [esc] to title
     `;

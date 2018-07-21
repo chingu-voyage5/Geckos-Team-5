@@ -12,12 +12,15 @@ export class Credits extends Scene {
     //makes music accessible to the scene
     musicAdder(this);
     
+    //the background image for this scene
     this.image = this.add.sprite(
       240,
       160,
       'title'
     );
+    //variable controlls which credits are displayed, those are split into different "pages"
     this.textnumber = 1;
+    //sets the first page into view, the developer credits
     this.text = this.add.bitmapText(0, 0, FONT, this.text1(), FONTSIZE).setOrigin(0,0);
 
     this.keys = {
@@ -34,6 +37,7 @@ export class Credits extends Scene {
     }
   }
 
+  //dev credits
   text1() {
     return `
     DEVELOPED BY GECKO #5 AT CHINGU.IO\n\n
@@ -45,6 +49,7 @@ export class Credits extends Scene {
     `;
   }
 
+  //sound credits
   text2() {
     return `
     We are very thankful for being 
@@ -59,6 +64,7 @@ export class Credits extends Scene {
     [esc] to title   ||  [F] for next Page (Music)`;
   }
 
+  //music credits
   text3() {
     return `
     We are very thankful for being 
@@ -73,6 +79,7 @@ export class Credits extends Scene {
     [esc] to title   ||  [F] for next Page (Images)`;
   }
 
+  //image credits
   text4() {
     return `
     We are very thankful for being 
@@ -89,41 +96,41 @@ export class Credits extends Scene {
   }
 
   update() {
-    if (
+    if (                                                   //when esc key is pressed
       Phaser.Input.Keyboard.JustDown(this.keys.esc) ||
       Phaser.Input.Keyboard.JustDown(this.keys.space)
     ) {
-      this.scene.start('Title');
-      musicStopScene('theme', this);
-    } else if (Phaser.Input.Keyboard.JustDown(this.keys.music)) {      //music start stop
+      this.scene.start('Title'); //changes to title scene
+      musicStopScene('theme', this); //stops music for this scene only, but keeps it on generally
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.music)) {      //music start stop   keyboard M
       if (!this.registry.list.musicControl) {
         musicStart('theme', this);
       } else {
         musicStop('theme',this);
       }
-    } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) { //sound start stop
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) { //sound start stop    keyboard P
       if (!this.registry.list.soundControl) {
         this.registry.set('soundControl', true);
       } else {
         this.registry.set('soundControl', false);
       }
-    } else if (Phaser.Input.Keyboard.JustDown(this.keys.textswitch)) { //text switcher for the credits
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.textswitch)) { //text switcher for the credits  keyboard F
       this.textnumber++;
       if (this.textnumber == 5) {
         this.textnumber = 1;
       }
       switch (this.textnumber) {
         case 1:
-          this.text.setText(this.text1());
+          this.text.setText(this.text1()); //devs
           break;
         case 2:
-          this.text.setText(this.text2().toUpperCase());
+          this.text.setText(this.text2().toUpperCase()); //sounds
           break;
         case 3:
-          this.text.setText(this.text3().toUpperCase());
+          this.text.setText(this.text3().toUpperCase()); //music
           break;
         case 4:
-          this.text.setText(this.text4().toUpperCase());
+          this.text.setText(this.text4().toUpperCase()); //images
           break;
       }
     }
