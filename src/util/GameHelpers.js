@@ -6,6 +6,11 @@ import {
   BACKGROUND_AMOUNT
 } from '../util/constants';
 
+import Player from '../components/objects/Player';
+import Ball from '../components/objects/Ball';
+import Bullet from '../components/objects/Bullet';
+import EnemyBullet from '../components/enemy/EnemyBullet';
+
 import { songDecider, musicStopScene } from '../components/objects/Music';
 import { soundPlay } from '../components/objects/Sound';
 
@@ -47,6 +52,18 @@ export const makeBall = function() {
     }
   });
 };
+
+export const makeBullets = function() {
+  this.bullets = this.add.group({
+    classType: Bullet,
+    runChildUpdate: true
+  });
+  
+  this.enemyBullets = this.add.group({
+    classType: EnemyBullet,
+    runChildUpdate: true
+  });
+}
 
 export const makeFullScreen = function() {
   const canvasEl = document.querySelector('canvas');

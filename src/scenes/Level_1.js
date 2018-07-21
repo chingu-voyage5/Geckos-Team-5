@@ -7,11 +7,7 @@ import {
   FONT,
   FONTSIZE
 } from '../util/constants';
-import Player from '../components/objects/Player';
-import Bullet from '../components/objects/Bullet';
 import { soundAdder, soundPlay } from '../components/objects/Sound';
-import Ball from '../components/objects/Ball';
-import EnemyBullet from '../components/enemy/EnemyBullet';
 import {
   musicStart,
   musicStop,
@@ -22,6 +18,7 @@ import {
   makeKeys,
   makePlayer,
   makeBall,
+  makeBullets,
   gameOver,
   restartGame,
   pauseGame,
@@ -112,9 +109,16 @@ export class Level_1 extends Scene {
       'background' + this.backgroundArray[this.backgroundArrayIndex]
     );
 
-    // ===== BRIIIIIICKS HEART ===== //
+    
 
-    //selects the prick pattern
+    // ===== CUSTOM KEYS ===== //
+    this.keys = makeKeys.call(this);
+
+    // ===== Object Creation ===== //
+    makePlayer.call(this);
+    makeBall.call(this);
+    makeBullets.call(this);    
+
     BRICKS['LEVEL_' + this.brickPatternNumber].call(this);
 
     //counts the amount of bricks in the scene
@@ -122,21 +126,6 @@ export class Level_1 extends Scene {
       this.amountBricks += this.bricks[i].children.entries.length;
     }
 
-    // ===== CUSTOM KEYS ===== //
-    this.keys = makeKeys.call(this);
-    makePlayer.call(this);
-    makeBall.call(this);
-
-    // ===== Set up a creation of bullets for the scene ===== //
-    this.bullets = this.add.group({
-      classType: Bullet,
-      runChildUpdate: true
-    });
-
-    this.enemyBullets = this.add.group({
-      classType: EnemyBullet,
-      runChildUpdate: true
-    });
 
     this.startText = this.add.bitmapText(
       (WIDTH / 2) * 0.45,
