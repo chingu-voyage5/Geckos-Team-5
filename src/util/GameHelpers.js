@@ -62,7 +62,6 @@ export const makeBullets = function() {
     classType: Bullet,
     runChildUpdate: true
   });
-  
   this.enemyBullets = this.add.group({
     classType: EnemyBullet,
     runChildUpdate: true

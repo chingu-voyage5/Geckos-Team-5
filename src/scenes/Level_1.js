@@ -64,8 +64,8 @@ export class Level_1 extends Scene {
 
   create() {
 
-    const { bulletCycleDelay, bulletShowerDelay, 
-            sessionAlive, lives } = this.registry.list;
+    const { bulletCycleDelay, bulletShowerDelay, sessionAlive, lives } = this.registry.list;
+
     //loading the sounds into the scene look into sound.js
     soundAdder(this);
     //makes music accessible to the scene
@@ -87,18 +87,22 @@ export class Level_1 extends Scene {
 
     if (sessionAlive) {
       if (this.bulletCycleDelay > 1500) {
+        //if its a repeat cycle and not a new game, delay decrese
         this.registry.set('bulletShowerDelay', this.bulletCycleDelay - 350);
       }
       if (this.bulletShowerDelay > 20) {
+        //if its a repeat cycle and not a new game,delay decrease
         this.registry.set('bulletWaveDelay', this.bulletShowerDelay - 10);
       }
+      //if its a repeat cycle and not a new game, the old amount get transfered to the new round
       this.lives = lives;
     } else {
       this.lives = 5;
       this.registry.set('SESSIONTIMER', 0);
     }
 
-    this.registry.set('lives', this.lives);
+    // loading the settings of the page into the registry
+    this.registry.set('lives', this.lives);  
 
     this.scene.launch('UIScene');
 
@@ -109,16 +113,15 @@ export class Level_1 extends Scene {
       'background' + this.backgroundArray[this.backgroundArrayIndex]
     );
 
-    
-
     // ===== CUSTOM KEYS ===== //
-    this.keys = makeKeys.call(this);
+    this.keys = makeKeys.call(this); //adds keyboard keys to the scene
 
     // ===== Object Creation ===== //
-    makePlayer.call(this);
-    makeBall.call(this);
-    makeBullets.call(this);    
+    makePlayer.call(this); //adds player to the scene
+    makeBall.call(this); //adds ball to the scene
+    makeBullets.call(this); //adds groups to the scene where player and enemy bullets can be stored
 
+    //calls in a random brick pattern to the scene
     BRICKS['LEVEL_' + this.brickPatternNumber].call(this);
 
     //counts the amount of bricks in the scene
@@ -126,7 +129,7 @@ export class Level_1 extends Scene {
       this.amountBricks += this.bricks[i].children.entries.length;
     }
 
-
+    //the text to how the start the game, from the loaded scene
     this.startText = this.add.bitmapText(
       (WIDTH / 2) * 0.45,
       HEIGHT - 80,
@@ -149,27 +152,34 @@ export class Level_1 extends Scene {
 
   update(time, delta) {
 
+    //checks if a gamepad is plugged in the system
     let pad = checkGamepad.call(this);
+    //at this point the player is in a waiting screen but sees the scene
+    //upon press of space the game starts
     if (
       (this.gameStart && Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
       pad.buttons[0].pressed
     ) {
 
       this.startText.visible = false;
+      // if the game was paused once, don't display the pause text
       if( this.escapeTextTitle ) { this.escapeTextTitle.visible = false; }
       this.gameStart = false;
       this.isPaused = false;
       this.isGameOver = false;
+      //resumes the game from a paused state
       this.physics.world.resume();
       this.events.emit('resumeTimer');
       this.ball.anims.resume();
 
-    } else if (
+    } else if ( //if the game was paused and now resumed
       (this.isPaused && Phaser.Input.Keyboard.JustDown(this.keys.slide)) ||
       pad.buttons[0].pressed
     ) {
+      //resumes everything
       resumeGame.call(this, [ this.ball, this.player ]);
       this.isPaused = false;
+      //sets the text which tells that the game is paused to not visible
       this.escapeTextTitle.visible = false;
     }
     
@@ -183,17 +193,21 @@ export class Level_1 extends Scene {
       //makes the sound of the bullet
       if (this.isGameOver) return;
       soundPlay('sound_bullet', this);
+      // gets the group where the bullets are stored and creates a new bullet
       let bullet = this.bullets.get();
+      //if bullet is created, it gets fired
       if (bullet) {
         bullet.fire(this.player.x, this.player.y - 30);
       }
     }
 
+    //updates the player sprite, for movement etc.
     this.player.update(this.keys, time, delta);
 
     //tracks the y changes in the velocity because add.collider is a bitch
     this.ball.update();
 
+    //game over
     if (
       (this.registry.list.lives < 1 && this.isPlayerAlive) ||
       (this.amountBricks === 0 && this.isPlayerAlive)
@@ -243,7 +257,7 @@ export class Level_1 extends Scene {
       }
     }
 
-    //music start stop
+    //music start stop key:M
     if (Phaser.Input.Keyboard.JustDown(this.keys.music)) {
       if (!this.registry.list.musicControl) {
         musicStart(this.currentSong, this);
@@ -251,7 +265,7 @@ export class Level_1 extends Scene {
         musicStop(this.currentSong.toString(), this);
       }
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) {
-      //sound start stop
+      //sound start stop key:P
       if (!this.registry.list.soundControl) {
         this.registry.set('soundControl', true);
       } else {
