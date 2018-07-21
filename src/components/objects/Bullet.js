@@ -9,6 +9,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     this.player = this.scene.player;
     this.scene.physics.world.enable(this);
 
+    //check for a collision between the ball and the bullet
     this.scene.physics.add.overlap(
       this,
       this.scene.ball,
