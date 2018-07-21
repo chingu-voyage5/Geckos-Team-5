@@ -6,6 +6,11 @@ import {
   BACKGROUND_AMOUNT
 } from '../util/constants';
 
+import Player from '../components/objects/Player';
+import Ball from '../components/objects/Ball';
+import Bullet from '../components/objects/Bullet';
+import EnemyBullet from '../components/enemy/EnemyBullet';
+
 import { songDecider, musicStopScene } from '../components/objects/Music';
 import { soundPlay } from '../components/objects/Sound';
 
@@ -25,6 +30,40 @@ export const makeKeys = function() {
     sound: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P)
   };
 };
+
+export const makePlayer = function() {
+  this.player = new Player({
+    scene: this,
+    key: 'player',
+    x: 400,
+    y: HEIGHT - 30
+  });;
+};
+
+export const makeBall = function() {
+  this.ball = new Ball({
+  scene: this,
+    key: 'ball',
+    x: 0,
+    y: HEIGHT - 100,
+    veloc: {
+      x: 100,
+      y: -80
+    }
+  });
+};
+
+export const makeBullets = function() {
+  this.bullets = this.add.group({
+    classType: Bullet,
+    runChildUpdate: true
+  });
+  
+  this.enemyBullets = this.add.group({
+    classType: EnemyBullet,
+    runChildUpdate: true
+  });
+}
 
 export const makeFullScreen = function() {
   const canvasEl = document.querySelector('canvas');
