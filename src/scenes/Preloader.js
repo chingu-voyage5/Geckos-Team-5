@@ -43,7 +43,7 @@ export class Preloader extends phaser.Scene {
     this.load.audio('theme', [
       './assets/audio/kickhat_success-menu.mp3'
     ]);
-
+    //background songs for the game
     this.load.audio('song1', [
       './assets/audio/Ouroboros.mp3'
     ]);
@@ -56,7 +56,7 @@ export class Preloader extends phaser.Scene {
     this.load.audio('song4', [
       './assets/audio/Undaunted.mp3'
     ]);
-
+    //sounds
     this.load.audio('gameover', [
       './assets/sounds/thezero-game-over.mp3'
     ]);
@@ -83,7 +83,7 @@ export class Preloader extends phaser.Scene {
     ]);
     
 
-
+    //the loading screen
     const progress = this.add.graphics();
 
     // Register a load progress event to show a load bar

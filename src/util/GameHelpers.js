@@ -16,6 +16,7 @@ import { soundPlay } from '../components/objects/Sound';
 
 // ===== GAME LOGIC STUFF  ===== //
 
+//adding the keyboard keys to the game
 export const makeKeys = function() {
   return {
     slide: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
@@ -31,6 +32,7 @@ export const makeKeys = function() {
   };
 };
 
+//when called puts the player into the scene
 export const makePlayer = function() {
   this.player = new Player({
     scene: this,
@@ -40,6 +42,7 @@ export const makePlayer = function() {
   });;
 };
 
+//when called puts the ball into the scene
 export const makeBall = function() {
   this.ball = new Ball({
   scene: this,
@@ -53,18 +56,19 @@ export const makeBall = function() {
   });
 };
 
+//when called, adds player- and enemy-bullet groups
 export const makeBullets = function() {
   this.bullets = this.add.group({
     classType: Bullet,
     runChildUpdate: true
   });
-  
   this.enemyBullets = this.add.group({
     classType: EnemyBullet,
     runChildUpdate: true
   });
 }
 
+//enables the game to go into fullscreen when the player clicks on the game canvas
 export const makeFullScreen = function() {
   const canvasEl = document.querySelector('canvas');
   const phaserContainer = document.querySelector('#phaser');
@@ -138,7 +142,7 @@ export const gameOver = function() {
   for (let i = 0; i < this.bricks.length; i++) {
     this.amountBricks += this.bricks[i].children.entries.length;
   }
-  //switches to the next track
+  //switches to the next music track
   let songNumber = songDecider(this.registry.list.currentSongNumber);
   //saves the track number in the registry
   this.registry.set('currentSongNumber', songNumber);
@@ -152,16 +156,20 @@ export const gameOver = function() {
     [],
     this
   );
+  
   this.scene.stop('UIScene');
 
-  //stops the normal music upon game over because it collides with the sounds
+  //stops the normal music upon game over because it collides with the sound
   musicStopScene(this.currentSong.toString(), this);
 
+  //if the game was stopped because the player lost all lives
   if (this.registry.list.lives === 0) {
     this.registry.set('sessionAlive', false);
 
     //game over sound
     soundPlay('sound_gameover', this);
+
+    //adding the "you lost text"
     this.add.bitmapText(
       50,
       HEIGHT - 80,
@@ -173,14 +181,20 @@ export const gameOver = function() {
         '\nPress C to try again!',
       FONTSIZE
     );
+
+    //resetting the session counter
     this.registry.set('SESSIONTIMER', 0);
-  } else {
+
+  } else { //if the player cleared the block pattern
+
     this.registry.set('sessionAlive', true);
     //add time bonus
     let timeBonus = 1200 - this.registry.list.TIMER[3] * 100;
     this.registry.set('SCORE', this.registry.list.SCORE + timeBonus);
 
     soundPlay('sound_gamewin', this);
+
+    // "you cleared the stage" text
     this.add.bitmapText(
       50,
       HEIGHT - 110,
@@ -195,6 +209,7 @@ export const gameOver = function() {
 };
 
 export const restartGame = function() {
+  //the key which was originally determined for a bomb firing became the stage reset  button
   if (
     this.keys.bomb.isDown ||
     (this.input.gamepad.gamepads.length > 0
@@ -218,6 +233,8 @@ export const restartGame = function() {
     this.time.delayedCall(
       500,
       () => {
+        //clearing of the stage timer, different from a session counter
+        //session timer -- overall time played until death, TIMER is only for the current brick pattern
         this.registry.set('TIMER', [0, 0, ':', 0, 0, 0]);
         this.events.off();
         this.scene.restart();
@@ -243,7 +260,7 @@ export const resumeGame = function( args ) {
     this.physics.world.resume();
 }
 
-//brick pattern numbers
+//brick pattern numbers switcher
 export const patternNumber = function(oldNumber) {
   let number = Math.floor(Math.random() * 6) + 1;
   if (number == oldNumber) {

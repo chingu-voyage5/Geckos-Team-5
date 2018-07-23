@@ -58,12 +58,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
         keys.down.isDown || pad.buttons[13].pressed || pad.axes[1].value > 0,
       slide:
         Phaser.Input.Keyboard.JustDown(keys.slide) || pad.buttons[0].pressed,
-      //changed to justdown to prevent key spam
       attack:
         Phaser.Input.Keyboard.JustDown(keys.attack) ||
         pad.buttons[2].pressed ||
         pad.buttons[6].pressed,
-      //changed to justdown to prevent key spam
       fire: keys.fire.isDown || pad.buttons[1].pressed,
       bomb: keys.bomb.isDown || pad.buttons[3].pressed,
       esc: keys.esc.isDown || pad.buttons[9].pressed,
@@ -76,7 +74,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.emitter.active = true;
       this.emitter.explode(5, this.x, this.y - 15);
       this.anims.play('sword', true);
-      //makes a sound on sword draw
       soundPlay('sound_sword', this.scene);
       this.isAttackingUp = true;
       this.on('animationcomplete', () => (this.isAttackingUp = false), this);
@@ -138,7 +135,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
         });
         this.emitter.active = true;
         this.emitter.explode(1, this.x, this.y - 15);
-        //makes a sound on sword draw
         soundPlay('sound_sword', this.scene);
         this.scene.time.delayedCall(
           this.slideTimer,

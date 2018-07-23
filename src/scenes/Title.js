@@ -14,6 +14,7 @@ export class Title extends Scene {
     //makes music accessible to the scene
     musicAdder(this);
 
+    //adding the background picture for this scene
     this.image = this.add.sprite(
       240,
       160,
@@ -36,7 +37,8 @@ export class Title extends Scene {
     else {
       this.registry.set('soundControl', false);
     }
-    
+
+    //keyboard controlls for this scene
      this.keys = {
       start: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
       credits: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C),
@@ -45,7 +47,6 @@ export class Title extends Scene {
       sound: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P)
     };
 
-    // document.body.style.backgroundColor = '#000';
     this.titleText = this.add
       .bitmapText(20, HEIGHT - 290, FONT, '    THE LAST \nCHINGU WARRIOR', FONTSIZE * 1.5);
     this.playText = this.add
@@ -63,6 +64,9 @@ export class Title extends Scene {
   update() {
     let pad = checkGamepad.call(this);
 
+    //if different buttons are pressed, different scenes are called or controlls triggered:
+    //scenes: help, credit, game
+    //music and sound controls
     if (
       Phaser.Input.Keyboard.JustDown(this.keys.start) ||
       pad.buttons[0].pressed
@@ -70,19 +74,22 @@ export class Title extends Scene {
       this.scene.start('Level_1');
       //transition to next scene and music
       musicStopScene('theme', this);
+      
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.help)) {
       this.scene.start('Help');
       musicStopScene('theme', this);
+
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.credits)) {
       this.scene.start('Credits');
       musicStopScene('theme',this);
-    } else if (Phaser.Input.Keyboard.JustDown(this.keys.music)) { //music start stop
+
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.music)) { //music start stop  key: M
       if (!this.registry.list.musicControl) {
         musicStart('theme', this);
       } else {
         musicStop('theme',this);
       }
-    } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) { //sound start stop
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) { //sound start stop   key: P
       if (!this.registry.list.soundControl) {
         this.registry.set('soundControl', true);
       } else {

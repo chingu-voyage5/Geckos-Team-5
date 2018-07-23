@@ -5,18 +5,23 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
     super(config, 0, 0, 'enemy-bullet');
     config.scene.scene.physics.world.enable(this);
-
+    //bullet speed
     this.speedX = 0;
     this.speedY = 0;
+    //player position
     this.targetX = 0;
+    //starting position
     this.startingX = 0;
     this.startingY = 0;
     this.scene = config.scene.scene;
     this.player = this.scene.player;
     this.speed = Phaser.Math.GetSpeed(HEIGHT, 1.5);
+    //creates a visible effect of particles behind bullets
     this.particles = this.scene.add.particles('bullet');
+    //color for the bullet
     this.setTint(0xf44253);
 
+    //checks for collision between bullet and player
     this.scene.physics.add.collider(
       this,
       this.player,
@@ -38,6 +43,7 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
       this.targetX,
       HEIGHT
     );
+    //emits the particle visual effect
     let emitter = this.particles.createEmitter({
       speed: 100,
       lifespan: 200,
@@ -45,7 +51,7 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
       tint: 0xf44253,
       blendMode: 'ADD'
     });
-
+    //the particles are following the bullet
     emitter.startFollow(this);
 
     this.scene.time.delayedCall(1000, function() {
@@ -62,9 +68,11 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
   }
 
   update(time, delta) {
+    //the bullet travels over the screen via updates
     this.y += this.speedY * 10;
     this.x += this.speedX * 10;
 
+    //if outside screen, destroy
     if (this.y > HEIGHT) {
       this.setActive(false);
       this.setVisible(false);
@@ -72,6 +80,7 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  //if the player doesn't defend with sword strike etc., take a live
   hitPlayer() {
     if (
       !(
@@ -80,7 +89,6 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
         this.player.isInvincible
       )
     ) {
-      //makes the sound of player loosing a life
       soundPlay('sound_life', this.scene);
       this.scene.registry.set('lives', this.scene.registry.list.lives - 1);
       this.player.setTemporaryInvincibility();
