@@ -18,7 +18,7 @@ export class Credits extends Scene {
       160,
       'title'
     );
-    //variable controlls which credits are displayed, those are split into different "pages"
+    //variable controlls which credits are displayed, the credits are split into different "pages"
     this.textnumber = 1;
     //sets the first page into view, the developer credits
     this.text = this.add.bitmapText(0, 0, FONT, this.text1(), FONTSIZE).setOrigin(0,0);

@@ -80,7 +80,7 @@ export class Level_1 extends Scene {
 
     // ===== Level Variables ===== //
     this.gameStart = true;
-    this.amountBricks = 0; //will later contain the number of bricks
+    this.amountBricks = 0;
     this.isPlayerAlive = true;
     this.isGameOver = true;    
     this.isPaused = false;
@@ -117,9 +117,9 @@ export class Level_1 extends Scene {
     this.keys = makeKeys.call(this); //adds keyboard keys to the scene
 
     // ===== Object Creation ===== //
-    makePlayer.call(this); //adds player to the scene
-    makeBall.call(this); //adds ball to the scene
-    makeBullets.call(this); //adds groups to the scene where player and enemy bullets can be stored
+    makePlayer.call(this); 
+    makeBall.call(this); 
+    makeBullets.call(this); 
 
     //calls in a random brick pattern to the scene
     BRICKS['LEVEL_' + this.brickPatternNumber].call(this);
@@ -151,9 +151,8 @@ export class Level_1 extends Scene {
   }
 
   update(time, delta) {
-
-    //checks if a gamepad is plugged in the system
     let pad = checkGamepad.call(this);
+
     //at this point the player is in a waiting screen but sees the scene
     //upon press of space the game starts
     if (
@@ -185,17 +184,14 @@ export class Level_1 extends Scene {
     
     // ===== BULLET ===== //
     if (
-      //changed to justdown to prevent sound spam
       Phaser.Input.Keyboard.JustDown(this.keys.fire) ||
       pad.buttons[1].pressed ||
       pad.buttons[7].pressed
     ) {
-      //makes the sound of the bullet
       if (this.isGameOver) return;
       soundPlay('sound_bullet', this);
       // gets the group where the bullets are stored and creates a new bullet
       let bullet = this.bullets.get();
-      //if bullet is created, it gets fired
       if (bullet) {
         bullet.fire(this.player.x, this.player.y - 30);
       }
@@ -204,7 +200,7 @@ export class Level_1 extends Scene {
     //updates the player sprite, for movement etc.
     this.player.update(this.keys, time, delta);
 
-    //tracks the y changes in the velocity because add.collider is a bitch
+    //tracks the y changes in the velocity because add.collider doesn't track properly collide on the top of the player
     this.ball.update();
 
     //game over
@@ -257,7 +253,7 @@ export class Level_1 extends Scene {
       }
     }
 
-    //music start stop key:M
+    //music start stop key: M
     if (Phaser.Input.Keyboard.JustDown(this.keys.music)) {
       if (!this.registry.list.musicControl) {
         musicStart(this.currentSong, this);
@@ -265,7 +261,7 @@ export class Level_1 extends Scene {
         musicStop(this.currentSong.toString(), this);
       }
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) {
-      //sound start stop key:P
+      //sound start stop key: P
       if (!this.registry.list.soundControl) {
         this.registry.set('soundControl', true);
       } else {

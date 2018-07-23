@@ -11,31 +11,18 @@ export class UIScene extends Scene {
 
     //variable for the text, using the levelName variable
     this.levelText;
-
     //An area to hold the level numbers in the format 1-1, levelNumber[0] stands for the the first number, levelNumber[1] for the second one
     this.levelNumber = [1, 1];
-
-    //an empty variable to later on hold the names of the all the scenes in the game
     this.Scenes;
-
-    //holds the text for the timer
     this.timerText;
-
-    //holds the timer event
     this.timerEvent;
-
     //timer value in the form of 00 min, : string, 00 seconds and timerValue[5] for the amount of hours
     this.timerValue = [0, 0, ':', 0, 0, 0];
     this.timerValueFormatted = '';
-
-    //the variables for the score and the text of the score
     this.score = 0;
     this.scoreText;
-
-    //the text which says Lifes:
+    //the text which says "Lifes:#"
     this.livesText;
-
-    //array for storage of heart objects
     this.hearts;
     //all game objects of ui scene (such as text, hearts and so on)
     this.UISceneGameObjects;
@@ -46,18 +33,16 @@ export class UIScene extends Scene {
     // display hearts for each player life on level start
     this.setLives(this.registry.list.lives);
 
-    //currently the timer start now as the scene loads in
+    // timer gets initiated
     this.startGameClock();
+    // and gets stopped until the player starts the game with space key
     this.pauseGameClock();
 
     // Check the registry and hit the updateData function every time the data is changed.
     // this includes the TIMER and SCORE
     this.registry.events.on('changedata', this.updateData, this);
 
-    //initial display of the level
-    // this.levelText = this.add.bitmapText(5, 0, FONT, 'Stage 1-1', FONTSIZE);
-
-    //initial display of the score
+    //initial display of the score, life text and timer
     this.scoreText = this.add.bitmapText(
       5,
       0,
@@ -65,22 +50,15 @@ export class UIScene extends Scene {
       'Score: ' + this.score,
       FONTSIZE
     );
-
-    //initial display of the life text
     this.livesText = this.add.bitmapText(180, 0, FONT, 'Lives: ', FONTSIZE);
-
-    //adds the initial timer text
     this.timerText = this.add.bitmapText(420, 0, FONT, '00:00', FONTSIZE);
 
     // this gets the array with all the scenes names in it like in the config
     this.Scenes = this.scene.manager.scenes;
 
-    //an empty array for the for loop, later it will be holding a shortcut to make events for all scenes
-    let sceneGets = [];
-
     //for loop to generate events to enable level update after a stage is won
+    let sceneGets = [];
     for (let i = 1; i < this.Scenes.length - 1; i++) {
-      //loading a scene correspoding to the name of the scene
       sceneGets[i] = this.scene.get(this.Scenes[i]);
 
       //event with the trigger code 'updateLevel' to update Levels, need the following line to function inside a level scene:
@@ -134,10 +112,7 @@ export class UIScene extends Scene {
   }
 
   updateLevel(uiScene) {
-    //shortening the name to improve readability
     let level = uiScene.levelNumber;
-
-    //basic increase in the level
     level[1] += 1;
 
     //this checks if there is a need to go to a higher first number
@@ -155,17 +130,14 @@ export class UIScene extends Scene {
 
   //updates all the data which was changed in the registry, currently that is : TIMER && SCORE && HEARTS
   updateData(parent, key, data) {
-    //changes the score
     if (key === 'SCORE') {
       this.scoreText.setText('Score: ' + data);
     }
-    //changes the timer
     else if (key === 'TIMER') {
       //the writerTimerText function uses the timerValue which is why its updated.
       this.timerValue = data;
       this.writeTimerText();
     }
-    //changes the hearts
     else if (key === 'lives') {
       this.setLives(data);
     }
@@ -202,17 +174,14 @@ export class UIScene extends Scene {
   }
 
   pauseGameClock() {
-    //stops the time event named timerEvent
     this.timerEvent.paused = true;
   }
 
   resumeGameClock() {
-    //stops the time event named timerEvent
     this.timerEvent.paused = false;
   }
 
   startGameClock() {
-    //starts the timer loop which triggeres the gameClock every second, its looped
     this.timerEvent = this.time.addEvent({
       delay: 1000,
       callback: this.gameClock,
@@ -222,22 +191,18 @@ export class UIScene extends Scene {
   }
 
   writeTimerText() {
-    //delete the previous data in the formatted timervalue
     this.timerValueFormatted = '';
 
     //make the array to a text in format 00:00
     for (let i = 0; i < 5; i++) {
       this.timerValueFormatted += this.timerValue[i].toString();
     }
-
-    //changes the timerText in the ui scene
     this.timerText.setText(this.timerValueFormatted);
   }
 
   //deletes all hearts first before passing on to the write function (which makes the hearts)
   setLives(lives) {
     let numberHearts = lives;
-
     this.UISceneGameObjects = this.add.displayList.list;
 
     //filters all objects out which are not hearts
@@ -251,7 +216,6 @@ export class UIScene extends Scene {
       }
     });
 
-    //souless heart destroyer D:
     for (let i = 0; i < this.hearts.length; i++) {
       this.hearts[i].destroy();
     }
@@ -260,7 +224,6 @@ export class UIScene extends Scene {
     this.writeLives(numberHearts);
   }
 
-  //function to make heart objects
   writeLives(numberHearts) {
     for (let i = 0; i < numberHearts; i++) {
       if (i > 8) {

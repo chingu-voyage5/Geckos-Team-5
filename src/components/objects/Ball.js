@@ -10,14 +10,9 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     config.scene.add.existing(this);
     //saving config to be able to use later
     this.config = config;
-    //stting the bounce on walls
     this.body.setCollideWorldBounds(true).setBounce(1);
-    //addition gravity for the ball
     this.body.setGravityY(150);
-
-    //starts the animation for the ball
     this.anims.play('ballAnim');
-    //when the animations are finished they get started again
     this.on('animationcomplete', this.animComplete, this);
 
     //collider for the bricks
@@ -41,12 +36,10 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     //initial velocity
     this.body.setVelocity(config.veloc.x, config.veloc.y);
 
-    //saves the current velocity y so that we can fix collider
+    //saves the current velocity y so that we can fix the collider
     this.currentVelocY;
     //difference between the x coordinates of player and ball, it is used to set the velocity on sword strike and bounce
     this.difference;
-
-    //sets the maximum velocity for the ball
     this.body.maxVelocity = { x: 150, y: 450}    
 
     //added y velocity on action
@@ -54,6 +47,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     //multiplier for the x velocity
     this.multiplier = 10;
 
+    //group for the point drops which increase the score
     this.scene.points = this.scene.physics.add.group({
       classType: Pointdrop,
       runChildUpdate: true
@@ -65,7 +59,6 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     //necessary variable to override the strange collider velocity behavior
     this.currentVelocY = this.body.velocity.y;
 
-    //makes a sound on ball hitting the wall
     if (this.body.checkWorldBounds() == true) {
       soundPlay('sound_ballwalls', this.scene);
     }
@@ -76,16 +69,11 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   }
 
   hitBrick(ball, brick) {
-    //makes a sound on ball hitting a brick
     soundPlay('sound_brick', brick.scene);
-
-    //ads score and tracks bricks
+    //ads score and tracks brick amount
     this.addScore(true);
-
-    //disable the brick
     brick.disableBody(true, false);
-
-    //animation
+    //fade animation
     this.scene.tweens.add({
       targets: brick,
       alpha: 0,
@@ -106,8 +94,6 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       this.additionY = 200;
     } else { //everything happening with the player
       setTimeout(() => {
-
-        //makes a sound on ball hitting the object
         soundPlay('sound_ballplayer', object.scene);
 
         //the velocity changes for the swortd strike
@@ -120,19 +106,19 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
           this.multiplier = 10;
           this.additionY = 250;
         }
-        //the velocity changes for hitting the object
+        //the velocity changes for hitting any passed in object
         else {
           this.multiplier = 7;
           this.additionY = 0;
           //takes away a life from the player, playes the sound and sets the invincibilty
           this.takeLife(object);
 
-          //allows the ball to travel faster if than the max veloc of 150
-          //fixes the bug where the ball is stuck on the player
+          //allows the ball to travel faster than the max veloc of 150
+          //fixes the bug where the ball is stuck on the player, because player can move faster than 150
           this.velocityAdjusterX();
         }
 
-      }, 70);
+      }, 70); //delay to counter bad sword swings
       
     }
 
@@ -142,7 +128,6 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   }
 
   changeVelocity(addedVelocity, multiplier, ball, object) {
-
     //enabling the bounce for the top of the object
     this.body.setVelocityY(this.currentVelocY * -1);
 
@@ -161,7 +146,6 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   }
 
   changeVelocX(multiplier, ball, object) {
-
     //calculates the x position difference
     this.difference = this.calculateXDistance(ball, object);
 
@@ -220,7 +204,6 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       this.scene.amountBricks--;
     }
 
-    //setting the new score as the old score plus 100
     this.scene.registry.set('SCORE', this.scene.registry.list.SCORE + 100);
 
     //adds a life if the score conditions are met
@@ -248,7 +231,6 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
   fireBullet(brick) {
     if (this.scene.amountBricks == 0) { }
     else {
-      //firing homing bullets onto the player
       this.scene.fireEnemyBullet(brick.x, brick.y, this.scene.player.x, this.scene.player.y);
     }
   }
@@ -276,7 +258,6 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       //otherwise it looks like the ball warped
       this.speedDecrease("y", 450, 1);
       
-      //adding more velocity when low
       addedVelocity += 100;
 
       return addedVelocity

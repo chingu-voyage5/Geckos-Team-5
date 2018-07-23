@@ -19,7 +19,6 @@ export class Help extends Scene {
       'title'
     );
 
-    // const text = this.add.bitmapText(0, 0, UIFONT, this.text(), 8);
     const text = this.add
       .bitmapText(WIDTH / 4 + 10, HEIGHT - 200, FONT, this.text(), FONTSIZE)
       .setOrigin(0.5);

@@ -16,7 +16,7 @@ import { soundPlay } from '../components/objects/Sound';
 
 // ===== GAME LOGIC STUFF  ===== //
 
-//adding the keyboard key to the game
+//adding the keyboard keys to the game
 export const makeKeys = function() {
   return {
     slide: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
@@ -56,7 +56,7 @@ export const makeBall = function() {
   });
 };
 
-//when called, adds player and enemy bullet groups
+//when called, adds player- and enemy-bullet groups
 export const makeBullets = function() {
   this.bullets = this.add.group({
     classType: Bullet,
@@ -142,7 +142,7 @@ export const gameOver = function() {
   for (let i = 0; i < this.bricks.length; i++) {
     this.amountBricks += this.bricks[i].children.entries.length;
   }
-  //switches to the next track
+  //switches to the next music track
   let songNumber = songDecider(this.registry.list.currentSongNumber);
   //saves the track number in the registry
   this.registry.set('currentSongNumber', songNumber);
@@ -159,7 +159,7 @@ export const gameOver = function() {
   
   this.scene.stop('UIScene');
 
-  //stops the normal music upon game over because it collides with the sounds
+  //stops the normal music upon game over because it collides with the sound
   musicStopScene(this.currentSong.toString(), this);
 
   //if the game was stopped because the player lost all lives
@@ -260,7 +260,7 @@ export const resumeGame = function( args ) {
     this.physics.world.resume();
 }
 
-//brick pattern numbers
+//brick pattern numbers switcher
 export const patternNumber = function(oldNumber) {
   let number = Math.floor(Math.random() * 6) + 1;
   if (number == oldNumber) {

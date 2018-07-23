@@ -72,7 +72,7 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
     this.y += this.speedY * 10;
     this.x += this.speedX * 10;
 
-    //if outside screen destroy
+    //if outside screen, destroy
     if (this.y > HEIGHT) {
       this.setActive(false);
       this.setVisible(false);
@@ -80,7 +80,7 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  //if the player doesn't defend, take a live
+  //if the player doesn't defend with sword strike etc., take a live
   hitPlayer() {
     if (
       !(
@@ -89,7 +89,6 @@ export default class EnemyBullet extends Phaser.Physics.Arcade.Sprite {
         this.player.isInvincible
       )
     ) {
-      //makes the sound of player loosing a life
       soundPlay('sound_life', this.scene);
       this.scene.registry.set('lives', this.scene.registry.list.lives - 1);
       this.player.setTemporaryInvincibility();

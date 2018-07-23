@@ -22,7 +22,7 @@ export default function makeAnimations(scene) {
   scene.anims.create(config);
 
   config = {
-    key: 'attackUp', //a spell looking arm swing
+    key: 'attackUp', //a spelly looking arm swing
     frames: scene.anims.generateFrameNumbers('player', {
       start: 27,
       end: 30
@@ -32,7 +32,7 @@ export default function makeAnimations(scene) {
   scene.anims.create(config);
 
   config = {
-    key: 'slide', //slide animation
+    key: 'slide',
     frames: scene.anims.generateFrameNumbers('player', {
       start: 5,
       end: 6
@@ -54,7 +54,7 @@ export default function makeAnimations(scene) {
   scene.anims.create(config);
 
   config = {
-    key: 'ballAnim', //the rotating ball 
+    key: 'ballAnim', //the ball is rotating, done with 4 frames
     frames: scene.anims.generateFrameNumbers('ball', {
       start: 0,
       end: 3,

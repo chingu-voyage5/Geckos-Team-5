@@ -47,7 +47,6 @@ export class Title extends Scene {
       sound: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P)
     };
 
-    // document.body.style.backgroundColor = '#000';
     this.titleText = this.add
       .bitmapText(20, HEIGHT - 290, FONT, '    THE LAST \nCHINGU WARRIOR', FONTSIZE * 1.5);
     this.playText = this.add
@@ -63,7 +62,6 @@ export class Title extends Scene {
   }
 
   update() {
-    //checks for a gamepad and activates the buttons for it
     let pad = checkGamepad.call(this);
 
     //if different buttons are pressed, different scenes are called or controlls triggered:
@@ -85,13 +83,13 @@ export class Title extends Scene {
       this.scene.start('Credits');
       musicStopScene('theme',this);
 
-    } else if (Phaser.Input.Keyboard.JustDown(this.keys.music)) { //music start stop
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.music)) { //music start stop  key: M
       if (!this.registry.list.musicControl) {
         musicStart('theme', this);
       } else {
         musicStop('theme',this);
       }
-    } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) { //sound start stop
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.sound)) { //sound start stop   key: P
       if (!this.registry.list.soundControl) {
         this.registry.set('soundControl', true);
       } else {
