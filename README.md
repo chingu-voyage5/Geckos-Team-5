@@ -1,11 +1,15 @@
-# Breakout Game
+# Last Chingu Warrior
 
-(Title is a Work-In-Progress)
+A fun and hellishly difficult game build by the awesome Geckos-Team-5 team using the newest version of the Phaser.js framework in only 8 weeks.
 
 ## Getting Started
 
-Live version if the game can be found here: [Game](https://github.com/chingu-voyage5/Geckos-Team-5) <br>
+Live version if the game can be found here: [Game]() <br>
 If you want to look into the code, clone it or download the ZIP.
+
+## Documentation
+
+[Start here in case you need help with the code](https://github.com/chingu-voyage5/Geckos-Team-5/wiki/Start)
 
 ### Prerequisites
 
@@ -13,17 +17,26 @@ You should have the least amount of knowledge into node.js and have it installed
 
 ### Installing
 
-Navigate in you cmd line to your folder. Then you can run: `npm install` in your branch and `npm start` to start the application. This will activate a local webserver with webpack. Phaser.js doesn't work wihtout a webserver, you can't just click on index.
+Navigate in you cmd line to your folder. Then you can run: `npm install` in your branch and `npm start` to start the application. This will activate a local webserver with webpack. Phaser.js doesn't work without a webserver, you can't just click on index.
 
 ## Dev Notes
 
-23.05.2018 - Development started!
-26.05.2018 - First try out level rendered.
-08.06.2018 - Basic UI finished
-
-## Running tests
-
-Currently no testing set up
+* 23.05.2018 - Development started!
+* 26.05.2018 - First try out level rendered.
+* 08.06.2018 - Basic UI finished
+* 10.06.2018 - first Player attack
+* 21.06.2018 - Ball logic got more complexity
+* 23.06.2018 - Better player attacks
+* 26.06.2018 - added homing Enemy Bullets
+* 28.06.2018 - temporal invincibility added
+* 29.06.2018 - Title screen added
+* 30.06.2018 - Music added
+* 06.07.2018 - Improvements to Bullets
+* 07.07.2018 - Sounds added
+* 08.07.2018 - Bullets storms added
+* 11.07.2018 - Fullscreen available
+* 14.07.2018 - Pausing is possible with esc
+* 25.07.2018 - Documentation added
 
 ## Built With
 
@@ -33,19 +46,18 @@ Currently no testing set up
 
 ## Contributing
 
-Please read [CONTRIBUTING.md]
-It is a build-to-learn project, so please don't make contriutions before the 15th of July, 2018
+Feel free to just open PRs.
 
 ## Versioning
 
-Currently no versions available.
+Version 1 available since 15.07.2018
 
 ## Authors
 
-- **Allistair Everett** - _Team Leader_ - [FancyAction](https://github.com/fancyaction)
-- **Shav Parta** - _Game Logic_ - [Bigghead](https://github.com/Bigghead)
-- **Oleksandr Malakhov** - _UI and more_ - [Alexever17](https://github.com/Alexever17)
-- **Jethro Fredericks** - _A little of this, a little of that_ - [JethroF22](https://github.com/JethroF22)
+- **Allistair Everett** - _Team Leader and Quality Supervisor_ - [FancyAction](https://github.com/fancyaction)
+- **Shav Parta** - _Game Logic, especially Player_ - [Bigghead](https://github.com/Bigghead)
+- **Oleksandr Malakhov** - _Everything visual and music, also ball logic_ - [Alexever17](https://github.com/Alexever17)
+- **Jethro Fredericks** - _Game logic, Bullets Storms and more_ - [JethroF22](https://github.com/JethroF22)
 
 See also the list of [contributors](https://github.com/chingu-voyage5/Geckos-Team-5/graphs/contributors) who participated in this project.
 
