@@ -4,7 +4,7 @@ A fun and hellishly difficult game build by the awesome Geckos-Team-5 team using
 
 ## Getting Started
 
-Live version if the game can be found here: [Game]() <br>
+Live version if the game can be found here: [Game](http://chinguwarrior.surge.sh/) <br>
 If you want to look into the code, clone it or download the ZIP.
 
 ## Documentation
